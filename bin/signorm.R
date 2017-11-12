@@ -13,8 +13,9 @@ signal_scale_factor_vector_output_file = paste(data_x_sig_norm_output_file, '.sf
 
 changepoint_method = args[5]
 sampling_num = as.numeric(args[6])
+ignore_t_lim = as.numeric(args[7])
 
-source_code_folder = args[7]
+source_code_folder = args[8]
 
 ### signorm functions
 source(paste(source_code_folder, 'signorm_functions.R', sep = ''))
@@ -23,7 +24,7 @@ source(paste(source_code_folder, 'signorm_functions.R', sep = ''))
 t_r_matrix = read.table(input_file_t_r_matrix,header = F)
 print(dim(t_r_matrix))
 ### get t threshold
-t_threshold = t_r_curve_change_point(t_r_matrix, changepoint_method, t_r_change_point_plot_file_name)
+t_threshold = t_r_curve_change_point(t_r_matrix, changepoint_method, t_r_change_point_plot_file_name, ignore_t_lim)
 print((t_threshold))
 ### read input reads table
 data_x_od = read.table(xais_variable_file, header = T)
