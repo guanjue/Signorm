@@ -41,14 +41,18 @@ t_r_curve_change_point = function(t_r_matrix, changepoint_method, t_r_change_poi
 		t_variance_change_point = 0
 	}
 	
-	png(t_r_change_point_plot_file_name)
-	par(mfrow=c(1,2))
 	### plot r vs t pattern without polynomial regression norm & and variance change point
+	png(paste(t_r_change_point_plot_file_name, '.raw.png', sep=''))
+	par(mfrow=c(1,1))
 	heatscatter(t, r, pch = 20, ylim=c(-3,3), xlim=c(1,10000), log='x', main=paste(toString(ansvar[1]), 'VS', toString(ansvar_norm[1]), sep=' ') )
 	lines(t, lo_fit_value, col = 'blue', lty=2)
 	abline(v = t[ansvar[1]], col = 'gray', lty=2)
 	abline(v = t_variance_change_point, col = 'red', lty=2)
+	dev.off()
+
 	### plot r vs t pattern with polynomial regression norm & and variance change point
+	png(paste(t_r_change_point_plot_file_name, '.polynorm.png', sep=''))
+	par(mfrow=c(1,1))
 	heatscatter(t, r-lo_fit_value, pch = 20, ylim=c(-3,3), xlim=c(1,10000), log='x', main=toString(ansvar_norm[1]))
 	abline(v = t_variance_change_point, col = 'red', lty=2)
 	dev.off()
