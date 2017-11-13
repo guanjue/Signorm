@@ -27,11 +27,11 @@ print(dim(t_r_matrix))
 t_threshold = t_r_curve_change_point(t_r_matrix, changepoint_method, t_r_change_point_plot_file_name, ignore_t_lim)
 print((t_threshold))
 ### read input reads table
-data_x_od = read.table(xais_variable_file, header = T)
-data_x_sig = as.matrix(data_x_od[,2])
+data_x_od = read.table(xais_variable_file, header = FALSE)
+data_x_sig = as.matrix(data_x_od[,1])
 #print(head(data_x))
-data_y_od = read.table(yais_variable_file, header = T)
-data_y_sig = as.matrix(data_y_od[,2])
+data_y_od = read.table(yais_variable_file, header = FALSE)
+data_y_sig = as.matrix(data_y_od[,1])
 
 ### get scale factor based on signal part
 signal_scale_factor_vector = calculate_scale_factor_with_t_thresh(data_x_sig, data_y_sig, sampling_num, t_threshold, scatterplot_MAplot_output_file_name)

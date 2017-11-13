@@ -5,8 +5,8 @@ def get_ncis_t_a_b(matrix1, matrix2, output):
 	data2 = open(matrix2,'r')
 
 	### skip header
-	data1.readline()
-	data2.readline()
+	#data1.readline()
+	#data2.readline()
 
 	d1_tri1 = {}
 	d1_tri2 = {}
@@ -14,8 +14,8 @@ def get_ncis_t_a_b(matrix1, matrix2, output):
 		d1 = [ x.strip() for x in rec1.split('\t') ]
 		d2 = [ x.strip() for x in rec2.split('\t') ]
 		### get signal
-		r1 = float(d1[1])
-		r2 = float(d2[1])
+		r1 = float(d1[0])
+		r2 = float(d2[0])
 		### get t value
 		t = r1+r2
 
