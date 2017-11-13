@@ -1,0 +1,1 @@
+G1E_22_input	MEGs_118_input	G1E_22_input_vs_MEGs_118_input.200.txt.200.txt	G1E.h3k4me3rep.22.input.tab.reads.txt	MEGs.h3k4me3rep.118.input.tab.reads.txt
