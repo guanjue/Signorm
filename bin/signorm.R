@@ -15,10 +15,11 @@ changepoint_method = args[5]
 sampling_num = as.numeric(args[6])
 seed = as.numeric(args[7])
 ignore_t_lim = as.numeric(args[8])
+raw_plot_lim = as.numeric(args[9])
 
-scale_factor_type = as.numeric(args[9]) ### 1: total mean; 2:total median; 3: low Poisson mean; 4: high Poisson mean
+scale_factor_type = as.numeric(args[10]) ### 1: total mean; 2:total median; 3: low Poisson mean; 4: high Poisson mean
 
-source_code_folder = args[10]
+source_code_folder = args[11]
 
 ### signorm functions
 source(paste(source_code_folder, 'signorm_functions.R', sep = ''))
@@ -27,7 +28,7 @@ source(paste(source_code_folder, 'signorm_functions.R', sep = ''))
 t_r_matrix = read.table(input_file_t_r_matrix,header = F)
 print(dim(t_r_matrix))
 ### get t threshold
-t_threshold = t_r_curve_change_point(t_r_matrix, changepoint_method, t_r_change_point_plot_file_name, ignore_t_lim)
+t_threshold = t_r_curve_change_point(t_r_matrix, changepoint_method, t_r_change_point_plot_file_name, ignore_t_lim, raw_plot_lim)
 print((t_threshold))
 ### read input reads table
 data_x_od = read.table(xais_variable_file, header = FALSE)

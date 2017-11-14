@@ -1,5 +1,5 @@
 ##############################################
-t_r_curve_change_point = function(t_r_matrix, changepoint_method, t_r_change_point_plot_file_name, ignore_t_lim){
+t_r_curve_change_point = function(t_r_matrix, changepoint_method, t_r_change_point_plot_file_name, ignore_t_lim, raw_plot_lim){
 	library(LSD)
 	library(changepoint)
 
@@ -53,7 +53,7 @@ t_r_curve_change_point = function(t_r_matrix, changepoint_method, t_r_change_poi
 	### plot r vs t pattern with polynomial regression norm & and variance change point
 	png(paste(t_r_change_point_plot_file_name, '.polynorm.png', sep=''))
 	par(mfrow=c(1,1))
-	heatscatter(t, r-lo_fit_value, pch = 20, ylim=c(-3,3), xlim=c(1,10000), log='x', main=toString(ansvar_norm[1]))
+	heatscatter(t, r-lo_fit_value, pch = 20, ylim=c(-raw_plot_lim,raw_plot_lim), xlim=c(1,10000), log='x', main=toString(ansvar_norm[1]))
 	abline(v = t_variance_change_point, col = 'red', lty=2)
 	dev.off()
 
