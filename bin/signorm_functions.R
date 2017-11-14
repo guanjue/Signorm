@@ -145,9 +145,10 @@ plotting_scatterplot_MAplot = function(data_x_high_t, data_y_high_t, data_x_low_
 ##############################################
 
 ##############################################
-calculate_scale_factor_with_t_thresh = function(data_x, data_y, sampling_num, t_threshold, scatterplot_MAplot_output_file_name){
+calculate_scale_factor_with_t_thresh = function(data_x, data_y, sampling_num, seed, t_threshold, scatterplot_MAplot_output_file_name){
 	### if sampling_num != 0, sampling calculate scale factor & plotting 
 	if (sampling_num != 0){
+		set.seed(seed)
 		used_id = sample(length(data_y)[1],sampling_num)
 		data_x = data_x[used_id,]
 		data_y = data_y[used_id,]		
