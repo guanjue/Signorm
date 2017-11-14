@@ -11,15 +11,16 @@ scatterplot_MAplot_output_file_name = paste(input_file_t_r_matrix, '.scatter_MA.
 data_x_sig_norm_output_file = args[4]
 signal_scale_factor_vector_output_file = paste(data_x_sig_norm_output_file, '.sf_vec.txt', sep='')
 
-changepoint_method = args[5]
-sampling_num = as.numeric(args[6])
-seed = as.numeric(args[7])
-ignore_t_lim = as.numeric(args[8])
-raw_plot_lim = as.numeric(args[9])
+mean_or_var = args[5] ### mean or var
+changepoint_method = args[6]
+sampling_num = as.numeric(args[7])
+seed = as.numeric(args[8])
+ignore_t_lim = as.numeric(args[9])
+raw_plot_lim = as.numeric(args[10])
 
-scale_factor_type = as.numeric(args[10]) ### 1: total mean; 2:total median; 3: low Poisson mean; 4: high Poisson mean
+scale_factor_type = as.numeric(args[11]) ### 1: total mean; 2:total median; 3: low Poisson mean; 4: high Poisson mean
 
-source_code_folder = args[11]
+source_code_folder = args[12]
 
 ### signorm functions
 source(paste(source_code_folder, 'signorm_functions.R', sep = ''))
@@ -28,7 +29,7 @@ source(paste(source_code_folder, 'signorm_functions.R', sep = ''))
 t_r_matrix = read.table(input_file_t_r_matrix,header = F)
 print(dim(t_r_matrix))
 ### get t threshold
-t_threshold = t_r_curve_change_point(t_r_matrix, changepoint_method, t_r_change_point_plot_file_name, ignore_t_lim, raw_plot_lim)
+t_threshold = t_r_curve_change_point(t_r_matrix, changepoint_method, t_r_change_point_plot_file_name, ignore_t_lim, raw_plot_lim, mean_or_var)
 print((t_threshold))
 ### read input reads table
 data_x_od = read.table(xais_variable_file, header = FALSE)
