@@ -29,9 +29,6 @@ t_r_curve_change_point = function(t_r_matrix, changepoint_method, t_r_change_poi
 			ansvar=cpt.mean(r, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=5)
 	}
 	
-	print('fit_polynorm')
-	print(fit_polynorm)
-	print((fit_polynorm=='polynorm'))
 	if (fit_polynorm=='polynorm'){
 		### variance change-point with polynomial regression norm (cosider 0 for read the same sample data)
 		print('find variance change-point with polynomial regression norm')
