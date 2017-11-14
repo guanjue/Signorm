@@ -213,7 +213,7 @@ calculate_scale_factor_with_t_thresh = function(data_x, data_y, sampling_num, se
 		### get scale factor vector
 		sf_vector = c(sf_info_total_mean$merge_x, sf_info_total_median$merge_x, sf_info_low_t$merge_x, sf_info_high_t$merge_x,   sf_info_total_mean$merge_y, sf_info_total_median$merge_y, sf_info_low_t$merge_y, sf_info_high_t$merge_y)
 	} else{
-		sf_vector = c(sf_info_total_mean$merge_x, sf_info_total_median$merge_x, sf_info_low_t$merge_x, sf_info_high_t$merge_x,   sf_info_total_mean$merge_y, sf_info_total_median$merge_y, sf_info_low_t$merge_y, sf_info_high_t$merge_y)
+		sf_vector = c(sf_info_total_mean$merge_x, sf_info_total_median$merge_x, sf_info_total_mean$merge_x, sf_info_total_mean$merge_x,   sf_info_total_mean$merge_y, sf_info_total_median$merge_y, sf_info_total_mean$merge_y, sf_info_total_mean$merge_y)
 	}
 
 	return(sf_vector)
