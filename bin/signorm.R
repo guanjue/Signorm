@@ -15,7 +15,9 @@ changepoint_method = args[5]
 sampling_num = as.numeric(args[6])
 ignore_t_lim = as.numeric(args[7])
 
-source_code_folder = args[8]
+scale_factor_type = as.numeric(args[8]) ### 1: total mean; 2:total median; 3: low Poisson mean; 4: high Poisson mean
+
+source_code_folder = args[9]
 
 ### signorm functions
 source(paste(source_code_folder, 'signorm_functions.R', sep = ''))
@@ -37,7 +39,7 @@ data_y_sig = as.matrix(data_y_od[,1])
 signal_scale_factor_vector = calculate_scale_factor_with_t_thresh(data_x_sig, data_y_sig, sampling_num, t_threshold, scatterplot_MAplot_output_file_name)
 
 ### norm the x-axis signal by the scale factor
-data_x_sig_norm = data_x_sig / signal_scale_factor_vector[4] * signal_scale_factor_vector[8]
+data_x_sig_norm = data_x_sig / signal_scale_factor_vector[scale_factor_type] * signal_scale_factor_vector[scale_factor_type+4]
 
 ### write normed signal vector
 write.table(data_x_sig_norm, data_x_sig_norm_output_file, quote=FALSE, col.names=FALSE, row.names=FALSE, sep='\t')

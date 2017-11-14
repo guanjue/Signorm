@@ -22,14 +22,13 @@ cd $analysis_folder
 ### run pipeline
 while read LINE
 do
-	output_name=$(echo "$LINE" | awk '{print $3}')
-	sig1=$(echo "$LINE" | awk '{print $4}')
-	sig2=$(echo "$LINE" | awk '{print $5}')
+	sig1=$(echo "$LINE" | awk '{print $1}')
+	sig2=$(echo "$LINE" | awk '{print $2}')
 	echo $output_name
 	### get ncis t_r matrix
-	time python $script_folder'get_ncis_t_a_b.py' -i $input_folder$sig1 -j $input_folder$sig2 -o $output_folder_t_r_file$output_name
+	time python $script_folder'get_ncis_t_a_b.py' -i $input_folder$sig1 -j $input_folder$sig2 -o $output_folder_t_r_file$sig1'_vs_'$sig2
 	### get scale factor and normalize x-axis signal
-	time Rscript $script_folder'signorm.R' $input_folder$sig1 $input_folder$sig2 $output_folder_t_r_file$output_name $output_folder_normed_sig_file$sig1'.norm.txt' BinSeg 1000000 0 $script_folder
+	time Rscript $script_folder'signorm.R' $input_folder$sig1 $input_folder$sig2 $output_folder_t_r_file$sig1'_vs_'$sig2 $output_folder_normed_sig_file$sig1'.norm.txt' BinSeg 1000000 0 4 $script_folder
 done < $input_folder'info_table.txt'
 ##################################
 
