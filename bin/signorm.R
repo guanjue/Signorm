@@ -30,7 +30,7 @@ source(paste(source_code_folder, 'signorm_functions.R', sep = ''))
 t_r_matrix = read.table(input_file_t_r_matrix,header = F)
 print(dim(t_r_matrix))
 ### get t threshold
-t_threshold = t_r_curve_change_point(t_r_matrix, changepoint_method, t_r_change_point_plot_file_name, ignore_t_lim, raw_plot_lim, mean_or_var)
+t_threshold = t_r_curve_change_point(t_r_matrix, changepoint_method, t_r_change_point_plot_file_name, ignore_t_lim, raw_plot_lim, mean_or_var, polynorm)
 print((t_threshold))
 ### read input reads table
 data_x_od = read.table(xais_variable_file, header = FALSE)
