@@ -1,5 +1,5 @@
 ##############################################
-t_r_curve_change_point = function(t_r_matrix, changepoint_method, t_r_change_point_plot_file_name, ignore_t_lim, raw_plot_lim, mean_or_var, polynorm){
+t_r_curve_change_point = function(t_r_matrix, changepoint_method, t_r_change_point_plot_file_name, ignore_t_lim, raw_plot_lim, mean_or_var, fit_polynorm){
 	library(LSD)
 	library(changepoint)
 
@@ -29,7 +29,7 @@ t_r_curve_change_point = function(t_r_matrix, changepoint_method, t_r_change_poi
 			ansvar=cpt.mean(r, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=5)
 	}
 	
-	if (polynorm=='polynorm'){
+	if (fit_polynorm=='polynorm'){
 		### variance change-point with polynomial regression norm (cosider 0 for read the same sample data)
 		print('find variance change-point with polynomial regression norm')
 		if (max(r)!=0){
@@ -39,10 +39,10 @@ t_r_curve_change_point = function(t_r_matrix, changepoint_method, t_r_change_poi
 				ansvar_norm=cpt.mean(r-lo_fit_value, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=5)
 			}
 			print(ansvar_norm)
-		}	else{
+		} else{
 				ansvar_norm=c(0)
 		}
-	}	else{
+	} else{
 		ansvar_norm=ansvar
 	}
 	### use the first change point as t_threshold
