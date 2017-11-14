@@ -1,5 +1,5 @@
 ##############################################
-t_r_curve_change_point = function(t_r_matrix, changepoint_method, t_r_change_point_plot_file_name, ignore_t_lim, raw_plot_lim, mean_or_var){
+t_r_curve_change_point = function(t_r_matrix, changepoint_method, t_r_change_point_plot_file_name, ignore_t_lim, raw_plot_lim, mean_or_var, polynorm){
 	library(LSD)
 	library(changepoint)
 
@@ -25,24 +25,26 @@ t_r_curve_change_point = function(t_r_matrix, changepoint_method, t_r_change_poi
 	print('find variance change-point without polynomial regression norm')
 	if (mean_or_var=='var'){
 			ansvar=cpt.var(r, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=5)
-		} else{
+	} else{
 			ansvar=cpt.mean(r, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=5)
-		}
+	}
 	
-
-	### variance change-point with polynomial regression norm (cosider 0 for read the same sample data)
-	print('find variance change-point with polynomial regression norm')
-	if (max(r)!=0){
-		if (mean_or_var=='var'){
-			ansvar_norm=cpt.var(r-lo_fit_value, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=5)
-		} else{
-			ansvar_norm=cpt.mean(r-lo_fit_value, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=5)
-		}
-		print(ansvar_norm)
+	if (polynorm=='polynorm'){
+		### variance change-point with polynomial regression norm (cosider 0 for read the same sample data)
+		print('find variance change-point with polynomial regression norm')
+		if (max(r)!=0){
+			if (mean_or_var=='var'){
+				ansvar_norm=cpt.var(r-lo_fit_value, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=5)
+			} else{
+				ansvar_norm=cpt.mean(r-lo_fit_value, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=5)
+			}
+			print(ansvar_norm)
 		}	else{
-			ansvar_norm=c(0)
+				ansvar_norm=c(0)
 		}
-	
+	}	else{
+		ansvar_norm=ansvar
+	}
 	### use the first change point as t_threshold
 	if (ansvar_norm[1] != 0){ 
 		t_variance_change_point = t[ansvar_norm[1]]

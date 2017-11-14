@@ -13,14 +13,15 @@ signal_scale_factor_vector_output_file = paste(data_x_sig_norm_output_file, '.sf
 
 mean_or_var = args[5] ### mean or var
 changepoint_method = args[6]
-sampling_num = as.numeric(args[7])
-seed = as.numeric(args[8])
-ignore_t_lim = as.numeric(args[9])
-raw_plot_lim = as.numeric(args[10])
+polynorm = args[7]
+sampling_num = as.numeric(args[8])
+seed = as.numeric(args[9])
+ignore_t_lim = as.numeric(args[10])
+raw_plot_lim = as.numeric(args[11])
 
-scale_factor_type = as.numeric(args[11]) ### 1: total mean; 2:total median; 3: low Poisson mean; 4: high Poisson mean
+scale_factor_type = as.numeric(args[12]) ### 1: total mean; 2:total median; 3: low Poisson mean; 4: high Poisson mean
 
-source_code_folder = args[12]
+source_code_folder = args[13]
 
 ### signorm functions
 source(paste(source_code_folder, 'signorm_functions.R', sep = ''))
