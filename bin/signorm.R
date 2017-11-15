@@ -41,7 +41,7 @@ data_y_od = read.table(yais_variable_file, header = FALSE)
 data_y_sig = as.matrix(data_y_od[,1]) 
 
 ### get scale factor based on signal part
-signal_scale_factor_vector = calculate_scale_factor_with_t_thresh(data_x_sig, data_y_sig, sampling_num, seed, t_threshold, quantile_lim, scatterplot_MAplot_output_file_name)
+signal_scale_factor_vector = calculate_scale_factor_with_t_thresh(data_x_sig, data_y_sig, sampling_num, seed, t_threshold, ignore_t_lim, quantile_lim, scatterplot_MAplot_output_file_name)
 
 ### norm the x-axis signal by the scale factor
 data_x_sig_norm = data_x_sig / signal_scale_factor_vector[scale_factor_type] * signal_scale_factor_vector[scale_factor_type+4]
