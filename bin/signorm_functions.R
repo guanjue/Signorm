@@ -173,6 +173,13 @@ calculate_scale_factor_with_t_thresh = function(data_x, data_y, sampling_num, se
 	print(sum(data_t>t_threshold))
 	print(t_threshold)
 
+	### if data_t<=t_threshold have more than 75% of the bins, use 75% bin as the threshold
+	if ( (sum(data_t<=t_threshold) / length(data_t)) > 0.75 ){
+		print('use 75% quantile')
+		t_threshold = quantile(data_t, 0.75)
+		print(t_threshold)
+	}
+
 	### get bins with t <= t_threshold
 	data_x_low_t = data_x[data_t<=t_threshold]
 	data_y_low_t = data_y[data_t<=t_threshold]
