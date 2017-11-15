@@ -173,10 +173,10 @@ calculate_scale_factor_with_t_thresh = function(data_x, data_y, sampling_num, se
 	print(sum(data_t>t_threshold))
 	print(t_threshold)
 
-	### if data_t<=t_threshold have more than 75% of the bins, use 75% bin as the threshold
+	### if data_t<=t_threshold have more than X% of the bins, use X% bin as the threshold
 	data_t_non0 = data_t[data_t!=0]
 	if ( (sum(data_t_non0<=t_threshold) / length(data_t_non0)) > quantile_lim ){
-		print('use 75% quantile')
+		print('use X% quantile')
 		t_threshold = quantile(data_t_non0, quantile_lim)
 		print(t_threshold)
 		write.table(t_threshold, paste(scatterplot_MAplot_output_file_name,'.threshold_75.txt', sep=''), quote=FALSE, col.names=FALSE, row.names=FALSE, sep='\t')
