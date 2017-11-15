@@ -14,8 +14,8 @@ def get_ncis_t_a_b(matrix1, matrix2, output):
 		d1 = [ x.strip() for x in rec1.split('\t') ]
 		d2 = [ x.strip() for x in rec2.split('\t') ]
 		### get signal
-		r1 = float(d1[0]) 
-		r2 = float(d2[0]) 
+		r1 = float(d1[0]) + 1
+		r2 = float(d2[0]) + 1
 		### get t value
 		t = r1+r2
 
