@@ -42,9 +42,9 @@ data_x_sig = as.matrix(data_x_od[,1])
 data_y_od = read.table(yais_variable_file, header = FALSE)
 data_y_sig = as.matrix(data_y_od[,1]) 
 
-### put input and sample to the same level
-total_data_x_sig = sum(data_x_sig)
-data_x_sig = data_x_sig / total_data_x_sig * sum(data_y_sig)
+### put input and sample to the same level and round counts to int
+total_data_y_sig = sum(data_y_sig)
+data_y_sig = round( data_y_sig / total_data_y_sig * sum(data_x_sig) )
 
 ### get scale factor based on signal part
 signal_scale_factor_vector = calculate_scale_factor_with_t_thresh(data_x_sig, data_y_sig, sampling_num, seed, t_threshold, ignore_t_lim_lower, quantile_lim, scatterplot_MAplot_output_file_name)
