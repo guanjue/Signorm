@@ -178,6 +178,7 @@ calculate_scale_factor_with_t_thresh = function(data_x, data_y, sampling_num, se
 		print('use 75% quantile')
 		t_threshold = quantile(data_t, 0.75)
 		print(t_threshold)
+		write.table(t_threshold, paste(scatterplot_MAplot_output_file_name,'.threshold_75.txt', sep=''), quote=FALSE, col.names=FALSE, row.names=FALSE, sep='\t')
 	}
 
 	### get bins with t <= t_threshold
