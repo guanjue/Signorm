@@ -19,11 +19,11 @@ quantile_lim = as.numeric(args[9])
 seed = as.numeric(args[10])
 ignore_t_lim_lower = as.numeric(args[11])
 ignore_t_lim_upper = as.numeric(args[12])
-raw_plot_lim = as.numeric(args[12])
+raw_plot_lim = as.numeric(args[13])
 
-scale_factor_type = as.numeric(args[13]) ### 1: total mean; 2:total median; 3: low Poisson mean; 4: high Poisson mean
+scale_factor_type = as.numeric(args[14]) ### 1: total mean; 2:total median; 3: low Poisson mean; 4: high Poisson mean
 
-source_code_folder = args[14]
+source_code_folder = args[15]
 
 ### signorm functions
 source(paste(source_code_folder, 'signorm_functions.R', sep = ''))
