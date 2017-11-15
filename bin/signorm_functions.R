@@ -136,22 +136,22 @@ plotting_scatterplot_MAplot = function(data_x_high_t, data_y_high_t, data_x_low_
 	dev.off()
 
 	###### MA plot for different strategy
-	png(paste(output_file_name, '.4.MA.png', sep =''))
-	par(mfrow=c(2,2))
+	#png(paste(output_file_name, '.4.MA.png', sep =''))
+	#par(mfrow=c(2,2))
 	###
-	heatscatter(od_A, od_M, pch = 20, ylim=c(-10,10), main='original signal', xlim=c(-1,8.5))
-	abline(h=0,col = 'red')
+	#heatscatter(od_A, od_M, pch = 20, ylim=c(-10,10), main='original signal', xlim=c(-1,8.5))
+	#abline(h=0,col = 'red')
 	###
-	heatscatter(sf_info_total_mean$A, sf_info_total_mean$M, pch = 20, ylim=c(-10,10), main='original signal mean', xlim=c(-1,8.5))
-	abline(h=0,col = 'red')
+	#heatscatter(sf_info_total_mean$A, sf_info_total_mean$M, pch = 20, ylim=c(-10,10), main='original signal mean', xlim=c(-1,8.5))
+	#abline(h=0,col = 'red')
 	###
-	heatscatter(sf_info_low_t$A, sf_info_low_t$M, pch = 20, ylim=c(-10,10), main='low t mean', xlim=c(-1,8.5))
-	abline(h=0,col = 'red')
+	#heatscatter(sf_info_low_t$A, sf_info_low_t$M, pch = 20, ylim=c(-10,10), main='low t mean', xlim=c(-1,8.5))
+	#abline(h=0,col = 'red')
 	###
-	heatscatter(sf_info_high_t$A, sf_info_high_t$M, pch = 20, ylim=c(-10,10), main='high t mean', xlim=c(-1,8.5))
-	abline(h=0,col = 'red')
+	#heatscatter(sf_info_high_t$A, sf_info_high_t$M, pch = 20, ylim=c(-10,10), main='high t mean', xlim=c(-1,8.5))
+	#abline(h=0,col = 'red')
 	###
-	dev.off()	
+	#dev.off()	
 }
 ##############################################
 
