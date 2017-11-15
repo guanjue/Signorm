@@ -1,10 +1,11 @@
 ##############################################
-t_r_curve_change_point = function(t_r_matrix, changepoint_method, t_r_change_point_plot_file_name, ignore_t_lim, raw_plot_lim, mean_or_var, fit_polynorm){
+t_r_curve_change_point = function(t_r_matrix, changepoint_method, t_r_change_point_plot_file_name, ignore_t_lim_lower, ignore_t_lim_upper, raw_plot_lim, mean_or_var, fit_polynorm){
 	library(LSD)
 	library(changepoint)
 
 	### ignore the data points with t value 1-ignore_t_lim (too noisy)
-	t_r_matrix = t_r_matrix[t_r_matrix[,1]>ignore_t_lim,]
+	t_r_matrix_lower = t_r_matrix[t_r_matrix[,1]>ignore_t_lim_lower,]
+	t_r_matrix = t_r_matrix_lower[t_r_matrix_lower<ignore_t_lim_upper,]
 	print(dim(t_r_matrix))
 	### extract t value and r value
 	t_od = (t_r_matrix[,1])
