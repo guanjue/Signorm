@@ -15,13 +15,14 @@ mean_or_var = args[5] ### mean or var
 changepoint_method = args[6]
 fit_polynorm = args[7]
 sampling_num = as.numeric(args[8])
-seed = as.numeric(args[9])
-ignore_t_lim = as.numeric(args[10])
-raw_plot_lim = as.numeric(args[11])
+quantile_lim = as.numeric(args[9])
+seed = as.numeric(args[10])
+ignore_t_lim = as.numeric(args[11])
+raw_plot_lim = as.numeric(args[12])
 
-scale_factor_type = as.numeric(args[12]) ### 1: total mean; 2:total median; 3: low Poisson mean; 4: high Poisson mean
+scale_factor_type = as.numeric(args[13]) ### 1: total mean; 2:total median; 3: low Poisson mean; 4: high Poisson mean
 
-source_code_folder = args[13]
+source_code_folder = args[14]
 
 ### signorm functions
 source(paste(source_code_folder, 'signorm_functions.R', sep = ''))
@@ -40,7 +41,7 @@ data_y_od = read.table(yais_variable_file, header = FALSE)
 data_y_sig = as.matrix(data_y_od[,1]) 
 
 ### get scale factor based on signal part
-signal_scale_factor_vector = calculate_scale_factor_with_t_thresh(data_x_sig, data_y_sig, sampling_num, seed, t_threshold, scatterplot_MAplot_output_file_name)
+signal_scale_factor_vector = calculate_scale_factor_with_t_thresh(data_x_sig, data_y_sig, sampling_num, seed, t_threshold, quantile_lim, scatterplot_MAplot_output_file_name)
 
 ### norm the x-axis signal by the scale factor
 data_x_sig_norm = data_x_sig / signal_scale_factor_vector[scale_factor_type] * signal_scale_factor_vector[scale_factor_type+4]

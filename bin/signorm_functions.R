@@ -156,7 +156,7 @@ plotting_scatterplot_MAplot = function(data_x_high_t, data_y_high_t, data_x_low_
 ##############################################
 
 ##############################################
-calculate_scale_factor_with_t_thresh = function(data_x, data_y, sampling_num, seed, t_threshold, scatterplot_MAplot_output_file_name){
+calculate_scale_factor_with_t_thresh = function(data_x, data_y, sampling_num, seed, t_threshold, quantile_lim, scatterplot_MAplot_output_file_name){
 	### if sampling_num != 0, sampling calculate scale factor & plotting 
 	if (sampling_num != 0){
 		set.seed(seed)
@@ -174,9 +174,9 @@ calculate_scale_factor_with_t_thresh = function(data_x, data_y, sampling_num, se
 	print(t_threshold)
 
 	### if data_t<=t_threshold have more than 75% of the bins, use 75% bin as the threshold
-	if ( (sum(data_t<=t_threshold) / length(data_t)) > 0.75 ){
+	if ( (sum(data_t<=t_threshold) / length(data_t)) > quantile_lim ){
 		print('use 75% quantile')
-		t_threshold = quantile(data_t, 0.75)
+		t_threshold = quantile(data_t, quantile_lim)
 		print(t_threshold)
 		write.table(t_threshold, paste(scatterplot_MAplot_output_file_name,'.threshold_75.txt', sep=''), quote=FALSE, col.names=FALSE, row.names=FALSE, sep='\t')
 	}
