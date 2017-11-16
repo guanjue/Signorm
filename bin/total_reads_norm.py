@@ -20,8 +20,8 @@ def total_reads_norm(sig1, sig2, method, sig2_normed_output):
 	data1.close()
 	data2.close()
 	### vector to float np.array
-	sig1 = np.array(sig1, dtypes=float)
-	sig2 = np.array(sig2, dtypes=float)
+	sig1 = np.array(sig1, dtype=float)
+	sig2 = np.array(sig2, dtype=float)
 
 	### get total reads scale factor
 	if method == 'mean':
