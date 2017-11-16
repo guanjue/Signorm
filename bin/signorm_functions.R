@@ -5,20 +5,27 @@ t_r_curve_change_point = function(t_r_matrix, changepoint_method, t_r_change_poi
 
 	### ignore the data points with t value 1-ignore_t_lim (too noisy)
 	t_r_matrix_lower = t_r_matrix[t_r_matrix[,1]>ignore_t_lim_lower,]
-	t_r_matrix = t_r_matrix_lower[t_r_matrix_lower<ignore_t_lim_upper,]
+	t_r_matrix_for_polyfit = t_r_matrix_lower[t_r_matrix_lower<ignore_t_lim_upper,]
 	print(dim(t_r_matrix))
 	### extract t value and r value
 	t_od = (t_r_matrix[,1])
 	r_od = log2(t_r_matrix[,2])-log2(t_r_matrix[,3]) ### log2 transform r
 
+	### extract t value and r value for polynomial fit
+	t_od_polyfit = (t_r_matrix[,1])
+	r_od_polyfit = log2(t_r_matrix[,2])-log2(t_r_matrix[,3]) ### log2 transform r
+
 	### remove x1 OR x2 equals 0
 	t = t_od[as.logical((!is.na(r_od)) * (is.finite(r_od)) ) ]
 	r = r_od[as.logical((!is.na(r_od)) * (is.finite(r_od)) ) ]
+	t_polyfit = t_od_polyfit[as.logical((!is.na(r_od)) * (is.finite(r_od)) ) ]
+	r_polyfit = r_od_polyfit[as.logical((!is.na(r_od)) * (is.finite(r_od)) ) ]
+
 	print(summary(r))
 
 	### polynomial regression fit the log(r) vs log(t) pattern
 	print('fit polynomial regression model')
-	lo = lm(r~poly(log(t),polynomial_degree, raw=TRUE))
+	lo = lm(r_polyfit~poly(log(t_polyfit),polynomial_degree, raw=TRUE))
 	### get polynomial regression fitted model predicted value
 	lo_fit_value = predict(lo, data.frame(x=t))
 
