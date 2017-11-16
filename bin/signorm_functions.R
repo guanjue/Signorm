@@ -1,5 +1,5 @@
 ##############################################
-t_r_curve_change_point = function(t_r_matrix, changepoint_method, t_r_change_point_plot_file_name, ignore_t_lim_lower, ignore_t_lim_upper, raw_plot_lim, mean_or_var, fit_polynorm){
+t_r_curve_change_point = function(t_r_matrix, changepoint_method, t_r_change_point_plot_file_name, ignore_t_lim_lower, ignore_t_lim_upper, raw_plot_lim, mean_or_var, fit_polynorm, polynomial_degree){
 	library(LSD)
 	library(changepoint)
 
@@ -18,7 +18,7 @@ t_r_curve_change_point = function(t_r_matrix, changepoint_method, t_r_change_poi
 
 	### polynomial regression fit the log(r) vs log(t) pattern
 	print('fit polynomial regression model')
-	lo = lm(r~poly(log(t),50, raw=TRUE))
+	lo = lm(r~poly(log(t),polynomial_degree, raw=TRUE))
 	### get polynomial regression fitted model predicted value
 	lo_fit_value = predict(lo, data.frame(x=t))
 
