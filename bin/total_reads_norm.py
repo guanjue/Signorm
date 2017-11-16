@@ -46,7 +46,7 @@ import sys
 
 def main(argv):
 	try:
-		opts, args = getopt.getopt(argv,"hi:j:o:")
+		opts, args = getopt.getopt(argv,"ha:b:m:o:")
 	except getopt.GetoptError:
 		print 'python total_reads_norm.py -a signal_1_file -b signal_2_file -m method(mean or percentile #) -o normed_sig2_output_file'
 		sys.exit(2)
