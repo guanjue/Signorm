@@ -35,7 +35,7 @@ def total_reads_norm(sig1, sig2, method, sig2_normed_output):
 	### write output
 	result = open(sig2_normed_output,'w')
 	for records in sig2_normed:
-		result.write(str(records[0])+'\n')
+		result.write(str(records)+'\n')
 	result.close()
 
 
