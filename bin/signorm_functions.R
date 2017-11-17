@@ -31,16 +31,15 @@ t_r_curve_change_point = function(t_r_matrix, changepoint_method, t_r_change_poi
 	### get polynomial regression fitted model predicted value
 	lo_fit_value = predict(lo, newdata=data.frame(x=t))
 	print('check')
-	print(length(t))
-	print(head(t))	
-	print(length(t_polyfit))
-	print(head(t_polyfit))
-
-	print(length(lo_fit_value))
-	print(head(lo_fit_value))
-	print(length(r))
-	print(head(r))
-	print('check')
+	#print(length(t))
+	#print(head(t))	
+	#print(length(t_polyfit))
+	#print(head(t_polyfit))
+	#print(length(lo_fit_value))
+	#print(head(lo_fit_value))
+	#print(length(r))
+	#print(head(r))
+	#print('check')
 	### variance change-point without polynomial regression norm
 	print('find variance change-point without polynomial regression norm')
 	if (mean_or_var=='var'){
