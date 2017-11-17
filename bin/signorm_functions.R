@@ -18,8 +18,8 @@ t_r_curve_change_point = function(t_r_matrix, changepoint_method, t_r_change_poi
 	### remove x1 OR x2 equals 0
 	t = t_od[as.logical((!is.na(r_od)) * (is.finite(r_od)) ) ]
 	r = r_od[as.logical((!is.na(r_od)) * (is.finite(r_od)) ) ]
-	t_polyfit = t_od_polyfit[as.logical((!is.na(r_od)) * (is.finite(r_od)) ) ]
-	r_polyfit = r_od_polyfit[as.logical((!is.na(r_od)) * (is.finite(r_od)) ) ]
+	t_polyfit = t_od_polyfit[as.logical((!is.na(r_od_polyfit)) * (is.finite(r_od_polyfit)) ) ]
+	r_polyfit = r_od_polyfit[as.logical((!is.na(r_od_polyfit)) * (is.finite(r_od_polyfit)) ) ]
 
 	print(summary(r))
 
