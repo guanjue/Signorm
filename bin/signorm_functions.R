@@ -1,5 +1,5 @@
 ##############################################
-t_r_curve_change_point = function(t_r_matrix, changepoint_method, t_r_change_point_plot_file_name, ignore_t_lim_lower, ignore_t_lim_upper, raw_plot_lim, mean_or_var, fit_polynorm, polynomial_degree){
+t_r_curve_change_point = function(t_r_matrix, changepoint_method, max_cp_num, t_r_change_point_plot_file_name, ignore_t_lim_lower, ignore_t_lim_upper, raw_plot_lim, mean_or_var, fit_polynorm, polynomial_degree){
 	library(LSD)
 	library(changepoint)
 
@@ -26,11 +26,11 @@ t_r_curve_change_point = function(t_r_matrix, changepoint_method, t_r_change_poi
 	### variance change-point without polynomial regression norm
 	print('find variance change-point without polynomial regression norm')
 	if (mean_or_var=='var'){
-			ansvar=cpt.var(r, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=3)
+			ansvar=cpt.var(r, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=max_cp_num)
 	} else if (mean_or_var=='mean'){
-			ansvar=cpt.mean(r, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=3)
+			ansvar=cpt.mean(r, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=max_cp_num)
 	} else if (mean_or_var=='meanvar'){
-			ansvar=cpt.meanvar(r, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=3)
+			ansvar=cpt.meanvar(r, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=max_cp_num)
 	}
 	
 	if (fit_polynorm=='polynorm'){
@@ -38,11 +38,11 @@ t_r_curve_change_point = function(t_r_matrix, changepoint_method, t_r_change_poi
 		print('find variance change-point with polynomial regression norm')
 		if (max(r)!=0){
 			if (mean_or_var=='var'){
-				ansvar_norm=cpt.var(r-lo_fit_value, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=3)
+				ansvar_norm=cpt.var(r-lo_fit_value, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=max_cp_num)
 			} else if (mean_or_var=='mean'){
-				ansvar_norm=cpt.mean(r-lo_fit_value, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=3)
+				ansvar_norm=cpt.mean(r-lo_fit_value, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=max_cp_num)
 			} else if (mean_or_var=='meanvar'){
-				ansvar_norm=cpt.meanvar(r-lo_fit_value, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=3)
+				ansvar_norm=cpt.meanvar(r-lo_fit_value, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=max_cp_num)
 			}
 			print(ansvar_norm)
 		} else{

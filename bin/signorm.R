@@ -13,19 +13,20 @@ signal_scale_factor_vector_output_file = paste(data_x_sig_norm_output_file, '.sf
 
 mean_or_var = args[5] ### mean or var
 changepoint_method = args[6]
-fit_polynorm = args[7]
-polynomial_degree = as.numeric(args[8])
+max_cp_num = as.numeric(args[7])
+fit_polynorm = args[8]
+polynomial_degree = as.numeric(args[9])
 
-sampling_num = as.numeric(args[9])
-quantile_lim = as.numeric(args[10])
-seed = as.numeric(args[11])
-ignore_t_lim_lower = as.numeric(args[12])
-ignore_t_lim_upper = as.numeric(args[13])
-raw_plot_lim = as.numeric(args[14])
+sampling_num = as.numeric(args[10])
+quantile_lim = as.numeric(args[11])
+seed = as.numeric(args[12])
+ignore_t_lim_lower = as.numeric(args[13])
+ignore_t_lim_upper = as.numeric(args[14])
+raw_plot_lim = as.numeric(args[15])
 
-scale_factor_type = as.numeric(args[15]) ### 1: total mean; 2:total median; 3: low Poisson mean; 4: high Poisson mean
+scale_factor_type = as.numeric(args[16]) ### 1: total mean; 2:total median; 3: low Poisson mean; 4: high Poisson mean
 
-source_code_folder = args[16]
+source_code_folder = args[17]
 
 ### signorm functions
 source(paste(source_code_folder, 'signorm_functions.R', sep = ''))
@@ -34,7 +35,7 @@ source(paste(source_code_folder, 'signorm_functions.R', sep = ''))
 t_r_matrix = read.table(input_file_t_r_matrix,header = F)
 print(dim(t_r_matrix))
 ### get t threshold
-t_threshold = t_r_curve_change_point(t_r_matrix, changepoint_method, t_r_change_point_plot_file_name, ignore_t_lim_lower, ignore_t_lim_upper, raw_plot_lim, mean_or_var, fit_polynorm, polynomial_degree)
+t_threshold = t_r_curve_change_point(t_r_matrix, changepoint_method, max_cp_num, t_r_change_point_plot_file_name, ignore_t_lim_lower, ignore_t_lim_upper, raw_plot_lim, mean_or_var, fit_polynorm, polynomial_degree)
 print((t_threshold))
 ### read input reads table
 data_x_od = read.table(xais_variable_file, header = FALSE)
