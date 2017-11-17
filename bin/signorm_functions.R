@@ -26,9 +26,9 @@ t_r_curve_change_point = function(t_r_matrix, changepoint_method, t_r_change_poi
 	### variance change-point without polynomial regression norm
 	print('find variance change-point without polynomial regression norm')
 	if (mean_or_var=='var'){
-			ansvar=cpt.var(r, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=2)
+			ansvar=cpt.var(r, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=1)
 	} else{
-			ansvar=cpt.mean(r, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=2)
+			ansvar=cpt.mean(r, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=1)
 	}
 	
 	if (fit_polynorm=='polynorm'){
@@ -36,9 +36,9 @@ t_r_curve_change_point = function(t_r_matrix, changepoint_method, t_r_change_poi
 		print('find variance change-point with polynomial regression norm')
 		if (max(r)!=0){
 			if (mean_or_var=='var'){
-				ansvar_norm=cpt.var(r-lo_fit_value, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=2)
+				ansvar_norm=cpt.var(r-lo_fit_value, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=1)
 			} else{
-				ansvar_norm=cpt.mean(r-lo_fit_value, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=2)
+				ansvar_norm=cpt.mean(r-lo_fit_value, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=1)
 			}
 			print(ansvar_norm)
 		} else{
