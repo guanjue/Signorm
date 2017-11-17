@@ -26,9 +26,10 @@ t_r_curve_change_point = function(t_r_matrix, changepoint_method, t_r_change_poi
 	### polynomial regression fit the log(r) vs log(t) pattern
 	print('fit polynomial regression model')
 	data_for_polyfit = data.frame(x=t_polyfit, y=r_polyfit)
-	lo = lm(y~poly(log(x), data = data_for_polyfit, polynomial_degree, raw=TRUE))
+
+	lo = lm(y~poly(log(x), polynomial_degree, raw=TRUE), data = data_for_polyfit)
 	### get polynomial regression fitted model predicted value
-	lo_fit_value = predict(lo, data.frame(x=t))
+	lo_fit_value = predict(lo, newdata=data.frame(x=t))
 	print('check')
 	print(length(t))
 	print(head(t))	
