@@ -12,8 +12,8 @@ t_r_curve_change_point = function(t_r_matrix, changepoint_method, t_r_change_poi
 	r_od = log2(t_r_matrix[,2])-log2(t_r_matrix[,3]) ### log2 transform r
 
 	### extract t value and r value for polynomial fit
-	t_od_polyfit = (t_r_matrix[,1])
-	r_od_polyfit = log2(t_r_matrix[,2])-log2(t_r_matrix[,3]) ### log2 transform r
+	t_od_polyfit = (t_r_matrix_for_polyfit[,1])
+	r_od_polyfit = log2(t_r_matrix_for_polyfit[,2])-log2(t_r_matrix_for_polyfit[,3]) ### log2 transform r
 
 	### remove x1 OR x2 equals 0
 	t = t_od[as.logical((!is.na(r_od)) * (is.finite(r_od)) ) ]
