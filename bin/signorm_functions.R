@@ -31,6 +31,9 @@ t_r_curve_change_point = function(t_r_matrix, changepoint_method, t_r_change_poi
 	print('check')
 	print(length(t))
 	print(head(t))	
+	print(length(t_polyfit))
+	print(head(t_polyfit))
+	
 	print(length(lo_fit_value))
 	print(head(lo_fit_value))
 	print(length(r))
