@@ -5,41 +5,24 @@ t_r_curve_change_point = function(t_r_matrix, changepoint_method, t_r_change_poi
 
 	### ignore the data points with t value 1-ignore_t_lim (too noisy)
 	t_r_matrix_lower = t_r_matrix[t_r_matrix[,1]>ignore_t_lim_lower,]
-	t_r_matrix_for_polyfit = t_r_matrix_lower[t_r_matrix_lower<ignore_t_lim_upper,]
+	t_r_matrix = t_r_matrix_lower[t_r_matrix_lower<ignore_t_lim_upper,]
 	print(dim(t_r_matrix))
 	### extract t value and r value
 	t_od = (t_r_matrix[,1])
 	r_od = log2(t_r_matrix[,2])-log2(t_r_matrix[,3]) ### log2 transform r
 
-	### extract t value and r value for polynomial fit
-	t_od_polyfit = (t_r_matrix_for_polyfit[,1])
-	r_od_polyfit = log2(t_r_matrix_for_polyfit[,2])-log2(t_r_matrix_for_polyfit[,3]) ### log2 transform r
-
 	### remove x1 OR x2 equals 0
 	t = t_od[as.logical((!is.na(r_od)) * (is.finite(r_od)) ) ]
 	r = r_od[as.logical((!is.na(r_od)) * (is.finite(r_od)) ) ]
-	t_polyfit = t_od_polyfit[as.logical((!is.na(r_od_polyfit)) * (is.finite(r_od_polyfit)) ) ]
-	r_polyfit = r_od_polyfit[as.logical((!is.na(r_od_polyfit)) * (is.finite(r_od_polyfit)) ) ]
-
-	print(summary(r))
 
 	### polynomial regression fit the log(r) vs log(t) pattern
 	print('fit polynomial regression model')
-	data_for_polyfit = data.frame(x=t_polyfit, y=r_polyfit)
+	data_for_polyfit = data.frame(x=t, y=r)
 
 	lo = lm(y~poly(log(x), polynomial_degree, raw=TRUE), data = data_for_polyfit)
 	### get polynomial regression fitted model predicted value
 	lo_fit_value = predict(lo, newdata=data.frame(x=t))
-	print('check')
-	#print(length(t))
-	#print(head(t))	
-	#print(length(t_polyfit))
-	#print(head(t_polyfit))
-	#print(length(lo_fit_value))
-	#print(head(lo_fit_value))
-	#print(length(r))
-	#print(head(r))
-	#print('check')
+
 	### variance change-point without polynomial regression norm
 	print('find variance change-point without polynomial regression norm')
 	if (mean_or_var=='var'){
