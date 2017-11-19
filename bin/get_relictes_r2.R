@@ -10,7 +10,7 @@ sampling_num = as.numeric(args[4])
 input_file_names = read.table(input_file_list, header = FALSE, sep='\t')
 
 test_r2 = function(sig1, sig2){
-	r2 =  1 - sum((sig1[,i] - sig2[,i])^2)/sum((sig1[,i] - mean(sig1[,i]))^2)
+	r2 =  1 - sum((sig1[,] - sig2[,])^2)/sum((sig1[,] - mean(sig1[,]))^2)
 	return(r2)
 }
 
