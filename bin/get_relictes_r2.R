@@ -16,7 +16,7 @@ test_r2 = function(sig1, sig2){
 
 r2_vector = c()
 r_vector = c()
-for ( i in seq(dim(input_file_names)) ){
+for ( i in seq(dim(input_file_names)[1]) ){
 	sig1_file=toString(input_file_names[i,1])
 	sig2_file=toString(input_file_names[i,2])
 	print(paste(input_folder, sig1_file, sep=''))
@@ -27,7 +27,6 @@ for ( i in seq(dim(input_file_names)) ){
 	sig2=read.table(paste(input_folder, sig2_file, sep=''), header=FALSE)
 	### random sample
 	print('random sample')
-	print(dim(sig1))
 	used_id = sample(dim(sig1)[1],sampling_num)
 	sig1=sig1[used_id,]
 	sig2=sig2[used_id,]
@@ -51,7 +50,7 @@ for ( i in seq(dim(input_file_names)) ){
 
 ### write output
 print('write output')
-r2r_matrix = cbind(r2_vector, r2_vector)
+r2r_matrix = cbind(r2_vector, r_vector)
 write.table(r2r_matrix, paste(input_file_list, '.r2_r.txt', sep=''), quote=FALSE, col.names=FALSE, row.names=FALSE, sep='\t')
 
 
