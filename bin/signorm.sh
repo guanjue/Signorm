@@ -44,7 +44,7 @@ done < $input_folder'info_table.txt'
 
 ### get r2 and r between replicates
 time Rscript $script_folder'get_relictes_r2.R' 'info_table_compare_r2_signorm.txt' $output_folder_normed_sig_file $output_folder_r2 500000
-
+time Rscript $script_folder'get_relictes_r2.R' 'info_table_compare_r2_totalmean_norm.txt' $output_folder_normed_sig_file $output_folder_r2 500000
 
 
 
