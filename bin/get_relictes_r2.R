@@ -30,11 +30,10 @@ for ( i in seq(dim(input_file_names)[1]) ){
 	used_id = sample(dim(sig1)[1],sampling_num)
 	sig1=sig1[used_id,]
 	sig2=sig2[used_id,]
-	### log scale
-
-	sig1 = log2(sig1+1)
-	sig2 = log2(sig2+1)
-
+	### nonzero
+	used_id_nonzero = as.logical((sig1!=0) * (sig2!=0))
+	sig1 = log2(sig1[used_id_nonzero])
+	sig2 = log2(sig2[used_id_nonzero])
 
 	### calculate r2 & r
 	print('calculate r2 & r')
