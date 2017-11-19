@@ -5,6 +5,8 @@ analysis_folder='/Volumes/MAC_Data/data/labs/hardison_lab/vision/gene_rnaseq_ata
 input_folder='/Volumes/MAC_Data/data/labs/zhang_lab/01projects/signorm/test_data/input_signal/'
 output_folder_t_r_file='/Volumes/MAC_Data/data/labs/zhang_lab/01projects/signorm/test_data/signorm_signal_t_r_info/'
 output_folder_normed_sig_file='/Volumes/MAC_Data/data/labs/zhang_lab/01projects/signorm/test_data/signorm_normed_signal/'
+output_folder_r2='/Volumes/MAC_Data/data/labs/zhang_lab/01projects/signorm/test_data/signorm_normed_signal_r2/'
+
 ##################################
 	if [ -d "$output_folder_t_r_file" ]; then  
 		rm -r $output_folder_t_r_file
@@ -15,6 +17,12 @@ output_folder_normed_sig_file='/Volumes/MAC_Data/data/labs/zhang_lab/01projects/
 		rm -r $output_folder_normed_sig_file
 	fi
 	mkdir $output_folder_normed_sig_file
+
+	if [ -d "$output_folder_r2" ]; then  
+		rm -r $output_folder_r2
+	fi
+	mkdir $output_folder_r2
+
 ##################################
 
 ##################################
@@ -33,4 +41,11 @@ do
 	time Rscript $script_folder'signorm.R' $input_folder$sig1 $input_folder$sig2 $output_folder_t_r_file$sig1'_vs_'$sig2'.txt' $output_folder_normed_sig_file$sig1'.norm.txt' var PELT 5 polynorm 50 1000000 0.95 2017 0 1000 3 4 $script_folder
 done < $input_folder'info_table.txt'
 ##################################
+
+time Rscript $script_folder'get_relictes_r2.R' $input_folder'info_table_compare_r2_signorm.txt' $output_folder_r2
+
+
+
+
+
 
