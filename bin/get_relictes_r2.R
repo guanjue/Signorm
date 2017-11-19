@@ -19,15 +19,15 @@ r_vector = c()
 for ( i in seq(dim(input_file_names)) ){
 	sig1_file=toString(input_file_names[i,1])
 	sig2_file=toString(input_file_names[i,2])
-	print(sig1_file)
-	print(sig2_file)
+	print(paste(input_folder, sig1_file, sep=''))
+	print(paste(input_folder, sig2_file, sep=''))
 	### read signal file
 	sig1=read.table(paste(input_folder, sig1_file, sep=''), header=FALSE)
 	sig2=read.table(paste(input_folder, sig2_file, sep=''), header=FALSE)
 	### random sample
 	used_id = sample(dim(sig1)[1],sampling_num)
-	sig1=sig1[used_id]
-	sig2=sig2[used_id]
+	sig1=sig1[used_id,]
+	sig2=sig2[used_id,]
 	### calculate r2 & r
 	r2 = test_r2(sig1, sig2)
 	print(r2)
