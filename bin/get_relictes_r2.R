@@ -5,6 +5,7 @@ args = commandArgs(trailingOnly=TRUE)
 input_file_list = args[1]
 input_folder = args[2]
 output_folder = args[3]
+sampling_num = as.numeric(args[4])
 
 input_file_names = read.table(input_file_list, header = FALSE, sep='\t')
 
@@ -23,6 +24,10 @@ for ( i in seq(dim(input_file_names)) ){
 	### read signal file
 	sig1=read.table(paste(input_folder, sig1_file, sep=''), header=FALSE)
 	sig2=read.table(paste(input_folder, sig2_file, sep=''), header=FALSE)
+	### random sample
+	used_id = sample(length(sig1)[1],sampling_num)
+	sig1=sig1[used_id]
+	sig2=sig2[used_id]
 	### calculate r2 & r
 	r2 = test_r2(sig1, sig2)
 	print(r2)

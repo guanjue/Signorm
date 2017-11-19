@@ -42,7 +42,8 @@ do
 done < $input_folder'info_table.txt'
 ##################################
 
-time Rscript $script_folder'get_relictes_r2.R' $input_folder'info_table_compare_r2_signorm.txt' $output_folder_r2
+### get r2 and r between replicates
+time Rscript $script_folder'get_relictes_r2.R' 'info_table_compare_r2_signorm.txt' $output_folder_normed_sig_file $output_folder_r2 500000
 
 
 
