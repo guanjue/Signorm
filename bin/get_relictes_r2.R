@@ -25,7 +25,7 @@ for ( i in seq(dim(input_file_names)) ){
 	sig1=read.table(paste(input_folder, sig1_file, sep=''), header=FALSE)
 	sig2=read.table(paste(input_folder, sig2_file, sep=''), header=FALSE)
 	### random sample
-	used_id = sample(length(sig1)[1],sampling_num)
+	used_id = sample(dim(sig1)[1],sampling_num)
 	sig1=sig1[used_id]
 	sig2=sig2[used_id]
 	### calculate r2 & r
