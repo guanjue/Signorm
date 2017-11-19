@@ -22,20 +22,27 @@ for ( i in seq(dim(input_file_names)) ){
 	print(paste(input_folder, sig1_file, sep=''))
 	print(paste(input_folder, sig2_file, sep=''))
 	### read signal file
+	print('read signal files')
 	sig1=read.table(paste(input_folder, sig1_file, sep=''), header=FALSE)
 	sig2=read.table(paste(input_folder, sig2_file, sep=''), header=FALSE)
 	### random sample
+	print('random sample')
+	print(dim(sig1))
 	used_id = sample(dim(sig1)[1],sampling_num)
 	sig1=sig1[used_id,]
 	sig2=sig2[used_id,]
 	### calculate r2 & r
+	print('calculate r2 & r')
+	print('R2: ')
 	r2 = test_r2(sig1, sig2)
 	print(r2)
 	r2_vector[i] = r2
+	print('R: ')
 	r = cor(sig1, sig2)
 	print(r)
 	r_vector[i] = r
 	### plot scatterplot
+	print('plot scatterplot')
 	png(paste(output_folder, sig1_file, sig2_file, '.png', sep=''))
 	heatscatter(sig1[,], sig2[,], log='xy', pch = 20)
 	abline(0, 1, col='red')
@@ -43,6 +50,7 @@ for ( i in seq(dim(input_file_names)) ){
 }
 
 ### write output
+print('write output')
 r2r_matrix = cbind(r2_vector, r2_vector)
 write.table(r2r_matrix, paste(input_file_list, '.r2_r.txt', sep=''), quote=FALSE, col.names=FALSE, row.names=FALSE, sep='\t')
 
