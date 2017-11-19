@@ -3,19 +3,21 @@ args = commandArgs(trailingOnly=TRUE)
 
 input_file_list = args[1]
 
-input_file_names = read.table(input_file_list, header = FALSE, sep='\t')
-
+input_file_names = read.table('info_table_compare_r2_signorm.txt', header = FALSE, sep='\t')
+info_table_compare_r2_signorm.txt
 test_r2 = function(sig1, sig2){
 	r2 =  1 - sum((sig1[,i] - sig2[,i])^2)/sum((sig1[,i] - mean(sig1[,i]))^2)
 	return(r2)
 }
 
-for (files in input_file_names){
-	print(files[1])
-	print(files[2])
+for (i in seq(dim(input_file_names[i,1])[1])){
+	sig1_file=toString(input_file_names[i,1])
+	sig2_file=toString(input_file_names[i,2])
+	print(sig1_file)
+	print(sig2_file)
 	### read signal file
-	sig1=read.table(files[1], header=FALSE)
-	sig2=read.table(files[2], header=FALSE)
+	sig1=read.table(sig1_file, header=FALSE)
+	sig2=read.table(sig2_file, header=FALSE)
 	### calculate r2 & r
 	r2 = test_r2(sig1, sig2)
 	print(r2)
