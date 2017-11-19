@@ -6,6 +6,7 @@ input_file_list = args[1]
 input_folder = args[2]
 output_folder = args[3]
 sampling_num = as.numeric(args[4])
+random_seed = as.numeric(args[5])
 
 input_file_names = read.table(input_file_list, header = FALSE, sep='\t')
 
@@ -27,6 +28,7 @@ for ( i in seq(dim(input_file_names)[1]) ){
 	sig2=read.table(paste(input_folder, sig2_file, sep=''), header=FALSE)
 	### random sample
 	print('random sample')
+	set.seed(random_seed)
 	used_id = sample(dim(sig1)[1],sampling_num)
 	sig1=sig1[used_id,]
 	sig2=sig2[used_id,]
