@@ -4,7 +4,7 @@ args = commandArgs(trailingOnly=TRUE)
 input_file_list = args[1]
 
 input_file_names = read.table('info_table_compare_r2_signorm.txt', header = FALSE, sep='\t')
-info_table_compare_r2_signorm.txt
+
 test_r2 = function(sig1, sig2){
 	r2 =  1 - sum((sig1[,i] - sig2[,i])^2)/sum((sig1[,i] - mean(sig1[,i]))^2)
 	return(r2)
