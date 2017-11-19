@@ -4,14 +4,14 @@ args = commandArgs(trailingOnly=TRUE)
 
 input_file_list = args[1]
 output_folder = args[2]
-input_file_names = read.table('info_table_compare_r2_signorm.txt', header = FALSE, sep='\t')
+input_file_names = read.table(input_file_list, header = FALSE, sep='\t')
 
 test_r2 = function(sig1, sig2){
 	r2 =  1 - sum((sig1[,i] - sig2[,i])^2)/sum((sig1[,i] - mean(sig1[,i]))^2)
 	return(r2)
 }
 
-for ( i in seq(dim(input_file_names[i,1])) ){
+for ( i in seq(dim(input_file_names)) ){
 	sig1_file=toString(input_file_names[i,1])
 	sig2_file=toString(input_file_names[i,2])
 	print(sig1_file)
