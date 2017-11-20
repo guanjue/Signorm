@@ -12,9 +12,10 @@ random_seed = as.numeric(args[6])
 
 input_file_names = read.table(input_file_list, header = FALSE, sep='\t')
 
-test_r2 = function(sig1, sig2){
-	r2 =  sum((sig1 - sig2)^2)/length(sig1)#/sum((sig1 - mean(sig1))^2)
-	return(r2)
+test_MSE = function(sig1, sig2){
+	MSE =  sum((sig1 - sig2)^2)/length(sig1)
+	#r2 =  1 - sum((sig1 - sig2)^2)/sum((sig1 - mean(sig1))^2)
+	return(MSE)
 }
 
 r2_vector = c()
@@ -40,9 +41,9 @@ for ( i in seq(dim(input_file_names)[1]) ){
 	sig2 = (sig2[used_id_nonzero])
 
 	### calculate r2 & r
-	print('calculate r2 & r')
-	print('R2: ')
-	r2 = test_r2(sig1, sig2)
+	print('calculate MSE & R')
+	print('MSE: ')
+	r2 = test_MSE(sig1, sig2)
 	print(r2)
 	r2_vector[i] = r2
 	print('R: ')
