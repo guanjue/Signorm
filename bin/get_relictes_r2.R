@@ -35,7 +35,7 @@ for ( i in seq(dim(input_file_names)[1]) ){
 	sig1=sig1[used_id,]
 	sig2=sig2[used_id,]
 	### nonzero
-	used_id_nonzero = as.logical((sig1>ignore_sig) * (sig2>ignore_sig))
+	used_id_nonzero = as.logical((sig1>ignore_sig) + (sig2>ignore_sig))
 	sig1 = (sig1[used_id_nonzero])
 	sig2 = (sig2[used_id_nonzero])
 
