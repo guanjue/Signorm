@@ -5,8 +5,10 @@ args = commandArgs(trailingOnly=TRUE)
 input_file_list = args[1]
 input_folder = args[2]
 output_folder = args[3]
-sampling_num = as.numeric(args[4])
-random_seed = as.numeric(args[5])
+
+ignore_sig = as.numeric(args[4])
+sampling_num = as.numeric(args[5])
+random_seed = as.numeric(args[6])
 
 input_file_names = read.table(input_file_list, header = FALSE, sep='\t')
 
@@ -33,7 +35,7 @@ for ( i in seq(dim(input_file_names)[1]) ){
 	sig1=sig1[used_id,]
 	sig2=sig2[used_id,]
 	### nonzero
-	used_id_nonzero = as.logical((sig1!=0) * (sig2!=0))
+	used_id_nonzero = as.logical((sig1>ignore_sig) * (sig2>ignore_sig))
 	sig1 = (sig1[used_id_nonzero])
 	sig2 = (sig2[used_id_nonzero])
 

@@ -47,8 +47,8 @@ done < $input_folder'info_table.txt'
 # :%s/.signorm.txt/.signorm.totalmean.txt/g
 # :%s/5end_histone_histone_signorm\///g
 # ls 5end_histone_histone_signorm/*.bamtobed5endintersect.signal.histone_ncis_subtract_input.txt.signorm.txt > info_table_compare_r2_signorm.txt
-time Rscript $script_folder'get_relictes_r2.R' 'info_table_compare_r2_signorm.txt' $output_folder_normed_sig_file $output_folder_r2 500000 2017
-time Rscript $script_folder'get_relictes_r2.R' 'info_table_compare_r2_totalmean_norm.txt' $output_folder_normed_sig_file $output_folder_r2 500000 2017
+time Rscript $script_folder'get_relictes_r2.R' 'info_table_compare_r2_signorm.txt' $output_folder_normed_sig_file $output_folder_r2 5 500000 2017
+time Rscript $script_folder'get_relictes_r2.R' 'info_table_compare_r2_totalmean_norm.txt' $output_folder_normed_sig_file $output_folder_r2 5 500000 2017
 
 
 
