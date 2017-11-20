@@ -26,11 +26,11 @@ t_r_curve_change_point = function(t_r_matrix, changepoint_method, max_cp_num, t_
 	### variance change-point without polynomial regression norm
 	print('find variance change-point without polynomial regression norm')
 	if (mean_or_var=='var'){
-			ansvar=cpt.var(r, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=max_cp_num)
+			ansvar=cpts(cpt.var(r, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=max_cp_num))
 	} else if (mean_or_var=='mean'){
-			ansvar=cpt.mean(r, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=max_cp_num)
+			ansvar=cpts(cpt.mean(r, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=max_cp_num))
 	} else if (mean_or_var=='meanvar'){
-			ansvar=cpt.meanvar(r, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=max_cp_num)
+			ansvar=cpts(cpt.meanvar(r, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=max_cp_num))
 	}
 	
 	if (fit_polynorm=='polynorm'){
