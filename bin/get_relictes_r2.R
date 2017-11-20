@@ -35,7 +35,7 @@ for ( i in seq(dim(input_file_names)[1]) ){
 	sig1=sig1[used_id,]
 	sig2=sig2[used_id,]
 	### nonzero
-	used_id_nonzero = as.logical((sig1>ignore_sig) + (sig2>ignore_sig))
+	used_id_nonzero = as.logical((sig1>ignore_sig) * (sig2>ignore_sig))
 	sig1 = (sig1[used_id_nonzero])
 	sig2 = (sig2[used_id_nonzero])
 
@@ -52,7 +52,7 @@ for ( i in seq(dim(input_file_names)[1]) ){
 	### plot scatterplot
 	print('plot scatterplot')
 	png(paste(output_folder, sig1_file, sig2_file, '.png', sep=''))
-	heatscatter(sig1, sig2, log='xy', pch = 20)
+	heatscatter(sig1, sig2, pch = 20)
 	abline(0, 1, col='red')
 	dev.off()
 }
