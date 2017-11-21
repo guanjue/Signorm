@@ -26,11 +26,11 @@ t_r_curve_change_point = function(t_r_matrix, changepoint_method, max_cp_num, t_
 	### variance change-point without polynomial regression norm
 	print('find variance change-point without polynomial regression norm')
 	if (mean_or_var=='var'){
-			ansvar=cpts(cpt.var(r, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=max_cp_num))
+			ansvar=(cpt.var(r, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=max_cp_num))
 	} else if (mean_or_var=='mean'){
-			ansvar=cpts(cpt.mean(r, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=max_cp_num))
+			ansvar=(cpt.mean(r, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=max_cp_num))
 	} else if (mean_or_var=='meanvar'){
-			ansvar=cpts(cpt.meanvar(r, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=max_cp_num))
+			ansvar=(cpt.meanvar(r, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=max_cp_num))
 	}
 	
 	if (fit_polynorm=='polynorm'){
@@ -39,11 +39,11 @@ t_r_curve_change_point = function(t_r_matrix, changepoint_method, max_cp_num, t_
 		if (max(r)!=0){
 			r_straight = r-lo_fit_value
 			if (mean_or_var=='var'){
-				ansvar_norm=cpts(cpt.var(r_straight, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=max_cp_num))
+				ansvar_norm=(cpt.var(r_straight, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=max_cp_num))
 			} else if (mean_or_var=='mean'){
-				ansvar_norm=cpts(cpt.mean(r_straight, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=max_cp_num))
+				ansvar_norm=(cpt.mean(r_straight, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=max_cp_num))
 			} else if (mean_or_var=='meanvar'){
-				ansvar_norm=cpts(cpt.meanvar(r_straight, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=max_cp_num))
+				ansvar_norm=(cpt.meanvar(r_straight, class=FALSE, method = changepoint_method, penalty = 'BIC', Q=max_cp_num))
 			}
 			print(ansvar_norm)
 		} else{
