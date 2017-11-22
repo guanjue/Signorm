@@ -68,10 +68,10 @@ for ( i in seq(dim(input_file_names)[1]) ){
 	r2_vector[i] = r2
 
 	print('MSE (log2): ')
-	mse_log_vector = test_MSE(sig1_log, sig2_log)
+	mse_log = test_MSE(sig1_log, sig2_log)
 	r2_log2 = test_r2(sig1_log, sig2_log)
 	print(r2_log2)
-	mse_log_vector[i] = mse_log_vector
+	mse_log_vector[i] = mse_log
 	r2_log_vector[i] = r2_log2
 
 	print('R: ')
