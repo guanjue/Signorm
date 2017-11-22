@@ -13,7 +13,7 @@ random_seed = as.numeric(args[6])
 input_file_names = read.table(input_file_list, header = FALSE, sep='\t')
 
 test_MSE = function(sig1, sig2){
-	MSE =  sum((sig1 - sig2)^2)/length(sig1)
+	MSE =  mean((sig1 - sig2)^2)
 	return(MSE)
 }
 
