@@ -19,7 +19,7 @@ test_MSE = function(sig1, sig2){
 
 test_r2 = function(sig1, sig2){
 	r2 =  1 - sum((sig1 - sig2)^2)/sum((sig1 - mean(sig1))^2)
-	return(MSE)
+	return(r2)
 }
 
 mse_vector = c()
