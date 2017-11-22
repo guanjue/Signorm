@@ -14,10 +14,16 @@ input_file_names = read.table(input_file_list, header = FALSE, sep='\t')
 
 test_MSE = function(sig1, sig2){
 	MSE =  sum((sig1 - sig2)^2)/length(sig1)
-	#r2 =  1 - sum((sig1 - sig2)^2)/sum((sig1 - mean(sig1))^2)
 	return(MSE)
 }
 
+test_r2 = function(sig1, sig2){
+	r2 =  1 - sum((sig1 - sig2)^2)/sum((sig1 - mean(sig1))^2)
+	return(MSE)
+}
+
+mse_vector = c()
+mse_log_vector = c()
 r2_vector = c()
 r2_log_vector = c()
 r_vector = c()
@@ -55,13 +61,17 @@ for ( i in seq(dim(input_file_names)[1]) ){
 	print('calculate MSE & R')
 
 	print('MSE: ')
-	r2 = test_MSE(sig1, sig2)
+	mse = test_MSE(sig1, sig2)
+	r2 = test_r2(sig1, sig2)
 	print(r2)
+	mse_vector[i] = mse
 	r2_vector[i] = r2
 
 	print('MSE (log2): ')
-	r2_log2 = test_MSE(sig1_log, sig2_log)
+	mse_log_vector = test_MSE(sig1_log, sig2_log)
+	r2_log2 = test_r2(sig1_log, sig2_log)
 	print(r2_log2)
+	mse_log_vector[i] = mse_log_vector
 	r2_log_vector[i] = r2_log2
 
 	print('R: ')
@@ -88,7 +98,7 @@ for ( i in seq(dim(input_file_names)[1]) ){
 
 ### write output
 print('write output')
-r2r_matrix = cbind(r_name, r2_vector, r_vector, total_mean, r2_log_vector, r_vector_log2, total_mean_log2)
+r2r_matrix = cbind(r_name, mse_vector, r2_vector, r_vector, total_mean, mse_log_vector, r2_log_vector, r_vector_log2, total_mean_log2)
 write.table(r2r_matrix, paste(input_file_list, '.r2_r.txt', sep=''), quote=FALSE, col.names=FALSE, row.names=FALSE, sep='\t')
 
 
