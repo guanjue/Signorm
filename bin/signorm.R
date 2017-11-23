@@ -53,11 +53,15 @@ print('signal_scale_factor_vector')
 print(signal_scale_factor_vector)
 print('t_threshold_modified')
 print(t_threshold_modified)
+is.element(scale_factor_type, c(1,2,3,4))
 ### norm the x-axis signal by the scale factor
-if (is.element(scale_factor_type, c(1,2,3,4))) {
+if (is.element(scale_factor_type, c(1,2,3,4))){
+	print('1: total mean; 2:total median; 3: low Poisson mean; 4: high Poisson mean')
+	print(scale_factor_type)
 	data_x_sig_norm = data_x_sig / signal_scale_factor_vector[scale_factor_type] * signal_scale_factor_vector[scale_factor_type+4]
 } else if (scale_factor_type=5) {
 	### 2 scale factor for 2 parts
+	print('2 scale factor for 2 parts method')
 	sf_low = 1/signal_scale_factor_vector[3] * signal_scale_factor_vector[3+4]
 	sf_high = 1/signal_scale_factor_vector[4] * signal_scale_factor_vector[4+4]
 	data_x_sig_norm = apply(cbind(data_x_sig, data_y_sig), 1, function(x) if((x[1]+x[2])<=t_threshold_modified) { x * sf_low} else { x * sf_high } )
