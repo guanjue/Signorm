@@ -49,6 +49,8 @@ signal_scale_factor_vector_t_threshold_modified = calculate_scale_factor_with_t_
 signal_scale_factor_vector = signal_scale_factor_vector_t_threshold_modified$sf_vector
 t_threshold_modified = signal_scale_factor_vector_t_threshold_modified$t_threshold
 
+print(signal_scale_factor_vector)
+print(t_threshold_modified)
 ### norm the x-axis signal by the scale factor
 if (is.element(scale_factor_type, c(1,2,3,4))) {
 	data_x_sig_norm = data_x_sig / signal_scale_factor_vector[scale_factor_type] * signal_scale_factor_vector[scale_factor_type+4]
