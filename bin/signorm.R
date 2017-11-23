@@ -59,7 +59,7 @@ if (is.element(scale_factor_type, c(1,2,3,4))){
 	print('2 scale factor for 2 parts method')
 	sf_low = 1/signal_scale_factor_vector[3] * signal_scale_factor_vector[3+4]
 	sf_high = 1/signal_scale_factor_vector[4] * signal_scale_factor_vector[4+4]
-	data_x_sig_norm = t( apply(cbind(data_x_sig, data_y_sig), 1, function(x) if((x[1]+x[2])<=t_threshold_modified) { x[1] * sf_low} else { x[1] * sf_high } ) )
+	data_x_sig_norm = as.matrix( apply(cbind(data_x_sig, data_y_sig), 1, function(x) if((x[1]+x[2])<=t_threshold_modified) { x[1] * sf_low} else { x[1] * sf_high } ) )
 }
 
 ### write normed signal vector
