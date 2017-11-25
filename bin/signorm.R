@@ -36,8 +36,11 @@ source(paste(source_code_folder, 'signorm_functions.R', sep = ''))
 t_r_matrix = read.table(input_file_t_r_matrix,header = F)
 print(dim(t_r_matrix))
 ### get t threshold
-t_threshold = t_r_curve_change_point(t_r_matrix, changepoint_method, max_cp_num, t_r_change_point_plot_file_name, ignore_t_lim_lower, ignore_t_lim_upper, raw_plot_lim, mean_or_var, fit_polynorm, polynomial_degree)
+t_cp_list = t_r_curve_change_point(t_r_matrix, changepoint_method, max_cp_num, t_r_change_point_plot_file_name, ignore_t_lim_lower, ignore_t_lim_upper, raw_plot_lim, mean_or_var, fit_polynorm, polynomial_degree)
+t_threshold = t_cp_list$tcp
 print((t_threshold))
+polynomial_model = t_cp_list$pnmodel
+
 ### read input reads table
 data_x_od = read.table(xais_variable_file, header = FALSE)
 data_x_sig = as.matrix(data_x_od[,1]) 
@@ -74,7 +77,17 @@ if (is.element(scale_factor_type, c(1,2,3,4))){
 	t_r_hash = hash( t_r_matrix[,1], t_r_matrix[,3] / t_r_matrix[,2] )
 	### give each t a independent sf
 	data_x_sig_norm = as.matrix( apply(cbind(data_x_sig, data_y_sig), 1, function(x) if(x[1]!=0){ x[1] * values(t_r_hash[toString(x[1]+x[2])]) } else{x[1]} ) )
+} else if (scale_factor_type==8) {
+	### only normalize high signal part
+	print('t value norm')
+	### initialize t-r matrix hash 
+	t = t_r_matrix[,1] 
+	tsf = exp(predict(lo, newdata=data.frame(x=t)))
+	t_r_hash = hash( t, tsf )
+	### give each t a independent sf
+	data_x_sig_norm = as.matrix( apply(cbind(data_x_sig, data_y_sig), 1, function(x) if(x[1]!=0){ x[1] * values(t_r_hash[toString(x[1]+x[2])]) } else{x[1]} ) )
 }
+
 
 
 ### write normed signal vector

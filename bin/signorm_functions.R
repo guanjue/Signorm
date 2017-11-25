@@ -75,8 +75,9 @@ t_r_curve_change_point = function(t_r_matrix, changepoint_method, max_cp_num, t_
 	abline(v = t_variance_change_point, col = 'red', lty=2)
 	dev.off()
 
-	return(t_variance_change_point)
-}
+	output = list('tcp'=t_variance_change_point, 'pnmodel'=lo)
+	return(output)
+} 
 ##############################################
 
 ##############################################
