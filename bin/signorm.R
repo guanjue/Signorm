@@ -81,11 +81,10 @@ if (is.element(scale_factor_type, c(1,2,3,4))){
 	### only normalize high signal part
 	print('t value norm')
 	### initialize t-r matrix hash 
-	t = log(t_r_matrix[,1]) 
-	tsf = 1/(2**(predict(polynomial_model, newdata=data.frame(x=t))))
-	t_r_hash = hash( t, tsf )
+	t_all = log(data_x_sig + data_y_sig) 
+	tsf = 1/(2**(predict(polynomial_model, newdata=data.frame(x=t_all))))
 	### give each t a independent sf
-	data_x_sig_norm = as.matrix( apply(cbind(data_x_sig, data_y_sig), 1, function(x) if(x[1]!=0){ x[1] * values(t_r_hash[toString( log(x[1]+x[2]) )]) } else{x[1]} ) )
+	data_x_sig_norm = as.matrix( apply(cbind(data_x_sig, tsf), 1, function(x) if(x[1]!=0){ x[1] * x[2] } else{x[1]} ) )
 }
 
 
