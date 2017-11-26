@@ -85,6 +85,7 @@ if (is.element(scale_factor_type, c(1,2,3,4))){
 	tsf = 1/exp(predict(polynomial_model, newdata=data.frame(x=t)))
 	t_r_hash = hash( t_r_matrix[,1], t_r_matrix[,3] / t_r_matrix[,2] )
 	print(length(tsf))
+	print(head(t))
 	print(head(tsf))
 	t_r_hash = hash( t, tsf )
 	### give each t a independent sf
