@@ -25,6 +25,8 @@ test_R2 = function(sig1, sig2){
 d1 = read.table(s1, header = F)
 d2 = read.table(s2, header = F)
 
+print(dim(d1))
+print(length(d1))
 ### if sampling_num != 0, sampling calculate scale factor & plotting 
 if (sampling_num != 0){
 	set.seed(seed)
