@@ -52,7 +52,7 @@ write.table(result, paste(output_filename, '.txt', sep=''), quote=F, sep='\t', r
 
 ### plot scatter plot
 png(paste(output_filename, '.png', sep=''))
-heatscatter(d1_no0, d2_no0, log='xy', pch = 20, main = paste('spearman: ', ))
+heatscatter(d1_no0, d2_no0, log='xy', pch = 20, main = paste('spearman: ', toString(spearman_cor), '\npearson: ', toString(pearson_cor), sep=''))
 abline(0,1,col='red')
 dev.off()
 
