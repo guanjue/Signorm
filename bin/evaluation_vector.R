@@ -5,7 +5,7 @@ args = commandArgs(trailingOnly=TRUE)
 s1 = args[1]
 s2 = args[2]
 sampling_num = as.numeric(args[3])
-random_seed = as.numeric(args[4])
+seed = as.numeric(args[4])
 output_filename = args[5]
 
 ############
