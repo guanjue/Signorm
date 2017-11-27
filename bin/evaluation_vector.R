@@ -25,9 +25,9 @@ d1 = read.table(s1, header = F)
 d2 = read.table(s2, header = F)
 
 ### only keep both nonzero bins
-used_id = as.logical((d1[,2]!=0)*(d2[,2]!=0))
-d1_no0 = d1[used_id,2]
-d2_no0 = d2[used_id,2]
+used_id = as.logical((d1[,1]!=0)*(d2[,1]!=0))
+d1_no0 = d1[used_id,1]
+d2_no0 = d2[used_id,1]
 
 ### get sample evaluation
 pearson_cor = cor(d1_no0, d2_no0, method = 'pearson')
