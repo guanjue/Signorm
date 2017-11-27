@@ -25,8 +25,6 @@ test_R2 = function(sig1, sig2){
 d1 = read.table(s1, header = F)
 d2 = read.table(s2, header = F)
 
-print(dim(d1))
-print(length(d1))
 ### if sampling_num != 0, sampling calculate scale factor & plotting 
 if (sampling_num != 0){
 	set.seed(seed)
@@ -36,9 +34,9 @@ if (sampling_num != 0){
 }
 
 ### only keep both nonzero bins
-used_id = as.logical((d1[,1]!=0)*(d2[,1]!=0))
-d1_no0 = d1[used_id,1]
-d2_no0 = d2[used_id,1]
+used_id = as.logical((d1!=0)*(d2!=0))
+d1_no0 = d1[used_id]
+d2_no0 = d2[used_id]
 
 ### get sample evaluation
 pearson_cor = cor(d1_no0, d2_no0, method = 'pearson')
