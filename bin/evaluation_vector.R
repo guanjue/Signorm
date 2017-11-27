@@ -43,12 +43,16 @@ pearson_cor = cor(d1_no0, d2_no0, method = 'pearson')
 spearman_cor = cor(d1_no0, d2_no0, method = 'spearman')
 MSE = test_MSE(d1_no0, d2_no0)
 R2 = test_R2(d1_no0, d2_no0)
+total_reads_d1 = sum(d1)
+total_reads_d2 = sum(d2)
+total_reads_d1_no0 = sum(d1_no0)
+total_reads_d2_no0 = sum(d2_no0)
 
 ### merge all evaluation scores
-result = data.frame(s1, s2, pearson_cor, spearman_cor, MSE, R2)
+result = data.frame(s1, s2, pearson_cor, spearman_cor, MSE, R2, total_reads_d1, total_reads_d2, total_reads_d1_no0, total_reads_d2_no0)
 
 ### write output
-write.table(result, paste(output_filename, '.txt', sep=''), quote=F, sep='\t', row.names = FALSE, col.names = FALSE)
+write.table(result, paste(output_filename, '.txt', sep=''), quote=F, sep='\t', row.names = FALSE, col.names = TRUE)
 
 ### plot scatter plot
 png(paste(output_filename, '.png', sep=''))
