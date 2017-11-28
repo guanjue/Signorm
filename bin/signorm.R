@@ -94,7 +94,7 @@ if (is.element(scale_factor_type, c(1,2,3,4))){
 	O = order(A)
 	a = A[O]
 	m = M[O]
-	ind = round(seq(1, length(a), len = 500000))
+	ind = round(seq(1, length(a), len = 50000))
 	a = a[ind]
 	m = m[ind]
 	fit = loess(m ~ a)
