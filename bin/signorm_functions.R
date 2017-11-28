@@ -270,14 +270,14 @@ MAnorm = function(data_x_sig, data_y_sig, sampling_num, seed, MAplot_output_file
 	### fit loess line
 	fit = loess(m ~ a)
 	### get bias line for MA plot
-	bias = predict(fit, newdata = data.frame(a = A[O]))
+	bias = predict(fit, newdata = data.frame(a = a))
 	### get scale factors
 	tsf = 1/(2**(predict(fit, newdata = data.frame(a = A))))
 	### plot orignal MA plot
 	png(paste(MAplot_output_file_name, '.od_MA.png', sep=''))
 	heatscatter(A[O], M[O], pch = 20, main='original signal')
 	abline(h=0,col = 'blue')
-	lines(A[O], bias, col='red', lty=1)
+	lines(a, bias, col='red', lty=1)
 	dev.off()
 	### plot bias corrected MA plot
 	png(paste(MAplot_output_file_name, '.bias_corrected_MA.png', sep=''))
