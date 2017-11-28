@@ -32,7 +32,7 @@ d2_od_no0 = d2_od[used_id,]
 ### if sampling_num != 0, sampling calculate scale factor & plotting 
 if (sampling_num != 0){
 	set.seed(seed)
-	used_id = sample(dim(d1)[1],sampling_num)
+	used_id = sample(dim(d1_od)[1],sampling_num)
 	d1 = d1_od[used_id,]
 	d2 = d2_od[used_id,]		
 }
