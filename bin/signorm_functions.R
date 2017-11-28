@@ -248,7 +248,43 @@ calculate_scale_factor_with_t_thresh = function(data_x, data_y, sampling_num, se
 	
 	return(sf_vector_t_threshold)
 }
+##############################################
 
-
-
+##############################################
+MAnorm = function(data_x_sig, data_y_sig, sampling_num, seed, MAplot_output_file_name){
+	### get M & A
+	M = log2(data_x_sig + 0.5) - log2(data_y_sig + 0.5)
+	A = 0.5*(log2(data_x_sig + 0.5) + log2(data_y_sig + 0.5))
+	### sort M & A for plotting
+	O = order(A)
+	a = A[O]
+	m = M[O]
+	### sampling for loess fit
+	### if sampling_num != 0, sampling calculate scale factor & plotting 
+	if (sampling_num != 0){
+		set.seed(seed)
+		used_id = sample(length(a)[1],sampling_num)
+		a = a[used_id]
+		m = m[used_id]		
+	}
+	### fit loess line
+	fit = loess(m ~ a)
+	### get bias line for MA plot
+	bias = predict(fit, newdata = data.frame(a = a))
+	### get scale factors
+	tsf = 1/(2**(predict(fit, newdata = data.frame(a = A))))
+	### plot orignal MA plot
+	png(paste(MAplot_output_file_name, '.od_MA.png', sep=''))
+	heatscatter(a, m, pch = 20, main='original signal')
+	abline(h=0,col = 'blue')
+	lines(a, bias, col='red')
+	dev.off()
+	### plot bias corrected MA plot
+	png(paste(MAplot_output_file_name, '.bias_corrected_MA.png', sep=''))
+	heatscatter(a, m-bias, pch = 20, main='bias corrected signal')
+	abline(h=0,col = 'blue')	
+	dev.off()
+	###
+	return(tsf)
+}
 
