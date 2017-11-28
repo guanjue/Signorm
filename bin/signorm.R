@@ -92,8 +92,8 @@ if (is.element(scale_factor_type, c(1,2,3,4))){
 	M = log2(data_x_sig + 0.5) - log2(data_y_sig + 0.5)
 	A = 0.5*(log2(data_x_sig + 0.5) + log2(data_y_sig + 0.5))
 	O = order(A)
-	a = A[o]
-	m = M[o]
+	a = A[O]
+	m = M[O]
 	ind = round(seq(1, length(a), len = 500000))
 	a = a[ind]
 	m = m[ind]
