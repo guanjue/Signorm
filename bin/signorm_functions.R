@@ -275,13 +275,13 @@ MAnorm = function(data_x_sig, data_y_sig, sampling_num, seed, MAplot_output_file
 	tsf = 1/(2**(predict(fit, newdata = data.frame(a = A))))
 	### plot orignal MA plot
 	png(paste(MAplot_output_file_name, '.od_MA.png', sep=''))
-	heatscatter(a, m, pch = 20, main='original signal')
+	heatscatter(A[O], M[O], pch = 20, main='original signal')
 	abline(h=0,col = 'blue')
 	lines(A[O], bias, col='red', lty=1)
 	dev.off()
 	### plot bias corrected MA plot
 	png(paste(MAplot_output_file_name, '.bias_corrected_MA.png', sep=''))
-	heatscatter(a, m-bias, pch = 20, main='bias corrected signal')
+	heatscatter(A[O], m-bias, pch = 20, main='bias corrected signal')
 	abline(h=0,col = 'blue')	
 	dev.off()
 	###
