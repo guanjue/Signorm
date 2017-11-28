@@ -30,7 +30,7 @@ scale_factor_type = as.numeric(args[16]) ### 1: total mean; 2:total median; 3: l
 source_code_folder = args[17]
 
 ### signorm functions
-source(paste(source_code_folder, 'signorm_functions.R', sep = ''))
+source(paste(source_code_folder, 'signorm_functions_poisson.R', sep = ''))
 
 ### read r vs t table of r vs t: r=sum(x1)/sum(x2); t=x1+x2
 t_r_matrix = read.table(input_file_t_r_matrix,header = F)
@@ -85,25 +85,7 @@ if (is.element(scale_factor_type, c(1,2,3,4))){
 	tsf = 1/(2**(predict(polynomial_model, newdata=data.frame(x=t_all))))
 	### give each t a independent sf
 	data_x_sig_norm = as.matrix( apply(cbind(data_x_sig, tsf), 1, function(x) if(x[1]!=0){ x[1] * x[2] } else{x[1]} ) )
-} else if (scale_factor_type==9) {
-	### only normalize high signal part
-	print('loess MA plot norm')
-	### initialize t-r matrix hash 
-	M = log2(data_x_sig + 0.5) - log2(data_y_sig + 0.5)
-	A = 0.5*(log2(data_x_sig + 0.5) + log2(data_y_sig + 0.5))
-	O = order(A)
-	a = A[o]
-	m = M[o]
-	ind = round(seq(1, length(a), len = 500000))
-	a = a[ind]
-	m = m[ind]
-	fit = loess(m ~ a)
-	tsf = 1/(2**(predict(fit, newdata = data.frame(a = A))))
-	### give each t a independent sf
-	data_x_sig_norm = as.matrix( apply(cbind(data_x_sig, tsf), 1, function(x) if((x[1]+0.5)!=0){ (x[1]+0.5) * x[2] } else{x[1]} ) )
 }
-
-
 
 
 
