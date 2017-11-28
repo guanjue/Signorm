@@ -281,7 +281,7 @@ MAnorm = function(data_x_sig, data_y_sig, sampling_num, seed, MAplot_output_file
 	dev.off()
 	### plot bias corrected MA plot
 	png(paste(MAplot_output_file_name, '.bias_corrected_MA.png', sep=''))
-	heatscatter(A[O], m-bias, pch = 20, main='bias corrected signal')
+	heatscatter(a, m-bias, pch = 20, main='bias corrected signal')
 	abline(h=0,col = 'blue')	
 	dev.off()
 	###
