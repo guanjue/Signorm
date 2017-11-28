@@ -262,8 +262,8 @@ MAnorm = function(data_x_sig, data_y_sig, sampling_num, seed, MAplot_output_file
 	### sampling for loess fit
 	### if sampling_num != 0, sampling calculate scale factor & plotting 
 	if (sampling_num != 0){
-		set.seed(seed)
-		used_id = sample(length(a)[1],sampling_num)
+		### keep the order
+		used_id = round(seq(1, length(a), len = sampling_num))
 		a = a[used_id]
 		m = m[used_id]		
 	}
