@@ -85,7 +85,14 @@ if (is.element(scale_factor_type, c(1,2,3,4))){
 	tsf = 1/(2**(predict(polynomial_model, newdata=data.frame(x=t_all))))
 	### give each t a independent sf
 	data_x_sig_norm = as.matrix( apply(cbind(data_x_sig, tsf), 1, function(x) if(x[1]!=0){ x[1] * x[2] } else{x[1]} ) )
+} else if (scale_factor_type==9) {
+	print('loess MA plot norm')
+	tsf = MAnorm(data_x_sig, data_y_sig, 50000, 2017, t_r_change_point_plot_file_name)
+	### give each bin a independent sf
+	data_x_sig_norm = as.matrix( apply(cbind(data_x_sig, tsf), 1, function(x) if((x[1]+0.5)!=0){ (x[1]+0.5) * x[2] } else{x[1]} ) )
 }
+
+
 
 
 
