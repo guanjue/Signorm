@@ -25,6 +25,31 @@ test_R2 = function(sig1, sig2){
 d1_od = read.table(s1, header = F)
 d2_od = read.table(s2, header = F)
 
+### only keep both nonzero bins
+used_id = as.logical((d1_od!=0)*(d2_od!=0))
+d1_no0 = d1_od[used_id]
+d2_no0 = d2_od[used_id]
+
+### get sample evaluation
+pearson_cor = cor(d1_no0, d2_no0, method = 'pearson')
+spearman_cor = cor(d1_no0, d2_no0, method = 'spearman')
+
+pearson_cor_all = cor(d1_od, d2_od, method = 'pearson')
+spearman_cor_all = cor(d1_od, d2_od, method = 'spearman')
+
+MSE = test_MSE(d1_od, d2_od)
+
+R2 = test_R2(d1_no0, d2_no0)
+
+total_reads_d1 = sum(d1_od)
+total_reads_d2 = sum(d2_od)
+
+### merge all evaluation scores
+result = data.frame(s1, s2, pearson_cor_all, spearman_cor_all, MSE, pearson_cor, spearman_cor, R2, total_reads_d1, total_reads_d2)
+
+### write output
+write.table(result, paste(output_filename, '.txt', sep=''), quote=F, sep='\t', row.names = FALSE, col.names = TRUE)
+
 ### if sampling_num != 0, sampling calculate scale factor & plotting 
 if (sampling_num != 0){
 	set.seed(seed)
@@ -35,29 +60,10 @@ if (sampling_num != 0){
 	d1 = d1_od
 	d2 = d2_od
 }
-
 ### only keep both nonzero bins
 used_id = as.logical((d1!=0)*(d2!=0))
 d1_no0 = d1[used_id]
 d2_no0 = d2[used_id]
-
-### get sample evaluation
-pearson_cor = cor(d1_no0, d2_no0, method = 'pearson')
-spearman_cor = cor(d1_no0, d2_no0, method = 'spearman')
-pearson_cor_all = cor(d1, d2, method = 'pearson')
-spearman_cor_all = cor(d1, d2, method = 'spearman')
-
-MSE = test_MSE(d1_no0, d2_no0)
-R2 = test_R2(d1_no0, d2_no0)
-
-total_reads_d1 = sum(d1_od)
-total_reads_d2 = sum(d2_od)
-
-### merge all evaluation scores
-result = data.frame(s1, s2, pearson_cor, spearman_cor, pearson_cor_all, spearman_cor_all, MSE, R2, total_reads_d1, total_reads_d2)
-
-### write output
-write.table(result, paste(output_filename, '.txt', sep=''), quote=F, sep='\t', row.names = FALSE, col.names = TRUE)
 
 ### plot scatter plot
 png(paste(output_filename, '.png', sep=''))
