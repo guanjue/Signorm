@@ -5,8 +5,8 @@ background_filename = args[2]
 output_filename = args[3]
 
 ### read input signal
-signal = read.table(signal_filename, header = FALSE)[,1]
-bg = read.table(background_filename, header = FALSE)[,1]
+signal = read.table(signal_filename, header = FALSE)[,1]+1
+bg = read.table(background_filename, header = FALSE)[,1]+1
 
 ### get negative log10 p-value 
 neg_log10_p = -log10(ppois(signal, lambda=bg, lower=FALSE))
