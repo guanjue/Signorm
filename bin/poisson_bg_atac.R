@@ -7,7 +7,7 @@ threshold = as.numeric(args[3])
 signal = read.table(signal_filename, header = FALSE)
 lamda = mean(signal)
 ### get negative log10 p-value 
-p1 = ppois(a, lambda=lamda, lower=FALSE)
+p1 = ppois(signal, lambda=lamda, lower=FALSE)
 
 ### get background signals
 signal_bg = signal[p1>=threshold]
