@@ -4,7 +4,7 @@ signal_filename = args[1]
 output_filename = args[2]
 threshold = as.numeric(args[3])
 ### read input signal
-signal = read.table(signal_filename, header = FALSE)
+signal = read.table(signal_filename, header = FALSE)[,1]
 lamda = mean(signal)
 ### get negative log10 p-value 
 p1 = ppois(signal, lambda=lamda, lower=FALSE)
