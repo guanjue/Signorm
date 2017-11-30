@@ -26,15 +26,19 @@ def write2d_array(array,output):
 	r1.close()
 
 ################################################################################################
-def quantile_normalization(data_matrix, signal_col, outputname):
+def quantile_normalization(data_matrix, signal_col, outputname, header):
 	###### read inputs
 	### read data matrix
 	data_matrix = read2d_array(data_matrix, str, '\t')
 
 	### split header; info matrix; signal matrix
-	header = [data_matrix[0,:]]
-	data_matrix_info = data_matrix[1:, 0:signal_col-1]
-	data_matrix_sig = np.array(data_matrix[1:, signal_col-1:], dtype=float)
+	if header=='T':
+		header = [data_matrix[0,:]]
+		data_matrix_info = data_matrix[1:, 0:signal_col-1]
+		data_matrix_sig = np.array(data_matrix[1:, signal_col-1:], dtype=float)
+	else:
+		data_matrix_info = data_matrix[:, 0:signal_col-1]
+		data_matrix_sig = np.array(data_matrix[:, signal_col-1:], dtype=float)
 
 	print('data_matrix_sig.shape:')
 	print(data_matrix_sig.shape)
@@ -82,28 +86,29 @@ def quantile_normalization(data_matrix, signal_col, outputname):
 	### add back data info matrix
 	data_qn_matrix = np.concatenate((data_matrix_info, data_qn_matrix),  axis = 1)
 	### add back header
-	data_qn_matrix = np.concatenate((header, data_qn_matrix),  axis = 0)
-	
+	if header=='T':
+		data_qn_matrix = np.concatenate((header, data_qn_matrix),  axis = 0)
+
 	###### write quantile normed data
 	write2d_array(data_qn_matrix, outputname)
 
 
 ############################################################################
 ############################################################################
-#time python quantile_normalization.py -i all_rna_sampe_target_class.txt -n 6 -o all_rna_sampe_target_class_qn.txt
+#time python quantile_normalization.py -i all_rna_sampe_target_class.txt -n 6 -o all_rna_sampe_target_class_qn.txt -f T
 
 import getopt
 import sys
 def main(argv):
 	try:
-		opts, args = getopt.getopt(argv,"hi:n:o:")
+		opts, args = getopt.getopt(argv,"hi:n:o:f:")
 	except getopt.GetoptError:
-		print 'time python quantile_normalization.py -i data_matrix -n signal_col -o outputname'
+		print 'time python quantile_normalization.py -i data_matrix -n signal_col -o outputname -f use_header'
 		sys.exit(2)
 
 	for opt,arg in opts:
 		if opt=="-h":
-			print 'time python quantile_normalization.py -i data_matrix -n signal_col -o outputname'
+			print 'time python quantile_normalization.py -i data_matrix -n signal_col -o outputname -f use_header'
 			sys.exit()
 		elif opt=="-i":
 			data_matrix=str(arg.strip())
@@ -111,8 +116,10 @@ def main(argv):
 			signal_col=int(arg.strip())	
 		elif opt=="-o":
 			outputname=str(arg.strip())		
+		elif opt=="-f":
+			header=str(arg.strip())
 
-	quantile_normalization(data_matrix, signal_col, outputname)
+	quantile_normalization(data_matrix, signal_col, outputname, header)
 
 if __name__=="__main__":
 	main(sys.argv[1:])
