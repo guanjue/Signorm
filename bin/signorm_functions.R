@@ -269,7 +269,7 @@ MAnorm = function(data_x_sig, data_y_sig, sampling_num, seed, MAplot_output_file
 		m = m[used_id]		
 	}
 	### fit loess line
-	fit = loess(m ~ a, span=0.10)
+	fit = loess(m ~ a, span=0.25)
 	### get bias line for MA plot
 	bias = predict(fit, newdata = data.frame(a = a))
 	### get scale factors
