@@ -15,7 +15,7 @@ lamda_bg = mean(signal_bg)
 
 
 ### get negative log10 p-value 
-neg_log10_p = -log10(ppois(signal, lambda=lamda_bg, lower=FALSE)+0.01)
+neg_log10_p = -log10(ppois(signal, lambda=lamda_bg, lower=FALSE)+10^(-15))
 
 ### write signal vector
 write.table(neg_log10_p, output_filename, quote=FALSE, col.names=FALSE, row.names=FALSE, sep='\t')
