@@ -276,7 +276,7 @@ MAnorm = function(data_x_sig, data_y_sig, sampling_num, seed, MAplot_output_file
 	tsf = 1/(2**(predict(fit, newdata = data.frame(a = A))))
 	### plot orignal MA plot
 	png(paste(MAplot_output_file_name, '.scatterplot.png', sep=''))
-	heatscatter(log2(data_x_sig + small_num), log2(data_y_sig + small_num), pch = 20, main='original signal')
+	heatscatter(log2(data_x_sig[,1] + small_num), log2(data_y_sig[,1] + small_num), pch = 20, main='original signal')
 	abline(0,1,col = 'blue')
 	dev.off()	
 	png(paste(MAplot_output_file_name, '.od_MA.png', sep=''))
