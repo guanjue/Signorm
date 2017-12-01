@@ -253,8 +253,9 @@ calculate_scale_factor_with_t_thresh = function(data_x, data_y, sampling_num, se
 ##############################################
 MAnorm = function(data_x_sig, data_y_sig, sampling_num, seed, MAplot_output_file_name){
 	### get M & A
-	M = log2(data_x_sig + 0.5) - log2(data_y_sig + 0.5)
-	A = 0.5*(log2(data_x_sig + 0.5) + log2(data_y_sig + 0.5))
+	small_num = 0.01
+	M = log2(data_x_sig + small_num) - log2(data_y_sig + small_num)
+	A = 0.5*(log2(data_x_sig + small_num) + log2(data_y_sig + small_num))
 	### sort M & A for plotting
 	O = order(A)
 	a = A[O]
@@ -274,6 +275,10 @@ MAnorm = function(data_x_sig, data_y_sig, sampling_num, seed, MAplot_output_file
 	### get scale factors
 	tsf = 1/(2**(predict(fit, newdata = data.frame(a = A))))
 	### plot orignal MA plot
+	png(paste(MAplot_output_file_name, '.scatterplot.png', sep=''))
+	heatscatter(log2(data_x_sig + small_num), log2(data_y_sig + small_num), pch = 20, main='original signal')
+	abline(0,1,col = 'blue')
+	dev.off()	
 	png(paste(MAplot_output_file_name, '.od_MA.png', sep=''))
 	heatscatter(a, m, pch = 20, main='original signal')
 	abline(h=0,col = 'blue')
