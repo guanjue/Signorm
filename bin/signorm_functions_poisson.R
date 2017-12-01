@@ -264,12 +264,12 @@ MAnorm = function(data_x_sig, data_y_sig, sampling_num, seed, MAplot_output_file
 	### if sampling_num != 0, sampling calculate scale factor & plotting 
 	if (sampling_num != 0){
 		### keep the order
-		used_id = round(seq(1, length(a), len = sampling_num))
+		used_id = round(seq(1, length(a), len = sampling_num/20))
 		a = a[used_id]
 		m = m[used_id]		
 	}
 	### fit loess line
-	fit = loess(m ~ a)
+	fit = loess(m ~ a, span=0.10)
 	### get bias line for MA plot
 	bias = predict(fit, newdata = data.frame(a = a))
 	### get scale factors
