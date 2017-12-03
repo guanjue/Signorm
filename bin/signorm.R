@@ -29,6 +29,8 @@ scale_factor_type = as.numeric(args[16]) ### 1: total mean; 2:total median; 3: l
 
 source_code_folder = args[17]
 
+round_factor = args[18]
+
 ### signorm functions
 source(paste(source_code_folder, 'signorm_functions.R', sep = ''))
 
