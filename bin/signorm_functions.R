@@ -16,10 +16,11 @@ t_r_curve_change_point = function(t_r_matrix, changepoint_method, max_cp_num, t_
 	t_r_matrix_round = aggregate(. ~ t_od_round, data=t_r_matrix_df, FUN=mean)
 
 	### get robust r
+	t_od = t_r_matrix_round[,1] + 4
 	r_od = log2(t_r_matrix_round[,2]+2)-log2(t_r_matrix_round[,3]+2) ### log2 transform r
 
 	### remove x1 OR x2 equals 0
-	t = t_od_round[as.logical((!is.na(r_od)) * (is.finite(r_od)) ) ]
+	t = t_od[as.logical((!is.na(r_od)) * (is.finite(r_od)) ) ]
 	r = r_od[as.logical((!is.na(r_od)) * (is.finite(r_od)) ) ]
 
 	### polynomial regression fit the log(r) vs log(t) pattern
@@ -27,7 +28,7 @@ t_r_curve_change_point = function(t_r_matrix, changepoint_method, max_cp_num, t_
 	data_for_polyfit = data.frame(x=t, y=r)
 
 	#lo = lm(y~poly(log(x), polynomial_degree, raw=TRUE), data = data_for_polyfit)
-	lo = loess(y ~ log(x+1), span=0.25, data = data_for_polyfit)
+	lo = loess(y ~ log(x), span=0.25, data = data_for_polyfit)
 	### get polynomial regression fitted model predicted value
 	lo_fit_value = predict(lo, newdata=data.frame(x=t))
 
