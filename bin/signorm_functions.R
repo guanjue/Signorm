@@ -23,7 +23,7 @@ t_r_curve_change_point = function(t_r_matrix, changepoint_method, max_cp_num, t_
 	data_for_polyfit = data.frame(x=t, y=r)
 
 	#lo = lm(y~poly(log(x), polynomial_degree, raw=TRUE), data = data_for_polyfit)
-	lo = loess(y ~ log(x), span=0.25, data = data_for_polyfit)
+	lo = loess(y ~ log(x+1), span=0.25, data = data_for_polyfit)
 	### get polynomial regression fitted model predicted value
 	lo_fit_value = predict(lo, newdata=data.frame(x=t))
 
