@@ -1,5 +1,5 @@
 ##############################################
-t_r_curve_change_point = function(t_r_matrix, changepoint_method, max_cp_num, t_r_change_point_plot_file_name, ignore_t_lim_lower, ignore_t_lim_upper, raw_plot_lim, mean_or_var, fit_polynorm, polynomial_degree){
+t_r_curve_change_point = function(t_r_matrix, changepoint_method, max_cp_num, t_r_change_point_plot_file_name, ignore_t_lim_lower, ignore_t_lim_upper, raw_plot_lim, mean_or_var, fit_polynorm, polynomial_degree, round_factor){
 	library(LSD)
 	library(changepoint)
 
@@ -11,8 +11,11 @@ t_r_curve_change_point = function(t_r_matrix, changepoint_method, max_cp_num, t_
 	t_od = (t_r_matrix[,1])
 	r_od = log2(t_r_matrix[,2])-log2(t_r_matrix[,3]) ### log2 transform r
 
+	### round t for robustness
+	t_od_round = round(t_od / round_factor) * round_factor
+
 	### remove x1 OR x2 equals 0
-	t = t_od[as.logical((!is.na(r_od)) * (is.finite(r_od)) ) ]
+	t = t_od_round[as.logical((!is.na(r_od)) * (is.finite(r_od)) ) ]
 	r = r_od[as.logical((!is.na(r_od)) * (is.finite(r_od)) ) ]
 
 	### polynomial regression fit the log(r) vs log(t) pattern
