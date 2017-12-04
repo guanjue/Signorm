@@ -9,7 +9,7 @@ t_r_curve_change_point = function(t_r_matrix, changepoint_method, max_cp_num, t_
 	print(dim(t_r_matrix))
 	### extract t value and r value
 	### round t for robustness
-	t_od_round = 2**(round( log2(t_r_matrix[,1]) / round_factor) * round_factor)
+	t_od_round = 2**(round( log2(t_r_matrix[,1]) / round_factor) * round_factor) 
 	### use convert data frame
 	t_r_matrix_df = as.data.frame(cbind(t_od_round, t_r_matrix[,2], t_r_matrix[,3]))
 	### add read sun with the same rounded t
@@ -27,8 +27,8 @@ t_r_curve_change_point = function(t_r_matrix, changepoint_method, max_cp_num, t_
 	print('fit polynomial regression model')
 	data_for_polyfit = data.frame(x=t, y=r)
 
-	lo = lm(y~poly(log(x), polynomial_degree, raw=TRUE), data = data_for_polyfit)
-	#lo = loess(y ~ log(x), span=0.5, data = data_for_polyfit)
+	#lo = lm(y~poly(log(x), polynomial_degree, raw=TRUE), data = data_for_polyfit)
+	lo = loess(y ~ log(x), span=0.5, data = data_for_polyfit)
 	### get polynomial regression fitted model predicted value
 	lo_fit_value = predict(lo, newdata=data.frame(x=t))
 
@@ -186,7 +186,7 @@ calculate_scale_factor_with_t_thresh = function(data_x, data_y, sampling_num, se
 	data_t = data_x+data_y
 
 	### round t for robustness
-	data_t = round(data_t / round_factor) * round_factor
+	data_t = 2**(round(log2(data_t) / round_factor) * round_factor ) + 4
 
 	### get t threshold
 	print('t threshold')

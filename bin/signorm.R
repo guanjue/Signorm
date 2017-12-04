@@ -84,6 +84,7 @@ if (is.element(scale_factor_type, c(1,2,3,4))){
 	print('t value norm')
 	### initialize t-r matrix hash 
 	t_all = 2**(round(log2(data_x_sig + data_y_sig)/round_factor) * round_factor) + 4
+	print(summary(t_all))
 	tsf = 1/(2**(predict(polynomial_model, newdata=data.frame(x=t_all))))
 	print(summary(tsf))
 	### give each t a independent sf
