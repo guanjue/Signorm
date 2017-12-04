@@ -1,5 +1,5 @@
 ##############################################
-t_r_curve_change_point = function(t_r_matrix, changepoint_method, max_cp_num, t_r_change_point_plot_file_name, ignore_t_lim_lower, ignore_t_lim_upper, raw_plot_lim, mean_or_var, fit_polynorm, polynomial_degree, round_factor){
+t_r_curve_change_point = function(t_r_matrix, changepoint_method, max_cp_num, t_r_change_point_plot_file_name, ignore_t_lim_lower, ignore_t_lim_upper, raw_plot_lim, mean_or_var, fit_polynorm, polynomial_degree, round_factor, round_type){
 	library(LSD)
 	library(changepoint)
 
@@ -9,7 +9,12 @@ t_r_curve_change_point = function(t_r_matrix, changepoint_method, max_cp_num, t_
 	print(dim(t_r_matrix))
 	### extract t value and r value
 	### round t for robustness
-	t_od_round = 2**(round( log2(t_r_matrix[,1]) / round_factor) * round_factor)
+	if (round_type=='log2'){
+		t_od_round = 2**(round( log2(t_r_matrix[,1]) / round_factor) * round_factor)
+	} else{
+		t_od_round = 2**(round( (t_r_matrix[,1]) / round_factor) * round_factor)
+	}
+	
 	### use convert data frame
 	t_r_matrix_df = as.data.frame(cbind(t_od_round, t_r_matrix[,2], t_r_matrix[,3]))
 	### add read sun with the same rounded t
@@ -173,7 +178,7 @@ plotting_scatterplot_MAplot = function(data_x_high_t, data_y_high_t, data_x_low_
 ##############################################
 
 ##############################################
-calculate_scale_factor_with_t_thresh = function(data_x, data_y, sampling_num, seed, t_threshold, ignore_t_lim, quantile_lim, scatterplot_MAplot_output_file_name, round_factor){
+calculate_scale_factor_with_t_thresh = function(data_x, data_y, sampling_num, seed, t_threshold, ignore_t_lim, quantile_lim, scatterplot_MAplot_output_file_name, round_factor, round_type){
 	### if sampling_num != 0, sampling calculate scale factor & plotting 
 	if (sampling_num != 0){
 		set.seed(seed)
@@ -186,7 +191,13 @@ calculate_scale_factor_with_t_thresh = function(data_x, data_y, sampling_num, se
 	data_t = data_x+data_y
 
 	### round t for robustness
-	data_t = 2**(round(log2(data_t) / round_factor) * round_factor )
+	data_t = data_t[data_t>(ignore_t_lim)]
+	if (round_type=='log2'){
+			data_t = 2**(round(log2(data_t) / round_factor) * round_factor )
+		} else{
+			data_t = 2**(round((data_t) / round_factor) * round_factor )
+		}
+	
 
 	### get t threshold
 	print('t threshold')
@@ -194,7 +205,6 @@ calculate_scale_factor_with_t_thresh = function(data_x, data_y, sampling_num, se
 	print(t_threshold)
 
 	### if data_t<=t_threshold have more than X% of the bins, use X% bin as the threshold
-	data_t_ignore_ts = data_t[data_t>(ignore_t_lim)]
 	data_used_p = sum(data_t_ignore_ts<=t_threshold)/length(data_t_ignore_ts)
 	if ( data_used_p >= quantile_lim ){
 		print('use X% quantile')

@@ -30,7 +30,7 @@ scale_factor_type = as.numeric(args[16]) ### 1: total mean; 2:total median; 3: l
 source_code_folder = args[17]
 
 round_factor = as.numeric(args[18])
-
+round_type = args[19]
 ### signorm functions
 source(paste(source_code_folder, 'signorm_functions.R', sep = ''))
 
@@ -38,7 +38,7 @@ source(paste(source_code_folder, 'signorm_functions.R', sep = ''))
 t_r_matrix = read.table(input_file_t_r_matrix,header = F)
 print(dim(t_r_matrix))
 ### get t threshold
-t_cp_list = t_r_curve_change_point(t_r_matrix, changepoint_method, max_cp_num, t_r_change_point_plot_file_name, ignore_t_lim_lower, ignore_t_lim_upper, raw_plot_lim, mean_or_var, fit_polynorm, polynomial_degree, round_factor)
+t_cp_list = t_r_curve_change_point(t_r_matrix, changepoint_method, max_cp_num, t_r_change_point_plot_file_name, ignore_t_lim_lower, ignore_t_lim_upper, raw_plot_lim, mean_or_var, fit_polynorm, polynomial_degree, round_factor, round_type)
 t_threshold = t_cp_list$tcp
 print((t_threshold))
 polynomial_model = t_cp_list$pnmodel
@@ -51,7 +51,7 @@ data_y_od = read.table(yais_variable_file, header = FALSE)
 data_y_sig = as.matrix(data_y_od[,1]) 
 
 ### get scale factor based on signal part
-signal_scale_factor_vector_t_threshold_modified = calculate_scale_factor_with_t_thresh(data_x_sig, data_y_sig, sampling_num, seed, t_threshold, ignore_t_lim_lower, quantile_lim, scatterplot_MAplot_output_file_name, round_factor)
+signal_scale_factor_vector_t_threshold_modified = calculate_scale_factor_with_t_thresh(data_x_sig, data_y_sig, sampling_num, seed, t_threshold, ignore_t_lim_lower, quantile_lim, scatterplot_MAplot_output_file_name, round_factor, round_type)
 signal_scale_factor_vector = signal_scale_factor_vector_t_threshold_modified$sf_vector
 t_threshold_modified = signal_scale_factor_vector_t_threshold_modified$t_threshold
 
@@ -83,7 +83,12 @@ if (is.element(scale_factor_type, c(1,2,3,4))){
 	### only normalize high signal part
 	print('t value norm')
 	### initialize t-r matrix hash 
-	t_all = 2**(round(log2(data_x_sig + data_y_sig)/round_factor) * round_factor)
+	if (round_type == 'log2'){
+		t_all = 2**(round(log2(data_x_sig + data_y_sig)/round_factor) * round_factor)
+	} else{
+		t_all = 2**(round((data_x_sig + data_y_sig)/round_factor) * round_factor)
+	}
+	
 	print(summary(t_all))
 	t_pred = predict(polynomial_model, newdata=data.frame(x=t_all))
 	print(summary(t_pred))
