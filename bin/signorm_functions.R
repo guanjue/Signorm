@@ -192,7 +192,6 @@ calculate_scale_factor_with_t_thresh = function(data_x, data_y, sampling_num, se
 	data_t = data_x+data_y
 
 	### round t for robustness
-	#data_t = data_t[data_t>(ignore_t_lim)]
 	if (round_type=='log2'){
 			data_t = 2**(round(log2(data_t) / round_factor) * round_factor ) + 2
 		} else{
@@ -206,11 +205,12 @@ calculate_scale_factor_with_t_thresh = function(data_x, data_y, sampling_num, se
 	print(t_threshold)
 
 	### if data_t<=t_threshold have more than X% of the bins, use X% bin as the threshold
-	data_used_p = sum(data_t<=t_threshold)/length(data_t)
+	data_t_passlim = data_t[data_t>(ignore_t_lim+2)]
+	data_used_p = sum(data_t_passlim<=t_threshold)/length(data_t_passlim)
 	if ( data_used_p >= quantile_lim ){
 		print('use X% quantile')
-		print(summary(data_t))
-		t_threshold = quantile(data_t, quantile_lim, type=1)
+		print(summary(data_t_passlim))
+		t_threshold = quantile(data_t_passlim, quantile_lim, type=1)
 		print(t_threshold)
 		write.table(t_threshold, paste(scatterplot_MAplot_output_file_name,'.threshold_qunatile.txt', sep=''), quote=FALSE, col.names=FALSE, row.names=FALSE, sep='\t')
 	}
