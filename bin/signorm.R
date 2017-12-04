@@ -51,7 +51,7 @@ data_y_od = read.table(yais_variable_file, header = FALSE)
 data_y_sig = as.matrix(data_y_od[,1]) 
 
 ### get scale factor based on signal part
-signal_scale_factor_vector_t_threshold_modified = calculate_scale_factor_with_t_thresh(data_x_sig, data_y_sig, sampling_num, seed, t_threshold, ignore_t_lim_lower, quantile_lim, scatterplot_MAplot_output_file_name)
+signal_scale_factor_vector_t_threshold_modified = calculate_scale_factor_with_t_thresh(data_x_sig, data_y_sig, sampling_num, seed, t_threshold, ignore_t_lim_lower, quantile_lim, scatterplot_MAplot_output_file_name, round_factor)
 signal_scale_factor_vector = signal_scale_factor_vector_t_threshold_modified$sf_vector
 t_threshold_modified = signal_scale_factor_vector_t_threshold_modified$t_threshold
 

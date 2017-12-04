@@ -173,7 +173,7 @@ plotting_scatterplot_MAplot = function(data_x_high_t, data_y_high_t, data_x_low_
 ##############################################
 
 ##############################################
-calculate_scale_factor_with_t_thresh = function(data_x, data_y, sampling_num, seed, t_threshold, ignore_t_lim, quantile_lim, scatterplot_MAplot_output_file_name){
+calculate_scale_factor_with_t_thresh = function(data_x, data_y, sampling_num, seed, t_threshold, ignore_t_lim, quantile_lim, scatterplot_MAplot_output_file_name, round_factor){
 	### if sampling_num != 0, sampling calculate scale factor & plotting 
 	if (sampling_num != 0){
 		set.seed(seed)
@@ -184,6 +184,9 @@ calculate_scale_factor_with_t_thresh = function(data_x, data_y, sampling_num, se
 
 	### get input t value
 	data_t = data_x+data_y
+
+	### round t for robustness
+	data_t = round(data_t / round_factor) * round_factor
 
 	### get t threshold
 	print('t threshold')
