@@ -85,7 +85,9 @@ if (is.element(scale_factor_type, c(1,2,3,4))){
 	### initialize t-r matrix hash 
 	t_all = 2**(round(log2(data_x_sig + data_y_sig)/round_factor) * round_factor) + 4
 	print(summary(t_all))
-	tsf = 1/(2**(predict(polynomial_model, newdata=data.frame(x=t_all))))
+	t_pred = predict(polynomial_model, newdata=data.frame(x=t_all))
+	print(summary(t_pred))
+	tsf = 1/(2**(t_pred))
 	print(summary(tsf))
 	### give each t a independent sf
 	data_x_sig_norm = as.matrix( apply(cbind(data_x_sig, tsf), 1, function(x) if(x[1]!=0){ x[1] * x[2] } else{x[1]} ) )
