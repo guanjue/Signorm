@@ -12,7 +12,7 @@ t_r_curve_change_point = function(t_r_matrix, changepoint_method, max_cp_num, t_
 	if (round_type=='log2'){
 		t_od_round = 2**(round( log2(t_r_matrix[,1]) / round_factor) * round_factor)
 	} else{
-		t_od_round = 2**(round( (t_r_matrix[,1]) / round_factor) * round_factor)
+		t_od_round = (round( (t_r_matrix[,1]) / round_factor) * round_factor)
 	}
 	
 	### use convert data frame
@@ -195,7 +195,7 @@ calculate_scale_factor_with_t_thresh = function(data_x, data_y, sampling_num, se
 	if (round_type=='log2'){
 			data_t = 2**(round(log2(data_t) / round_factor) * round_factor )
 		} else{
-			data_t = 2**(round((data_t) / round_factor) * round_factor )
+			data_t = (round((data_t) / round_factor) * round_factor )
 		}
 	
 
