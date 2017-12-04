@@ -194,7 +194,7 @@ calculate_scale_factor_with_t_thresh = function(data_x, data_y, sampling_num, se
 	print(t_threshold)
 
 	### if data_t<=t_threshold have more than X% of the bins, use X% bin as the threshold
-	data_t_ignore_ts = data_t[data_t>(ignore_t_lim)]
+	data_t_ignore_ts = data_t[data_t>(ignore_t_lim + 4)]
 	data_used_p = sum(data_t_ignore_ts<=t_threshold)/length(data_t_ignore_ts)
 	if ( data_used_p >= quantile_lim ){
 		print('use X% quantile')
