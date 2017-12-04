@@ -192,7 +192,7 @@ calculate_scale_factor_with_t_thresh = function(data_x, data_y, sampling_num, se
 	data_t = data_x+data_y
 
 	### round t for robustness
-	data_t = data_t[data_t>(ignore_t_lim)]
+	#data_t = data_t[data_t>(ignore_t_lim)]
 	if (round_type=='log2'){
 			data_t = 2**(round(log2(data_t) / round_factor) * round_factor ) + 2
 		} else{
