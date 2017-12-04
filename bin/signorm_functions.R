@@ -193,7 +193,7 @@ calculate_scale_factor_with_t_thresh = function(data_x, data_y, sampling_num, se
 	### if data_t<=t_threshold have more than X% of the bins, use X% bin as the threshold
 	data_t_ignore_ts = data_t[data_t>ignore_t_lim]
 	data_t_ignore_ts_replace = quantile(data_t_ignore_ts, quantile_lim, type=1)
-	if ( data_t_ignore_ts > data_t_ignore_ts_replace ){
+	if ( data_t_ignore_ts <= data_t_ignore_ts_replace ){
 		print('use X% quantile')
 		t_threshold = data_t_ignore_ts_replace
 		print(t_threshold)
