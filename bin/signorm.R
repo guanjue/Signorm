@@ -84,9 +84,9 @@ if (is.element(scale_factor_type, c(1,2,3,4))){
 	print('t value norm')
 	### initialize t-r matrix hash 
 	if (round_type == 'log2'){
-		t_all = 2**(round(log2(data_x_sig + data_y_sig)/round_factor) * round_factor)
+		t_all = 2**(round(log2(data_x_sig + data_y_sig)/round_factor) * round_factor) + 2
 	} else{
-		t_all = (round((data_x_sig + data_y_sig)/round_factor) * round_factor)
+		t_all = (round((data_x_sig + data_y_sig)/round_factor) * round_factor) + 2
 	}
 	
 	print(summary(t_all))

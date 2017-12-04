@@ -10,9 +10,9 @@ t_r_curve_change_point = function(t_r_matrix, changepoint_method, max_cp_num, t_
 	### extract t value and r value
 	### round t for robustness
 	if (round_type=='log2'){
-		t_od_round = 2**(round( log2(t_r_matrix[,1]) / round_factor) * round_factor)
+		t_od_round = 2**(round( log2(t_r_matrix[,1]) / round_factor) * round_factor) + 2
 	} else{
-		t_od_round = (round( (t_r_matrix[,1]) / round_factor) * round_factor)
+		t_od_round = (round( (t_r_matrix[,1]) / round_factor) * round_factor) + 2
 	}
 	
 	### use convert data frame
@@ -194,9 +194,9 @@ calculate_scale_factor_with_t_thresh = function(data_x, data_y, sampling_num, se
 	### round t for robustness
 	data_t = data_t[data_t>(ignore_t_lim)]
 	if (round_type=='log2'){
-			data_t = 2**(round(log2(data_t) / round_factor) * round_factor )
+			data_t = 2**(round(log2(data_t) / round_factor) * round_factor ) + 2
 		} else{
-			data_t = (round((data_t) / round_factor) * round_factor )
+			data_t = (round((data_t) / round_factor) * round_factor ) + 2
 		}
 	
 
