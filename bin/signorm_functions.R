@@ -9,7 +9,7 @@ t_r_curve_change_point = function(t_r_matrix, changepoint_method, max_cp_num, t_
 	print(dim(t_r_matrix))
 	### extract t value and r value
 	### round t for robustness
-	t_od_round = 2**(round( log2(t_r_matrix[,1]) / round_factor) * round_factor) + 4
+	t_od_round = 2**(round( log2(t_r_matrix[,1]) / round_factor) * round_factor)
 	### use convert data frame
 	t_r_matrix_df = as.data.frame(cbind(t_od_round, t_r_matrix[,2], t_r_matrix[,3]))
 	### add read sun with the same rounded t
@@ -17,7 +17,7 @@ t_r_curve_change_point = function(t_r_matrix, changepoint_method, max_cp_num, t_
 
 	### get robust r
 	t_od = t_r_matrix_round[,1]
-	r_od = log2(t_r_matrix_round[,2]+2)-log2(t_r_matrix_round[,3]+2) ### log2 transform r
+	r_od = log2(t_r_matrix_round[,2]+1)-log2(t_r_matrix_round[,3]+1) ### log2 transform r
 
 	### remove x1 OR x2 equals 0
 	t = t_od[as.logical((!is.na(r_od)) * (is.finite(r_od)) ) ]
@@ -186,7 +186,7 @@ calculate_scale_factor_with_t_thresh = function(data_x, data_y, sampling_num, se
 	data_t = data_x+data_y
 
 	### round t for robustness
-	data_t = 2**(round(log2(data_t) / round_factor) * round_factor ) + 4
+	data_t = 2**(round(log2(data_t) / round_factor) * round_factor )
 
 	### get t threshold
 	print('t threshold')
@@ -194,10 +194,11 @@ calculate_scale_factor_with_t_thresh = function(data_x, data_y, sampling_num, se
 	print(t_threshold)
 
 	### if data_t<=t_threshold have more than X% of the bins, use X% bin as the threshold
-	data_t_ignore_ts = data_t[data_t>(ignore_t_lim + 1 + 4)]
+	data_t_ignore_ts = data_t[data_t>(ignore_t_lim)]
 	data_used_p = sum(data_t_ignore_ts<=t_threshold)/length(data_t_ignore_ts)
 	if ( data_used_p >= quantile_lim ){
 		print('use X% quantile')
+		print(summary(data_t_ignore_ts))
 		data_t_ignore_ts_replace = quantile(data_t_ignore_ts, quantile_lim, type=1)
 		t_threshold = data_t_ignore_ts_replace
 		print(t_threshold)

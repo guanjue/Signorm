@@ -83,7 +83,7 @@ if (is.element(scale_factor_type, c(1,2,3,4))){
 	### only normalize high signal part
 	print('t value norm')
 	### initialize t-r matrix hash 
-	t_all = 2**(round(log2(data_x_sig + data_y_sig)/round_factor) * round_factor) + 4
+	t_all = 2**(round(log2(data_x_sig + data_y_sig)/round_factor) * round_factor)
 	print(summary(t_all))
 	t_pred = predict(polynomial_model, newdata=data.frame(x=t_all))
 	print(summary(t_pred))
