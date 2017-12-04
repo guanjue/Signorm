@@ -9,7 +9,7 @@ t_r_curve_change_point = function(t_r_matrix, changepoint_method, max_cp_num, t_
 	print(dim(t_r_matrix))
 	### extract t value and r value
 	### round t for robustness
-	t_od_round = round(t_r_matrix[,1] / round_factor) * round_factor
+	t_od_round = 2**(round( log2(t_r_matrix[,1]) / round_factor) * round_factor)
 	### use convert data frame
 	t_r_matrix_df = as.data.frame(cbind(t_od_round, t_r_matrix[,2], t_r_matrix[,3]))
 	### add read sun with the same rounded t
