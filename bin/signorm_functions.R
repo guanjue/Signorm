@@ -128,36 +128,42 @@ scale_factor = function(data_x, data_y, method){
 plotting_scatterplot_MAplot = function(data_x_high_t, data_y_high_t, data_x_low_t, data_y_low_t, data_x, data_y, log, od_A, od_M, sf_info_total_mean, sf_info_low_t, sf_info_high_t, output_file_name){
 	### plot sig_vs_sig only
 	print('scatter plot')
-	png(paste(output_file_name, '.high_t.hs.png', sep =''))
-	if (log == 'T'){
-		heatscatter(data_x_high_t, data_y_high_t, log='xy', pch = 20, ylim=c(1,10000), xlim=c(1,10000))
-	} else{
-		heatscatter(data_x_high_t, data_y_high_t, pch = 20, ylim=c(-10,5), xlim=c(20,10000))
+	if (length(data_x_high_t)>0){
+		png(paste(output_file_name, '.high_t.hs.png', sep =''))
+		if (log == 'T'){
+			heatscatter(data_x_high_t, data_y_high_t, log='xy', pch = 20, ylim=c(1,10000), xlim=c(1,10000))
+		} else{
+			heatscatter(data_x_high_t, data_y_high_t, pch = 20, ylim=c(-10,5), xlim=c(20,10000))
+		}
+		abline(0,1,col = 'blue')
+		dev.off()	
 	}
-	abline(0,1,col = 'blue')
-	dev.off()
+
 
 	### plot low_vs_sig only
 	print('scatter plot')
-	png(paste(output_file_name, '.low_t.hs.png', sep =''))
-	if (log == 'T'){
-		heatscatter(data_x_low_t, data_y_low_t, log='xy', pch = 20, ylim=c(1,10000), xlim=c(1,10000))
-	} else{
-		heatscatter(data_x_low_t, data_y_low_t, pch = 20, ylim=c(-10,5), xlim=c(20,10000))
+	if (length(data_x_low_t)>0){
+		png(paste(output_file_name, '.low_t.hs.png', sep =''))
+		if (log == 'T'){
+			heatscatter(data_x_low_t, data_y_low_t, log='xy', pch = 20, ylim=c(1,10000), xlim=c(1,10000))
+		} else{
+			heatscatter(data_x_low_t, data_y_low_t, pch = 20, ylim=c(-10,5), xlim=c(20,10000))
+		}
+		abline(0,1,col = 'blue')
+		dev.off()
 	}
-	abline(0,1,col = 'blue')
-	dev.off()
 
 	print('scatter plot')
-	png(paste(output_file_name, '.all.log.hs.png', sep =''))
-	if (log == 'T'){
-		heatscatter(data_x, data_y, log='xy', pch = 20, ylim=c(1,10000), xlim=c(1,10000))
-	} else{
-		heatscatter(data_x, data_y, pch = 20, ylim=c(-10,5), xlim=c(20,10000))
+	if (length(data_x)>0){
+		png(paste(output_file_name, '.all.log.hs.png', sep =''))
+		if (log == 'T'){
+			heatscatter(data_x, data_y, log='xy', pch = 20, ylim=c(1,10000), xlim=c(1,10000))
+		} else{
+			heatscatter(data_x, data_y, pch = 20, ylim=c(-10,5), xlim=c(20,10000))
+		}
+		abline(0,1,col = 'blue')
+		dev.off()
 	}
-	abline(0,1,col = 'blue')
-	dev.off()
-
 	###### MA plot for different strategy
 	#png(paste(output_file_name, '.4.MA.png', sep =''))
 	#par(mfrow=c(2,2))
