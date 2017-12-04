@@ -27,7 +27,8 @@ t_r_curve_change_point = function(t_r_matrix, changepoint_method, max_cp_num, t_
 	### remove x1 OR x2 equals 0
 	t = t_od[as.logical((!is.na(r_od)) * (is.finite(r_od)) ) ]
 	r = r_od[as.logical((!is.na(r_od)) * (is.finite(r_od)) ) ]
-
+	print(summary(t))
+	print(summary(r))
 	### polynomial regression fit the log(r) vs log(t) pattern
 	print('fit polynomial regression model')
 	data_for_polyfit = data.frame(x=t, y=r)
