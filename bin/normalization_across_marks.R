@@ -1,7 +1,7 @@
 args = commandArgs(trailingOnly=TRUE)
 mark_list_file = args[1]
 
-mark_list_file = read.table('mark_list_file', header = F)
+mark_list_file = read.table(mark_list_file, header = F)
 
 median_list = c()
 i=1
