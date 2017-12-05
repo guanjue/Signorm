@@ -128,7 +128,7 @@ scale_factor = function(data_x, data_y, method){
 plotting_scatterplot_MAplot = function(data_x_high_t, data_y_high_t, data_x_low_t, data_y_low_t, data_x, data_y, log, od_A, od_M, sf_info_total_mean, sf_info_low_t, sf_info_high_t, output_file_name){
 	### plot sig_vs_sig only
 	print('scatter plot')
-	if (length(data_x_high_t)>0){
+	if (length(data_x_high_t)>2){
 		png(paste(output_file_name, '.high_t.hs.png', sep =''))
 		if (log == 'T'){
 			heatscatter(data_x_high_t, data_y_high_t, log='xy', pch = 20, ylim=c(1,10000), xlim=c(1,10000))
@@ -142,7 +142,7 @@ plotting_scatterplot_MAplot = function(data_x_high_t, data_y_high_t, data_x_low_
 
 	### plot low_vs_sig only
 	print('scatter plot')
-	if (length(data_x_low_t)>0){
+	if (length(data_x_low_t)>2){
 		png(paste(output_file_name, '.low_t.hs.png', sep =''))
 		if (log == 'T'){
 			heatscatter(data_x_low_t, data_y_low_t, log='xy', pch = 20, ylim=c(1,10000), xlim=c(1,10000))
@@ -154,7 +154,7 @@ plotting_scatterplot_MAplot = function(data_x_high_t, data_y_high_t, data_x_low_
 	}
 
 	print('scatter plot')
-	if (length(data_x)>0){
+	if (length(data_x)>2){
 		png(paste(output_file_name, '.all.log.hs.png', sep =''))
 		if (log == 'T'){
 			heatscatter(data_x, data_y, log='xy', pch = 20, ylim=c(1,10000), xlim=c(1,10000))
