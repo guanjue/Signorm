@@ -1,6 +1,6 @@
 args = commandArgs(trailingOnly=TRUE)
 mark_list_file = args[1]
-
+print(mark_list_file)
 mark_list = read.table(mark_list_file, header = F)
 
 median_list = c()
