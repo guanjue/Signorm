@@ -1,8 +1,9 @@
+############
 args = commandArgs(trailingOnly=TRUE)
 mark_list_file = args[1]
 print(mark_list_file)
 mark_list = read.table(mark_list_file, header = F)
-
+print(mark_list)
 median_list = c()
 i=1
 for (mark in mark_list){
