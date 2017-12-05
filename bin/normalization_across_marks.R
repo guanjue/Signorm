@@ -7,6 +7,7 @@ print(mark_list)
 median_list = c()
 i=1
 for (mark in mark_list){
+	print(mark)
 	d1=read.table(paste(mark, '.all_sample.txt', sep = ''), header =F)
 	### get non-zero median
 	median_data = median(d1[d1!=0,])
