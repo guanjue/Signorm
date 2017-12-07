@@ -324,3 +324,64 @@ MAnorm = function(data_x_sig, data_y_sig, sampling_num, seed, MAplot_output_file
 	return(tsf)
 }
 
+
+
+signorm_robust = function(d1, d2, p, cor_lim, step, plot_name, sampling_num){
+	r=r2=NULL
+	for (i in seq(1:step)){
+		used_ida = as.logical( (d1>quantile(d1[d1>0 & d2>0], 1-p*i)) * (d2>quantile(d2[d1>0 & d2>0], 1-p*i)) )
+		r2[i] = cor( (d1[used_ida]), (d2[used_ida]) )
+		r[i] = sum((d1[used_ida])) / sum((d2[used_ida]))
+		print(paste(i, r2[i], r[i], sep='_'))
+	}
+
+	set.seed(2017)
+	used_id = sample(dim(d1)[1], 50000)
+
+	d1_s = d1[used_id]
+	d2_s = d2[used_id]
+
+	#ansvar_norm=(cpt.meanvar(r2, class=FALSE, method = 'BinSeg', penalty = 'BIC', Q=1))
+	#used_r2 = ansvar_norm[1] #
+	used_r2 = which(r2==max(r2))[1]
+	if (r2[used_r2]>=cor_lim){
+		d1_thresh = quantile(d1[d1>0 & d2>0], 1-p*which(r2==max(r2))[1])
+		d2_thresh = quantile(d2[d1>0 & d2>0], 1-p*which(r2==max(r2))[1])
+		d1_thresh
+		d2_thresh
+
+		used_idb = as.logical( (d1_s>quantile(d1[d1>0 & d2>0], 1-p*used_r2)) * (d2_s>quantile(d2[d1>0 & d2>0], 1-p*used_r2)) )
+		sum(used_idb)
+		#heatscatter(d1_s[used_idb], d2_s[used_idb], log='xy', pch=20)
+		#abline(0,1, col='red')
+		sf = sum(d2_s[used_idb]) / sum(d1_s[used_idb])
+		sf_totalmean = sum(d2_s[]) / sum(d1_s[])
+		sf
+		sf_totalmean
+	} else{
+		sf = sf_totalmean = sum(d2_s[]) / sum(d1_s[])
+	}
+
+	pdf(paste(plot_name, '.pdf', sep=''))
+	par(mfrow=c(2,2))
+	heatscatter(d1[used_id], d2[used_id], log='xy', pch=20, main=paste('max r2: ', toString(round(r2[used_r2], digits=3)), '; ', 'quantile_lim: ', toString(1-p*used_r2), sep=''))
+	abline(0,1, col='red')
+	abline(h=d2_thresh, col='blue')
+	abline(v=d1_thresh, col='blue')
+
+	plot(seq(1:length(r2)), r2, ylim=c(0.38, 1.01))
+	abline(h=cor_lim, col='red')
+	abline(v=used_r2, col='blue')
+
+	heatscatter(d1[used_id]*sf, d2[used_id], log='xy', pch=20, main=paste('signorm_sf: ', toString(round(sf, digits=3)), sep=''))
+	abline(0,1, col='red')
+
+	heatscatter(d1[used_id]*sf_totalmean, d2[used_id], log='xy', pch=20, main=paste('totalmean_sf: ', toString(round(sf_totalmean, digits=3)), sep=''))
+	abline(0,1, col='red')
+	dev.off()
+
+	sf_vector = list("signorm_sf" = sf, "totalmean_sf" = sf_totalmean)
+	return(sf_vector)
+}
+
+

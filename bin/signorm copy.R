@@ -1,6 +1,4 @@
 library(hash)
-library(LSD)
-library(changepoint)
 ### get parameters
 args = commandArgs(trailingOnly=TRUE)
 
@@ -37,13 +35,13 @@ round_type = args[19]
 source(paste(source_code_folder, 'signorm_functions.R', sep = ''))
 
 ### read r vs t table of r vs t: r=sum(x1)/sum(x2); t=x1+x2
-#t_r_matrix = read.table(input_file_t_r_matrix,header = F)
-#print(dim(t_r_matrix))
+t_r_matrix = read.table(input_file_t_r_matrix,header = F)
+print(dim(t_r_matrix))
 ### get t threshold
-#t_cp_list = t_r_curve_change_point(t_r_matrix, changepoint_method, max_cp_num, t_r_change_point_plot_file_name, ignore_t_lim_lower, ignore_t_lim_upper, raw_plot_lim, mean_or_var, fit_polynorm, polynomial_degree, round_factor, round_type)
-#t_threshold = t_cp_list$tcp
-#print((t_threshold))
-#polynomial_model = t_cp_list$pnmodel
+t_cp_list = t_r_curve_change_point(t_r_matrix, changepoint_method, max_cp_num, t_r_change_point_plot_file_name, ignore_t_lim_lower, ignore_t_lim_upper, raw_plot_lim, mean_or_var, fit_polynorm, polynomial_degree, round_factor, round_type)
+t_threshold = t_cp_list$tcp
+print((t_threshold))
+polynomial_model = t_cp_list$pnmodel
 
 ### read input reads table
 data_x_od = read.table(xais_variable_file, header = FALSE)
@@ -53,9 +51,9 @@ data_y_od = read.table(yais_variable_file, header = FALSE)
 data_y_sig = as.matrix(data_y_od[,1]) 
 
 ### get scale factor based on signal part
-#signal_scale_factor_vector_t_threshold_modified = calculate_scale_factor_with_t_thresh(data_x_sig, data_y_sig, sampling_num, seed, t_threshold, ignore_t_lim_lower, quantile_lim, scatterplot_MAplot_output_file_name, round_factor, round_type)
-#signal_scale_factor_vector = signal_scale_factor_vector_t_threshold_modified$sf_vector
-#t_threshold_modified = signal_scale_factor_vector_t_threshold_modified$t_threshold
+signal_scale_factor_vector_t_threshold_modified = calculate_scale_factor_with_t_thresh(data_x_sig, data_y_sig, sampling_num, seed, t_threshold, ignore_t_lim_lower, quantile_lim, scatterplot_MAplot_output_file_name, round_factor, round_type)
+signal_scale_factor_vector = signal_scale_factor_vector_t_threshold_modified$sf_vector
+t_threshold_modified = signal_scale_factor_vector_t_threshold_modified$t_threshold
 
 ### norm the x-axis signal by the scale factor
 if (is.element(scale_factor_type, c(1,2,3,4))){
@@ -82,9 +80,8 @@ if (is.element(scale_factor_type, c(1,2,3,4))){
 	### give each t a independent sf
 	data_x_sig_norm = as.matrix( apply(cbind(data_x_sig, data_y_sig), 1, function(x) if(x[1]!=0){ x[1] * values(t_r_hash[toString(x[1]+x[2])]) } else{x[1]} ) )
 } else if (scale_factor_type==8) {
-	sf = signorm_robust(data_x_sig, data_y_sig, 0.025, 0.4, 1/0.025, scatterplot_MAplot_output_file_name, 100000)
-	data_x_sig_norm = data_x_sig * sf$signorm_sf
-	signal_scale_factor_vector = c(sf$signorm_sf, sf$totalmean_sf)
+
+
 } else if (scale_factor_type==9) {
 	print('loess MA plot norm')
 	tsf = MAnorm(data_x_sig, data_y_sig, 50000, 2017, t_r_change_point_plot_file_name)
