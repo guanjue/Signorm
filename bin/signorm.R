@@ -36,6 +36,13 @@ round_type = args[19]
 ### signorm functions
 source(paste(source_code_folder, 'signorm_functions.R', sep = ''))
 
+### read input reads table
+data_x_od = read.table(xais_variable_file, header = FALSE)
+data_x_sig = as.matrix(data_x_od[,1]) 
+
+data_y_od = read.table(yais_variable_file, header = FALSE)
+data_y_sig = as.matrix(data_y_od[,1]) 
+
 ### norm the x-axis signal by the scale factor
 if (is.element(scale_factor_type, c(1,2,3,4))){
 	### read r vs t table of r vs t: r=sum(x1)/sum(x2); t=x1+x2
@@ -47,12 +54,6 @@ if (is.element(scale_factor_type, c(1,2,3,4))){
 	print((t_threshold))
 	polynomial_model = t_cp_list$pnmodel
 
-	### read input reads table
-	data_x_od = read.table(xais_variable_file, header = FALSE)
-	data_x_sig = as.matrix(data_x_od[,1]) 
-
-	data_y_od = read.table(yais_variable_file, header = FALSE)
-	data_y_sig = as.matrix(data_y_od[,1]) 
 
 	### get scale factor based on signal part
 	signal_scale_factor_vector_t_threshold_modified = calculate_scale_factor_with_t_thresh(data_x_sig, data_y_sig, sampling_num, seed, t_threshold, ignore_t_lim_lower, quantile_lim, scatterplot_MAplot_output_file_name, round_factor, round_type)
