@@ -341,7 +341,7 @@ signorm_robust = function(d1, d2, p, cor_lim, step, plot_name, sampling_num){
 	d1_s = d1[used_id]
 	d2_s = d2[used_id]
 
-	ansvar_norm=(cpt.meanvar(r2, class=FALSE, method = 'BinSeg', penalty = 'BIC', Q=5))
+	ansvar_norm=(cpt.meanvar(r2, class=FALSE, method = 'BinSeg', penalty = 'BIC', Q=3))
 	used_r2 = ansvar_norm[1] #
 	#used_r2 = which(r2==max(r2))[1]
 	if (r2[used_r2]>=cor_lim){
