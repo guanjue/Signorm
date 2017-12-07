@@ -326,10 +326,11 @@ MAnorm = function(data_x_sig, data_y_sig, sampling_num, seed, MAplot_output_file
 
 
 
-signorm_robust = function(d1, d2, p, cor_lim, step, plot_name, sampling_num){
+signorm_robust = function(d1, d2, p, start_point, step, cor_lim, plot_name, sampling_num){
 	r=r2=NULL
-	for (i in seq(1:step)){
-		used_ida = as.logical( (d1>quantile(d1[d1>0 & d2>0], 1-p*i)) * (d2>quantile(d2[d1>0 & d2>0], 1-p*i)) )
+	used_range = p^seq(start_point,0, step)
+	for (i in used_range){
+		used_ida = as.logical( (d1>quantile(d1[d1>0 & d2>0], 1-i)) * (d2>quantile(d2[d1>0 & d2>0], 1-i)) )
 		r2[i] = cor( (d1[used_ida]), (d2[used_ida]) )
 		r[i] = sum((d1[used_ida])) / sum((d2[used_ida]))
 		print(paste(i, r2[i], r[i], sep='_'))
@@ -345,12 +346,12 @@ signorm_robust = function(d1, d2, p, cor_lim, step, plot_name, sampling_num){
 	used_r2 = ansvar_norm[1] #
 	#used_r2 = which(r2==max(r2))[1]
 	if (r2[used_r2]>=cor_lim){
-		d1_thresh = quantile(d1[d1>0 & d2>0], 1-p*which(r2==max(r2))[1])
-		d2_thresh = quantile(d2[d1>0 & d2>0], 1-p*which(r2==max(r2))[1])
+		d1_thresh = quantile(d1[d1>0 & d2>0], 1-used_range[which(r2==max(r2))[1]] )
+		d2_thresh = quantile(d2[d1>0 & d2>0], 1-used_range[which(r2==max(r2))[1]] )
 		d1_thresh
 		d2_thresh
 
-		used_idb = as.logical( (d1>quantile(d1[d1>0 & d2>0], 1-p*used_r2)) * (d2>quantile(d2[d1>0 & d2>0], 1-p*used_r2)) )
+		used_idb = as.logical( (d1>quantile(d1[d1>0 & d2>0], 1-used_range[which(r2==max(r2))[1]])) * (d2>quantile(d2[d1>0 & d2>0], 1-used_range[which(r2==max(r2))[1]])) )
 		sum(used_idb)
 		#heatscatter(d1_s[used_idb], d2_s[used_idb], log='xy', pch=20)
 		#abline(0,1, col='red')
@@ -369,7 +370,7 @@ signorm_robust = function(d1, d2, p, cor_lim, step, plot_name, sampling_num){
 	abline(h=d2_thresh, col='blue')
 	abline(v=d1_thresh, col='blue')
 
-	plot(seq(1:length(r2)), r2, ylim=c(0.38, 1.01))
+	plot(seq(1:length(r2)), r2, ylim=c(0.38, 1.01), pch=20)
 	abline(h=cor_lim, col='red')
 	abline(v=used_r2, col='blue')
 
