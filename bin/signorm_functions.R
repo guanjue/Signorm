@@ -350,16 +350,16 @@ signorm_robust = function(d1, d2, p, cor_lim, step, plot_name, sampling_num){
 		d1_thresh
 		d2_thresh
 
-		used_idb = as.logical( (d1_s>quantile(d1[d1>0 & d2>0], 1-p*used_r2)) * (d2_s>quantile(d2[d1>0 & d2>0], 1-p*used_r2)) )
+		used_idb = as.logical( (d1>quantile(d1[d1>0 & d2>0], 1-p*used_r2)) * (d2>quantile(d2[d1>0 & d2>0], 1-p*used_r2)) )
 		sum(used_idb)
 		#heatscatter(d1_s[used_idb], d2_s[used_idb], log='xy', pch=20)
 		#abline(0,1, col='red')
-		sf = sum(d2_s[used_idb]) / sum(d1_s[used_idb])
-		sf_totalmean = sum(d2_s[]) / sum(d1_s[])
+		sf = sum(d2[used_idb]) / sum(d1[used_idb])
+		sf_totalmean = sum(d2[]) / sum(d1[])
 		sf
 		sf_totalmean
 	} else{
-		sf = sf_totalmean = sum(d2_s[]) / sum(d1_s[])
+		sf = sf_totalmean = sum(d2[]) / sum(d1[])
 	}
 
 	pdf(paste(plot_name, '.pdf', sep=''))
