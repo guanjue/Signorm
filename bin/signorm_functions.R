@@ -330,7 +330,7 @@ signorm_robust = function(d1, d2, p, start_point, step, cor_lim, plot_name, samp
 	r=r2=NULL
 	used_range = p^seq(start_point,0, step)
 	for (i in seq(1,length(used_range))){
-		used_ida = as.logical( (d1>quantile(d1[d1>ignore_sig], 1-used_range[i])) * (d2>quantile(d2[d1>ignore_sig], 1-used_range[i])) )
+		used_ida = as.logical( (d1>quantile(d1[d1>ignore_sig], 1-used_range[i])) * (d2>quantile(d2[d2>ignore_sig], 1-used_range[i])) )
 		r2[i] = cor( (d1[used_ida]), (d2[used_ida]), method = 'spearman')
 		r[i] = sum((d1[used_ida])) / sum((d2[used_ida]))
 		print(paste(i, r2[i], r[i], sep='_'))
@@ -347,12 +347,12 @@ signorm_robust = function(d1, d2, p, start_point, step, cor_lim, plot_name, samp
 	used_r2 = which.max(r2)
 
 	d1_thresh = quantile(d1[d1>ignore_sig], 1-used_range[which.max(r2)] )
-	d2_thresh = quantile(d2[d1>ignore_sig], 1-used_range[which.max(r2)] )
+	d2_thresh = quantile(d2[d2>ignore_sig], 1-used_range[which.max(r2)] )
 	d1_thresh
 	d2_thresh
 
 	if (r2[used_r2]>=cor_lim){
-		used_idb = as.logical( (d1>quantile(d1[d1>ignore_sig], 1-used_range[which.max(r2)])) * (d2>quantile(d2[d1>ignore_sig], 1-used_range[which.max(r2)])) )
+		used_idb = as.logical( (d1>quantile(d1[d1>ignore_sig], 1-used_range[which.max(r2)])) * (d2>quantile(d2[d2>ignore_sig], 1-used_range[which.max(r2)])) )
 		sum(used_idb)
 		#heatscatter(d1_s[used_idb], d2_s[used_idb], log='xy', pch=20)
 		#abline(0,1, col='red')
