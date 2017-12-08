@@ -326,7 +326,7 @@ MAnorm = function(data_x_sig, data_y_sig, sampling_num, seed, MAplot_output_file
 
 
 
-signorm_robust = function(d1, d2, p, start_point, step, cor_lim, plot_name, sampling_num){
+signorm_robust = function(d1, d2, p, start_point, step, cor_lim, plot_name, sampling_num, use_log_axis){
 	r=r2=NULL
 	used_range = p^seq(start_point,0, step)
 	for (i in seq(1,length(used_range))){
@@ -365,7 +365,7 @@ signorm_robust = function(d1, d2, p, start_point, step, cor_lim, plot_name, samp
 
 	pdf(paste(plot_name, '.pdf', sep=''))
 	par(mfrow=c(2,2))
-	heatscatter(d1[used_id], d2[used_id], log='xy', pch=20, main=paste('max r2: ', toString(round(r2[used_r2], digits=3)), '; ', 'quantile_lim: ', toString(round(1-used_range[which.max(r2)], digits=3) ), sep=''))
+	heatscatter(d1[used_id], d2[used_id], log=use_log_axis, pch=20, main=paste('max r2: ', toString(round(r2[used_r2], digits=3)), '; ', 'quantile_lim: ', toString(round(1-used_range[which.max(r2)], digits=3) ), sep=''))
 	abline(0,1, col='red')
 	abline(h=d2_thresh, col='blue')
 	abline(v=d1_thresh, col='blue')
@@ -374,10 +374,10 @@ signorm_robust = function(d1, d2, p, start_point, step, cor_lim, plot_name, samp
 	abline(h=cor_lim, col='red')
 	abline(v=used_r2, col='blue')
 
-	heatscatter(d1[used_id]*sf, d2[used_id], log='xy', pch=20, main=paste('signorm_sf: ', toString(round(sf, digits=3)), sep=''))
+	heatscatter(d1[used_id]*sf, d2[used_id], log=use_log_axis, pch=20, main=paste('signorm_sf: ', toString(round(sf, digits=3)), sep=''))
 	abline(0,1, col='red')
 
-	heatscatter(d1[used_id]*sf_totalmean, d2[used_id], log='xy', pch=20, main=paste('totalmean_sf: ', toString(round(sf_totalmean, digits=3)), sep=''))
+	heatscatter(d1[used_id]*sf_totalmean, d2[used_id], log=use_log_axis, pch=20, main=paste('totalmean_sf: ', toString(round(sf_totalmean, digits=3)), sep=''))
 	abline(0,1, col='red')
 	dev.off()
 
