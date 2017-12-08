@@ -348,8 +348,8 @@ signorm_robust = function(d1, d2, p, start_point, step, cor_lim, plot_name, samp
 
 	d1_thresh = quantile(d1[d1>ignore_sig], 1-used_range[which.max(r2)] )
 	d2_thresh = quantile(d2[d2>ignore_sig], 1-used_range[which.max(r2)] )
-	d1_thresh
-	d2_thresh
+	print(d1_thresh)
+	print(d2_thresh)
 
 	if (r2[used_r2]>=cor_lim){
 		used_idb = as.logical( (d1>quantile(d1[d1>ignore_sig], 1-used_range[which.max(r2)])) * (d2>quantile(d2[d2>ignore_sig], 1-used_range[which.max(r2)])) )
