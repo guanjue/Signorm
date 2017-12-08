@@ -344,14 +344,14 @@ signorm_robust = function(d1, d2, p, start_point, step, cor_lim, plot_name, samp
 
 	#ansvar_norm=(cpt.meanvar(r2, class=FALSE, method = 'BinSeg', penalty = 'BIC', Q=3))
 	#used_r2 = ansvar_norm[1] #
-	used_r2 = which(r2==max(r2))[1]
+	used_r2 = which.max(r2)
 	if (r2[used_r2]>=cor_lim){
-		d1_thresh = quantile(d1[d1>0], 1-used_range[which(r2==max(r2))[1]] )
-		d2_thresh = quantile(d2[d1>0], 1-used_range[which(r2==max(r2))[1]] )
+		d1_thresh = quantile(d1[d1>0], 1-used_range[which.max(r2)] )
+		d2_thresh = quantile(d2[d1>0], 1-used_range[which.max(r2)] )
 		d1_thresh
 		d2_thresh
 
-		used_idb = as.logical( (d1>quantile(d1[d1>0 & d2>0], 1-used_range[which(r2==max(r2))[1]])) * (d2>quantile(d2[d1>0 & d2>0], 1-used_range[which(r2==max(r2))[1]])) )
+		used_idb = as.logical( (d1>quantile(d1[d1>0 & d2>0], 1-used_range[which.max(r2)])) * (d2>quantile(d2[d1>0 & d2>0], 1-used_range[which.max(r2)])) )
 		sum(used_idb)
 		#heatscatter(d1_s[used_idb], d2_s[used_idb], log='xy', pch=20)
 		#abline(0,1, col='red')
@@ -365,7 +365,7 @@ signorm_robust = function(d1, d2, p, start_point, step, cor_lim, plot_name, samp
 
 	pdf(paste(plot_name, '.pdf', sep=''))
 	par(mfrow=c(2,2))
-	heatscatter(d1[used_id], d2[used_id], log='xy', pch=20, main=paste('max r2: ', toString(round(r2[used_r2], digits=3)), '; ', 'quantile_lim: ', toString(round(1-used_range[which(r2==max(r2))[1]], digits=3) ), sep=''))
+	heatscatter(d1[used_id], d2[used_id], log='xy', pch=20, main=paste('max r2: ', toString(round(r2[used_r2], digits=3)), '; ', 'quantile_lim: ', toString(round(1-used_range[which.max(r2)], digits=3) ), sep=''))
 	abline(0,1, col='red')
 	abline(h=d2_thresh, col='blue')
 	abline(v=d1_thresh, col='blue')
