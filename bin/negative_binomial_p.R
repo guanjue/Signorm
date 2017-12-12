@@ -18,7 +18,7 @@ bg_bins = read.table(bg_bins_file, header = F)
 sig_bg = sig[bg_bins[,1]==1,]
 sig_bg_mean = mean(sig_bg)
 sig_bg_var = var(sig_bg)
-print(paste('check signal track overdispersion in background regions, var/mean=', toString(sig_bg_var/sig_bg_mean, digits=3))))
+print(paste('check signal track overdispersion in background regions, var/mean=', toString(round(sig_bg_var/sig_bg_mean, digits=3)) ))
 
 ### get negative binomial parameters from signal track bg regions
 sig_bg_prob = sig_bg_mean / sig_bg_var
@@ -28,7 +28,7 @@ sig_bg_size = sig_bg_mean * sig_bg_prob / (1-sig_bg_prob)
 input_bg = input[bg_bins[,1]==1,]
 input_bg_mean = mean(input_bg+1)
 inpy_bg_var = var(input_bg)
-print(paste('check input track overdispersion in background regions, var/mean=', toString(inpy_bg_var/input_bg_mean, digits=3))))
+print(paste('check input track overdispersion in background regions, var/mean=', toString(round(inpy_bg_var/input_bg_mean, digits=3)) ))
 
 ### get negative binomial p-value
 sig_input = cbind(sig, input)
