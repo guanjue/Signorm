@@ -230,8 +230,8 @@ calculate_scale_factor_with_t_thresh = function(data_x, data_y, sampling_num, se
 	data_y_high_t = data_y[data_t>t_threshold]
 
 	### get background vs foreground bins
-	bg_fg_10 = data_t<=t_threshold
-
+	bg_fg_10 = (data_t<=t_threshold)
+	print(head(bg_fg_10))
 	### remove zero for plotting
 	data_x_non0 = data_x[as.logical((data_x!=0) * (data_y!=0))]
 	data_y_non0 = data_y[as.logical((data_x!=0) * (data_y!=0))]
