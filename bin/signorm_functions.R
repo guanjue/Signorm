@@ -229,6 +229,9 @@ calculate_scale_factor_with_t_thresh = function(data_x, data_y, sampling_num, se
 	data_x_high_t = data_x[data_t>t_threshold]
 	data_y_high_t = data_y[data_t>t_threshold]
 
+	### get background vs foreground bins
+	bg_fg_10 = data_t<=t_threshold
+
 	### remove zero for plotting
 	data_x_non0 = data_x[as.logical((data_x!=0) * (data_y!=0))]
 	data_y_non0 = data_y[as.logical((data_x!=0) * (data_y!=0))]
@@ -277,7 +280,7 @@ calculate_scale_factor_with_t_thresh = function(data_x, data_y, sampling_num, se
 
 	sf_vector_t_threshold = list("sf_vector" = sf_vector, "t_threshold" = t_threshold)
 	
-	return(sf_vector_t_threshold)
+	return(sf_vector_t_threshold, bg_fg_10)
 }
 ##############################################
 
@@ -361,6 +364,7 @@ signorm_robust = function(d1, d2, p, start_point, step, cor_lim, plot_name, samp
 		sf
 		sf_totalmean
 	} else{
+		used_idb = d1>100000
 		sf = sf_totalmean = sum(d2[]) / sum(d1[])
 	}
 
@@ -383,7 +387,7 @@ signorm_robust = function(d1, d2, p, start_point, step, cor_lim, plot_name, samp
 	dev.off()
 
 	sf_vector = list("signorm_sf" = sf, "totalmean_sf" = sf_totalmean)
-	return(sf_vector)
+	return(sf_vector, used_idb)
 }
 
 
