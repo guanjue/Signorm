@@ -10,6 +10,7 @@ t_r_curve_change_point = function(t_r_matrix, changepoint_method, max_cp_num, t_
 	### extract t value and r value
 	### round t for robustness
 	if (round_type=='log2'){
+		### add 2 because r add 1 (see line 26)
 		t_od_round = 2**(round( log2(t_r_matrix[,1]) / round_factor) * round_factor) + 2
 	} else{
 		t_od_round = (round( (t_r_matrix[,1]) / round_factor) * round_factor) + 2
@@ -187,6 +188,7 @@ plotting_scatterplot_MAplot = function(data_x_high_t, data_y_high_t, data_x_low_
 ##############################################
 calculate_scale_factor_with_t_thresh = function(data_x, data_y, sampling_num, seed, t_threshold, ignore_t_lim, quantile_lim, scatterplot_MAplot_output_file_name, round_factor, round_type){
 	### if sampling_num != 0, sampling calculate scale factor & plotting 
+	t_all = data_x+data_y
 	if (sampling_num != 0){
 		set.seed(seed)
 		used_id = sample(length(data_y)[1],sampling_num)
@@ -211,7 +213,7 @@ calculate_scale_factor_with_t_thresh = function(data_x, data_y, sampling_num, se
 	print(t_threshold)
 
 	### if data_t<=t_threshold have more than X% of the bins, use X% bin as the threshold
-	data_t_passlim = data_t[data_t>(ignore_t_lim+2)]
+	data_t_passlim = data_t[data_t>(ignore_t_lim+2)] ### add 2 because t-r fit t add 2 & rs add 1
 	data_used_p = sum(data_t_passlim<=t_threshold)/length(data_t_passlim)
 	if ( data_used_p >= quantile_lim ){
 		print('use X% quantile')
@@ -230,7 +232,7 @@ calculate_scale_factor_with_t_thresh = function(data_x, data_y, sampling_num, se
 	data_y_high_t = data_y[data_t>t_threshold]
 
 	### get background vs foreground bins
-	bg_fg_10 = (data_t<=t_threshold)
+	bg_fg_10 = ((t_all+2)<=t_threshold)*1 ### t_all add 2 because t-r fit t add 2 & rs add 1 so threshod added 2
 	print(head(bg_fg_10))
 	### remove zero for plotting
 	data_x_non0 = data_x[as.logical((data_x!=0) * (data_y!=0))]
@@ -364,7 +366,7 @@ signorm_robust = function(d1, d2, p, start_point, step, cor_lim, plot_name, samp
 		sf
 		sf_totalmean
 	} else{
-		used_idb = d1>100000
+		used_idb = (d1>100000)*1
 		sf = sf_totalmean = sum(d2[]) / sum(d1[])
 	}
 
@@ -386,7 +388,7 @@ signorm_robust = function(d1, d2, p, start_point, step, cor_lim, plot_name, samp
 	abline(0,1, col='red')
 	dev.off()
 
-	sf_vector = list("signorm_sf" = sf, "totalmean_sf" = sf_totalmean, 'bg_fg_10' = bg_fg_10)
+	sf_vector = list("signorm_sf" = sf, "totalmean_sf" = sf_totalmean, 'bg_fg_10' = used_idb)
 	return(sf_vector)
 }
 
