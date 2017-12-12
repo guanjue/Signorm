@@ -58,11 +58,11 @@ if (is.element(scale_factor_type, c(1,2,3,4))){
 
 
 	### get scale factor based on signal part
-	signal_scale_factor_vector_t_threshold_modified, bg_fg_10_ncis = calculate_scale_factor_with_t_thresh(data_x_sig, data_y_sig, sampling_num, seed, t_threshold, ignore_t_lim_lower, quantile_lim, scatterplot_MAplot_output_file_name, round_factor, round_type)
+	signal_scale_factor_vector_t_threshold_modified = calculate_scale_factor_with_t_thresh(data_x_sig, data_y_sig, sampling_num, seed, t_threshold, ignore_t_lim_lower, quantile_lim, scatterplot_MAplot_output_file_name, round_factor, round_type)
 	signal_scale_factor_vector = signal_scale_factor_vector_t_threshold_modified$sf_vector
 	t_threshold_modified = signal_scale_factor_vector_t_threshold_modified$t_threshold
 
-	write.table(bg_fg_10_ncis, paste(data_x_sig_norm_output_file,'.bg_fg_10.ncis.txt', sep=''), quote=FALSE, col.names=FALSE, row.names=FALSE, sep='\t')
+	write.table(signal_scale_factor_vector_t_threshold_modified$bg_fg_10, paste(data_x_sig_norm_output_file,'.bg_fg_10.ncis.txt', sep=''), quote=FALSE, col.names=FALSE, row.names=FALSE, sep='\t')
 
 	print('1: total mean; 2:total median; 3: low Poisson mean; 4: high Poisson mean')
 	print(scale_factor_type)
@@ -87,8 +87,8 @@ if (is.element(scale_factor_type, c(1,2,3,4))){
 	### give each t a independent sf
 	data_x_sig_norm = as.matrix( apply(cbind(data_x_sig, data_y_sig), 1, function(x) if(x[1]!=0){ x[1] * values(t_r_hash[toString(x[1]+x[2])]) } else{x[1]} ) )
 } else if (scale_factor_type==8) {
-	sf, bg_fg_10_signorm_robust = signorm_robust(data_x_sig, data_y_sig, 2, -10, 0.2, 0.5, scatterplot_MAplot_output_file_name, 100000, 'xy', ignore_sig)
-	write.table(bg_fg_10_ncis, paste(data_x_sig_norm_output_file, '.bg_fg_10.signorm_robust.txt', sep=''), quote=FALSE, col.names=FALSE, row.names=FALSE, sep='\t')
+	sf = signorm_robust(data_x_sig, data_y_sig, 2, -10, 0.2, 0.5, scatterplot_MAplot_output_file_name, 100000, 'xy', ignore_sig)
+	write.table(sf$bg_fg_10, paste(data_x_sig_norm_output_file, '.bg_fg_10.signorm_robust.txt', sep=''), quote=FALSE, col.names=FALSE, row.names=FALSE, sep='\t')
 	data_x_sig_norm = data_x_sig * sf$signorm_sf
 	signal_scale_factor_vector = c(sf$signorm_sf, sf$totalmean_sf)
 } else if (scale_factor_type==9) {
