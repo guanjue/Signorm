@@ -11,7 +11,7 @@ output_name = args[4]
 
 ### read data
 sig = read.table(signal_track_file, header = F)
-input = read.table(signal_track_file, header = F)
+input = read.table(input_track_file, header = F)
 bg_bins = read.table(bg_bins_file, header = F)
 
 ### get sig bg regions
