@@ -34,6 +34,7 @@ inpy_bg_var = var(input_bg)
 print(paste('check input track overdispersion in background regions, var/mean=', toString(round(inpy_bg_var/input_bg_mean, digits=3)) ))
 print(sig_bg_prob)
 print(sig_bg_size)
+print(summary(input_bg))
 print(input_bg_mean)
 print(inpy_bg_var)
 
