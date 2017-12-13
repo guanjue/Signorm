@@ -55,7 +55,7 @@ nb_pval[nb_pval==0] = 0.1^16
 ############### second round
 ### get sig bg regions
 #sig_bg = sig[bg_bins[,1]==1,]
-sig_bg = sig[nb_pval<0.001,]
+sig_bg = sig[nb_pval>=0.001,]
 sig_bg_non0 = sig_bg[sig_bg>0]
 sig_bg_mean = mean(sig_bg_non0)
 sig_bg_var = var(sig_bg_non0)
