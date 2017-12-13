@@ -28,7 +28,6 @@ sig_bg_prob = sig_bg_mean / sig_bg_var
 sig_bg_size = sig_bg_mean * sig_bg_prob / (1-sig_bg_prob)
 ### get input bg regions
 input_bg = input[bg_bins[,1]==1,]
-input_bg = 
 input_bg_mean = mean(input_bg)
 inpy_bg_var = var(input_bg)
 print(paste('check input track overdispersion in background regions, var/mean=', toString(round(inpy_bg_var/input_bg_mean, digits=3)) ))
