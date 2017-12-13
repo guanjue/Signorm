@@ -22,17 +22,21 @@ sig_bg_var = var(sig_bg_non0)
 print(paste('check signal track overdispersion in background regions, var/mean=', toString(round(sig_bg_var/sig_bg_mean, digits=3)) ))
 print(sig_bg_mean)
 print(sig_bg_var)
+print(length(sig_bg_non0))
 
 ### get negative binomial parameters from signal track bg regions
 sig_bg_prob = sig_bg_mean / sig_bg_var
 sig_bg_size = sig_bg_mean * sig_bg_prob / (1-sig_bg_prob)
 ### get input bg regions
 input_bg = input[bg_bins[,1]==1,]
-input_bg_mean = mean(input_bg)
-inpy_bg_var = var(input_bg)
+input_bg_non0 = input_bg[input_bg>0]
+input_bg_mean = mean(input_bg_non0)
+inpy_bg_var = var(input_bg_non0)
 print(paste('check input track overdispersion in background regions, var/mean=', toString(round(inpy_bg_var/input_bg_mean, digits=3)) ))
 print(sig_bg_prob)
 print(sig_bg_size)
+print(length(input_bg_non0))
+
 print(head(input_bg))
 print(summary(input_bg))
 print(input_bg_mean)
