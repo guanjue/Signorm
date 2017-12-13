@@ -20,6 +20,8 @@ sig_bg_non0 = sig_bg[sig_bg>0]
 sig_bg_mean = mean(sig_bg_non0)
 sig_bg_var = var(sig_bg_non0)
 print(paste('check signal track overdispersion in background regions, var/mean=', toString(round(sig_bg_var/sig_bg_mean, digits=3)) ))
+print(sig_bg_mean)
+print(sig_bg_var)
 
 ### get negative binomial parameters from signal track bg regions
 sig_bg_prob = sig_bg_mean / sig_bg_var
@@ -33,6 +35,7 @@ print(paste('check input track overdispersion in background regions, var/mean=',
 print(sig_bg_prob)
 print(sig_bg_size)
 print(input_bg_mean)
+print(inpy_bg_var)
 
 ### get negative binomial p-value
 sig_input = cbind(sig, input)
