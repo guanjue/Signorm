@@ -18,13 +18,13 @@ prob_vec = c()
 sig = read.table(signal_track_file, header = F)
 input = read.table(input_track_file, header = F)
 bg_bins = read.table(bg_bins_file, header = F)
-thesh = -1
+thesh = 0
 #####################################################################################################################
 #####################################################################################################################
 #####################################################################################################################
 ### get sig bg regions
-#sig_bg = sig[bg_bins[,1]==1,]
-sig_bg = sig[,1]
+sig_bg = sig[bg_bins[,1]==1,]
+#sig_bg = sig[,1]
 sig_bg_non0 = sig_bg[sig_bg>thesh]
 sig_bg_mean = mean(sig_bg_non0)
 sig_bg_var = var(sig_bg_non0)
@@ -46,8 +46,8 @@ size_vec[1] = sig_bg_size
 prob_vec[1] = sig_bg_prob
 
 ### get input bg regions
-#input_bg = input[bg_bins[,1]==1,]
-input_bg = input[,1]
+input_bg = input[bg_bins[,1]==1,]
+#input_bg = input[,1]
 input_bg_non0 = input_bg[input_bg>thesh]
 input_bg_mean = mean(input_bg_non0)
 inpy_bg_var = var(input_bg_non0)
@@ -76,7 +76,7 @@ write.table(neglog10_nb_pval, output_name, quote=FALSE, col.names=FALSE, row.nam
 ### get sig bg regions
 #sig_bg = sig[bg_bins[,1]==1,]
 sig_vec = sig[,1]
-sig_bg = sig_vec[sig_vec<=quantile(sig_vec, 0.99)]
+sig_bg = sig_vec[sig_vec<=quantile(sig_vec[sig_vec>thesh], 0.99)]
 sig_bg_non0 = sig_bg[sig_bg>thesh]
 sig_bg_mean = mean(sig_bg_non0)
 sig_bg_var = var(sig_bg_non0)
@@ -99,7 +99,7 @@ prob_vec[2] = sig_bg_prob
 
 ### get input bg regions
 #input_bg = input[bg_bins[,1]==1,]
-input_bg = input[sig_vec<=quantile(sig_vec, 0.99),]
+input_bg = input[sig_vec<=quantile(sig_vec[sig_vec>thesh], 0.99),]
 input_bg_non0 = input_bg[input_bg>thesh]
 input_bg_mean = mean(input_bg_non0)
 inpy_bg_var = var(input_bg_non0)
@@ -121,7 +121,7 @@ nb_pval[nb_pval==0] = 0.1^16
 neglog10_nb_pval = -log10(nb_pval)
 
 ### write output
-write.table(neglog10_nb_pval, paste(output_name, '.99qt.txt'), quote=FALSE, col.names=FALSE, row.names=FALSE, sep='\t')
+write.table(neglog10_nb_pval, paste(output_name, '.99qt.txt', sep=''), quote=FALSE, col.names=FALSE, row.names=FALSE, sep='\t')
 
 
 #####################################################################################################################
@@ -191,7 +191,7 @@ size_vec[3] = sig_bg_size
 prob_vec[3] = sig_bg_prob
 
 ### get input bg regions
-input_bg = input[bg_bins[,1]==1,]
+input_bg = input[nb_pval>=0.001,]
 input_bg_non0 = input_bg[input_bg>thesh]
 input_bg_mean = mean(input_bg_non0)
 inpy_bg_var = var(input_bg_non0)
@@ -213,11 +213,11 @@ nb_pval[nb_pval==0] = 0.1^16
 neglog10_nb_pval = -log10(nb_pval)
 
 ### write output
-write.table(neglog10_nb_pval, paste(output_name, '.nobg.txt'), quote=FALSE, col.names=FALSE, row.names=FALSE, sep='\t')
+write.table(neglog10_nb_pval, paste(output_name, '.nobg.txt', sep=''), quote=FALSE, col.names=FALSE, row.names=FALSE, sep='\t')
 #####################################################################################################################
 #####################################################################################################################
 #####################################################################################################################
 
 info_matrix = cbind(mean_vec, var_vec, size_vec, prob_vec)
-write.table(info_matrix, paste(output_name, '.mvsp.txt'), quote=FALSE, col.names=FALSE, row.names=FALSE, sep='\t')
+write.table(info_matrix, paste(output_name, '.mvsp.txt', sep=''), quote=FALSE, col.names=FALSE, row.names=FALSE, sep='\t')
 
