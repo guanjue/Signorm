@@ -66,7 +66,7 @@ if (is.element(scale_factor_type, c(1,2,3,4))){
 
 	print('1: total mean; 2:total median; 3: low Poisson mean; 4: high Poisson mean')
 	print(scale_factor_type)
-	data_x_sig_norm = data_x_sig / signal_scale_factor_vector[scale_factor_type] * signal_scale_factor_vector[scale_factor_type+4]
+	data_x_sig_norm = (data_x_sig+1) / signal_scale_factor_vector[scale_factor_type] * signal_scale_factor_vector[scale_factor_type+4]
 
 } else if (scale_factor_type==5) {
 	### 2 scale factor for 2 parts
@@ -93,7 +93,7 @@ if (is.element(scale_factor_type, c(1,2,3,4))){
 } else if (scale_factor_type==8) {
 	sf = signorm_robust(data_x_sig, data_y_sig, 2, -10, 0.2, 0.5, scatterplot_MAplot_output_file_name, 100000, 'xy', ignore_sig)
 	write.table(sf$bg_fg_10, paste(data_x_sig_norm_output_file, '.bg_fg_10.signorm_robust.txt', sep=''), quote=FALSE, col.names=FALSE, row.names=FALSE, sep='\t')
-	data_x_sig_norm = data_x_sig * sf$signorm_sf
+	data_x_sig_norm = (data_x_sig+1) * sf$signorm_sf
 	signal_scale_factor_vector = c(sf$signorm_sf, sf$totalmean_sf)
 
 } else if (scale_factor_type==9) {
@@ -107,9 +107,9 @@ if (is.element(scale_factor_type, c(1,2,3,4))){
 	print('t value norm')
 	### initialize t-r matrix hash 
 	if (round_type == 'log2'){
-		t_all = 2**(round(log2(data_x_sig + data_y_sig)/round_factor) * round_factor) + 2
+		t_all = 2**(round(log2(data_x_sig + data_y_sig)/round_factor) * round_factor)
 	} else{
-		t_all = (round((data_x_sig + data_y_sig)/round_factor) * round_factor) + 2
+		t_all = (round((data_x_sig + data_y_sig)/round_factor) * round_factor)
 	}
 	
 	print(summary(t_all))

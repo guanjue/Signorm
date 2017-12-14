@@ -201,9 +201,9 @@ calculate_scale_factor_with_t_thresh = function(data_x, data_y, sampling_num, se
 
 	### round t for robustness
 	if (round_type=='log2'){
-			data_t = 2**(round(log2(data_t) / round_factor) * round_factor ) + 2
+			data_t = 2**(round(log2(data_t) / round_factor) * round_factor )
 		} else{
-			data_t = (round((data_t) / round_factor) * round_factor ) + 2
+			data_t = (round((data_t) / round_factor) * round_factor )
 		}
 	
 
@@ -213,7 +213,7 @@ calculate_scale_factor_with_t_thresh = function(data_x, data_y, sampling_num, se
 	print(t_threshold)
 
 	### if data_t<=t_threshold have more than X% of the bins, use X% bin as the threshold
-	data_t_passlim = data_t[data_t>(ignore_t_lim+2)] ### add 2 because t-r fit t add 2 & rs add 1
+	data_t_passlim = data_t[data_t>(ignore_t_lim)] ### add 2 because t-r fit t add 2 & rs add 1
 	data_used_p = sum(data_t_passlim<=t_threshold)/length(data_t_passlim)
 	if ( data_used_p >= 0 ){
 		print('use X% quantile')
@@ -232,7 +232,7 @@ calculate_scale_factor_with_t_thresh = function(data_x, data_y, sampling_num, se
 	data_y_high_t = data_y[data_t>t_threshold]
 
 	### get background vs foreground bins
-	bg_fg_10 = ((t_all+2)<=t_threshold)*1 ### t_all add 2 because t-r fit t add 2 & rs add 1 so threshod added 2
+	bg_fg_10 = ((t_all)<=t_threshold)*1 ### t_all add 2 because t-r fit t add 2 & rs add 1 so threshod added 2
 	print(head(bg_fg_10))
 	### remove zero for plotting
 	data_x_non0 = data_x[as.logical((data_x!=0) * (data_y!=0))]
