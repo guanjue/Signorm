@@ -11,7 +11,7 @@ t_r_curve_change_point = function(t_r_matrix, changepoint_method, max_cp_num, t_
 	### round t for robustness
 	if (round_type=='log2'){
 		### add 2 because r add 1 (see line 26)
-		t_od_round = 2**(round( log2(t_r_matrix[,1]) / round_factor) * round_factor) 
+		t_od_round = 2**(round( log2(t_r_matrix[,1]) / round_factor) * round_factor)
 	} else{
 		t_od_round = (round( (t_r_matrix[,1]) / round_factor) * round_factor) 
 	}
