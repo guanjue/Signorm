@@ -18,14 +18,14 @@ prob_vec = c()
 sig = read.table(signal_track_file, header = F)
 input = read.table(input_track_file, header = F)
 bg_bins = read.table(bg_bins_file, header = F)
-
+thesh = -1
 #####################################################################################################################
 #####################################################################################################################
 #####################################################################################################################
 ### get sig bg regions
 #sig_bg = sig[bg_bins[,1]==1,]
 sig_bg = sig[,1]
-sig_bg_non0 = sig_bg[sig_bg>0]
+sig_bg_non0 = sig_bg[sig_bg>thesh]
 sig_bg_mean = mean(sig_bg_non0)
 sig_bg_var = var(sig_bg_non0)
 print(paste('check signal track overdispersion in background regions, var/mean=', toString(round(sig_bg_var/sig_bg_mean, digits=3)) ))
@@ -48,7 +48,7 @@ prob_vec[1] = sig_bg_prob
 ### get input bg regions
 #input_bg = input[bg_bins[,1]==1,]
 input_bg = input[,1]
-input_bg_non0 = input_bg[input_bg>0]
+input_bg_non0 = input_bg[input_bg>thesh]
 input_bg_mean = mean(input_bg_non0)
 inpy_bg_var = var(input_bg_non0)
 print(paste('check input track overdispersion in background regions, var/mean=', toString(round(inpy_bg_var/input_bg_mean, digits=3)) ))
@@ -77,7 +77,7 @@ write.table(neglog10_nb_pval, output_name, quote=FALSE, col.names=FALSE, row.nam
 #sig_bg = sig[bg_bins[,1]==1,]
 sig_vec = sig[,1]
 sig_bg = sig_vec[sig_vec<=quantile(sig_vec, 0.99)]
-sig_bg_non0 = sig_bg[sig_bg>0]
+sig_bg_non0 = sig_bg[sig_bg>thesh]
 sig_bg_mean = mean(sig_bg_non0)
 sig_bg_var = var(sig_bg_non0)
 print(paste('check signal track overdispersion in background regions, var/mean=', toString(round(sig_bg_var/sig_bg_mean, digits=3)) ))
@@ -100,7 +100,7 @@ prob_vec[2] = sig_bg_prob
 ### get input bg regions
 #input_bg = input[bg_bins[,1]==1,]
 input_bg = input[sig_vec<=quantile(sig_vec, 0.99),]
-input_bg_non0 = input_bg[input_bg>0]
+input_bg_non0 = input_bg[input_bg>thesh]
 input_bg_mean = mean(input_bg_non0)
 inpy_bg_var = var(input_bg_non0)
 print(paste('check input track overdispersion in background regions, var/mean=', toString(round(inpy_bg_var/input_bg_mean, digits=3)) ))
@@ -130,7 +130,7 @@ write.table(neglog10_nb_pval, paste(output_name, '.99qt.txt'), quote=FALSE, col.
 ### get sig bg regions no bgs
 #sig_bg = sig[bg_bins[,1]==1,]
 sig_bg = sig[,1]
-sig_bg_non0 = sig_bg[sig_bg>0]
+sig_bg_non0 = sig_bg[sig_bg>thesh]
 sig_bg_mean = mean(sig_bg_non0)
 sig_bg_var = var(sig_bg_non0)
 print(paste('check signal track overdispersion in background regions, var/mean=', toString(round(sig_bg_var/sig_bg_mean, digits=3)) ))
@@ -147,7 +147,7 @@ sig_bg_size = sig_bg_mean * sig_bg_prob / (1-sig_bg_prob)
 ### get input bg regions
 #input_bg = input[bg_bins[,1]==1,]
 input_bg = input[,1]
-input_bg_non0 = input_bg[input_bg>0]
+input_bg_non0 = input_bg[input_bg>thesh]
 input_bg_mean = mean(input_bg_non0)
 inpy_bg_var = var(input_bg_non0)
 print(paste('check input track overdispersion in background regions, var/mean=', toString(round(inpy_bg_var/input_bg_mean, digits=3)) ))
@@ -170,7 +170,7 @@ nb_pval[nb_pval==0] = 0.1^16
 ### get sig bg regions
 #sig_bg = sig[bg_bins[,1]==1,]
 sig_bg = sig[nb_pval>=0.001,]
-sig_bg_non0 = sig_bg[sig_bg>0]
+sig_bg_non0 = sig_bg[sig_bg>thesh]
 sig_bg_mean = mean(sig_bg_non0)
 sig_bg_var = var(sig_bg_non0)
 print(paste('check signal track overdispersion in background regions, var/mean=', toString(round(sig_bg_var/sig_bg_mean, digits=3)) ))
@@ -192,7 +192,7 @@ prob_vec[3] = sig_bg_prob
 
 ### get input bg regions
 input_bg = input[bg_bins[,1]==1,]
-input_bg_non0 = input_bg[input_bg>0]
+input_bg_non0 = input_bg[input_bg>thesh]
 input_bg_mean = mean(input_bg_non0)
 inpy_bg_var = var(input_bg_non0)
 print(paste('check input track overdispersion in background regions, var/mean=', toString(round(inpy_bg_var/input_bg_mean, digits=3)) ))
