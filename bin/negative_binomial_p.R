@@ -38,6 +38,11 @@ sig_bg_prob = sig_bg_mean / sig_bg_var
 if (sig_bg_prob<0.1){
 	sig_bg_prob = 0.1
 }
+
+if (sig_bg_prob>1){
+	sig_bg_prob = 1
+}
+
 sig_bg_size = sig_bg_mean * sig_bg_prob / (1-sig_bg_prob)
 
 mean_vec[1] = sig_bg_mean
@@ -90,6 +95,11 @@ sig_bg_prob = sig_bg_mean / sig_bg_var
 if (sig_bg_prob<0.1){
 	sig_bg_prob = 0.1
 }
+
+if (sig_bg_prob>1){
+	sig_bg_prob = 1
+}
+
 sig_bg_size = sig_bg_mean * sig_bg_prob / (1-sig_bg_prob)
 
 mean_vec[2] = sig_bg_mean
@@ -143,6 +153,11 @@ sig_bg_prob = sig_bg_mean / sig_bg_var
 if (sig_bg_prob<0.1){
 	sig_bg_prob = 0.1
 }
+
+if (sig_bg_prob>1){
+	sig_bg_prob = 1
+}
+
 sig_bg_size = sig_bg_mean * sig_bg_prob / (1-sig_bg_prob)
 ### get input bg regions
 #input_bg = input[bg_bins[,1]==1,]
@@ -183,6 +198,11 @@ sig_bg_prob = sig_bg_mean / sig_bg_var
 if (sig_bg_prob<0.1){
 	sig_bg_prob = 0.1
 }
+
+if (sig_bg_prob>1){
+	sig_bg_prob = 1
+}
+
 sig_bg_size = sig_bg_mean * sig_bg_prob / (1-sig_bg_prob)
 
 mean_vec[3] = sig_bg_mean
