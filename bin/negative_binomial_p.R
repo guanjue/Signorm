@@ -39,8 +39,8 @@ if (sig_bg_prob<0.1){
 	sig_bg_prob = 0.1
 }
 
-if (sig_bg_prob>1){
-	sig_bg_prob = 1
+if (sig_bg_prob>=0.9){
+	sig_bg_prob = 0.9
 }
 
 sig_bg_size = sig_bg_mean * sig_bg_prob / (1-sig_bg_prob)
@@ -96,8 +96,8 @@ if (sig_bg_prob<0.1){
 	sig_bg_prob = 0.1
 }
 
-if (sig_bg_prob>1){
-	sig_bg_prob = 1
+if (sig_bg_prob>=0.9){
+	sig_bg_prob = 0.9
 }
 
 sig_bg_size = sig_bg_mean * sig_bg_prob / (1-sig_bg_prob)
@@ -154,8 +154,8 @@ if (sig_bg_prob<0.1){
 	sig_bg_prob = 0.1
 }
 
-if (sig_bg_prob>1){
-	sig_bg_prob = 1
+if (sig_bg_prob>=0.9){
+	sig_bg_prob = 0.9
 }
 
 sig_bg_size = sig_bg_mean * sig_bg_prob / (1-sig_bg_prob)
@@ -199,8 +199,8 @@ if (sig_bg_prob<0.1){
 	sig_bg_prob = 0.1
 }
 
-if (sig_bg_prob>1){
-	sig_bg_prob = 1
+if (sig_bg_prob>=0.9){
+	sig_bg_prob = 0.9
 }
 
 sig_bg_size = sig_bg_mean * sig_bg_prob / (1-sig_bg_prob)
