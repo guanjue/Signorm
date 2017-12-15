@@ -17,6 +17,9 @@ for (file in file_list){
 }
 ### get fisher method combined p-value
 get_fisher_p = function(x){
+	if (length(x)==1){
+		x = c(x, x)
+	}
 	x_p = 10^(-x)
 	fp = sumlog(x_p)$p
 	if (fp<=0.1^15){
