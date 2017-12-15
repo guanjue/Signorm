@@ -17,14 +17,16 @@ for (file in file_list){
 }
 ### get fisher method combined p-value
 get_fisher_p = function(x){
-	if (length(x)==1){
-		x = c(x, x)
+	if (length(x)!=1){
+		x_p = 10^(-x)
+		fp = sumlog(x_p)$p
+		if (fp<=0.1^15){
+			fp = 0.1^15
+		}		
+	} else{
+		fp = 10^(-x)
 	}
-	x_p = 10^(-x)
-	fp = sumlog(x_p)$p
-	if (fp<=0.1^15){
-		fp = 0.1^15
-	}
+
 	fp_neglog10 = -log10(fp)
 	return(fp_neglog10)
 }
