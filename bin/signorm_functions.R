@@ -370,7 +370,7 @@ signorm_robust = function(d1, d2, p, start_point, step, cor_lim, plot_name, samp
 		sf = sf_totalmean = sum(d2[]) / sum(d1[])
 	}
 
-	pdf(paste(plot_name, '.pdf', sep=''))
+	png(paste(plot_name, '.png', sep=''), width = 1000, height = 1000)
 	par(mfrow=c(2,2))
 	heatscatter(d1[used_id], d2[used_id], log=use_log_axis, pch=20, main=paste('max r2: ', toString(round(r2[used_r2], digits=3)), '; ', 'quantile_lim: ', toString(round(1-used_range[which.max(r2)], digits=3) ), sep=''))
 	abline(0,1, col='red')

@@ -91,7 +91,7 @@ if (is.element(scale_factor_type, c(1,2,3,4))){
 	data_x_sig_norm = as.matrix( apply(cbind(data_x_sig, data_y_sig), 1, function(x) if(x[1]!=0){ x[1] * values(t_r_hash[toString(x[1]+x[2])]) } else{x[1]} ) )
 
 } else if (scale_factor_type==8) {
-	sf = signorm_robust(data_x_sig, data_y_sig, 2, -10, 0.2, 0.5, scatterplot_MAplot_output_file_name, 100000, 'xy', ignore_sig)
+	sf = signorm_robust(data_x_sig, data_y_sig, 2, -10, 0.2, 0.5, scatterplot_MAplot_output_file_name, 100000, '', ignore_sig)
 	write.table(sf$bg_fg_10, paste(data_x_sig_norm_output_file, '.bg_fg_10.signorm_robust.txt', sep=''), quote=FALSE, col.names=FALSE, row.names=FALSE, sep='\t')
 	data_x_sig_norm = (data_x_sig+1) * sf$signorm_sf
 	signal_scale_factor_vector = c(sf$signorm_sf, sf$totalmean_sf)
