@@ -93,7 +93,9 @@ if (is.element(scale_factor_type, c(1,2,3,4))){
 } else if (scale_factor_type==8) {
 	sf = signorm_robust(data_x_sig, data_y_sig, 2, -10, 0.2, 0.5, scatterplot_MAplot_output_file_name, 100000, '', ignore_sig)
 	write.table(sf$bg_fg_10, paste(data_x_sig_norm_output_file, '.bg_fg_10.signorm_robust.txt', sep=''), quote=FALSE, col.names=FALSE, row.names=FALSE, sep='\t')
-	data_x_sig_norm = (data_x_sig+1) * sf$signorm_sf
+
+	data_x_sig_norm = (data_x_sig+0.1) * sf$signorm_sf
+	data_x_sig_norm[data_x_sig_norm>=15.1] = 15.1
 	signal_scale_factor_vector = c(sf$signorm_sf, sf$totalmean_sf)
 
 } else if (scale_factor_type==9) {
