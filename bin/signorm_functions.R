@@ -343,7 +343,7 @@ signorm_robust = function(d1, d2, p, start_point, step, cor_lim, plot_name, samp
 	}
 
 	set.seed(2017)
-	used_id = sample(dim(d1)[1], 50000)
+	used_id = sample(dim(d1)[1], 100000)
 
 	d1_s = d1[used_id]
 	d2_s = d2[used_id]
