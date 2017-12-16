@@ -336,8 +336,8 @@ signorm_robust = function(d1, d2, p, start_point, step, cor_lim, plot_name, samp
 	ignore_sig = -log10(0.9)
 	used_range = p^seq(start_point,0, step)
 	for (i in seq(1,length(used_range))){
-		used_ida = as.logical( (d1>quantile(d1[d1>ignore_sig], 1-used_range[i])) && (d2>quantile(d2[d2>ignore_sig], 1-used_range[i])) )
-		r2[i] = cor( log(d1[used_ida]), log(d2[used_ida]), method = 'spearman')
+		used_ida = as.logical( (d1>quantile(d1[d1>ignore_sig], 1-used_range[i])) * (d2>quantile(d2[d2>ignore_sig], 1-used_range[i])) )
+		r2[i] = cor( (d1[used_ida]), (d2[used_ida]), method = 'spearman')
 		r[i] = sum((d1[used_ida])) / sum((d2[used_ida]))
 		print(paste(i, r2[i], r[i], sep='_'))
 	}
@@ -358,7 +358,7 @@ signorm_robust = function(d1, d2, p, start_point, step, cor_lim, plot_name, samp
 	print(d2_thresh)
 
 	if (r2[used_r2]>=cor_lim){
-		used_idb = as.logical( (d1>quantile(d1[d1>ignore_sig], 1-used_range[which.max(r2)])) && (d2>quantile(d2[d2>ignore_sig], 1-used_range[which.max(r2)])) )
+		used_idb = as.logical( (d1>quantile(d1[d1>ignore_sig], 1-used_range[which.max(r2)])) * (d2>quantile(d2[d2>ignore_sig], 1-used_range[which.max(r2)])) )
 		sum(used_idb)
 		#heatscatter(d1_s[used_idb], d2_s[used_idb], log='xy', pch=20)
 		#abline(0,1, col='red')
@@ -392,7 +392,7 @@ signorm_robust = function(d1, d2, p, start_point, step, cor_lim, plot_name, samp
 
 	png(paste(plot_name, '.log.png', sep=''), width = 1000, height = 1000)
 	par(mfrow=c(2,2))
-	heatscatter(d1[used_id], d2[used_id], log='xy', pch=20, main=paste('max r2: ', toString(round(r2[used_r2], digits=3)), '; ', 'quantile_lim: ', toString(round(1-used_range[which.max(r2)], digits=3) ), sep=''))
+	heatscatter(d1[used_id], d2[used_id], log='xy', pch=20, xlim=c(0.001, 16), ylim=c(0.001, 16), main=paste('max r2: ', toString(round(r2[used_r2], digits=3)), '; ', 'quantile_lim: ', toString(round(1-used_range[which.max(r2)], digits=3) ), sep=''))
 	abline(0,1, col='red')
 	abline(h=d2_thresh, col='blue')
 	abline(v=d1_thresh, col='blue')
@@ -401,10 +401,10 @@ signorm_robust = function(d1, d2, p, start_point, step, cor_lim, plot_name, samp
 	abline(h=cor_lim, col='red')
 	abline(v=used_r2, col='blue')
 
-	heatscatter(d1[used_id]*sf, d2[used_id], log='xy', pch=20, main=paste('signorm_sf: ', toString(round(sf, digits=3)), sep=''))
+	heatscatter(d1[used_id]*sf, d2[used_id], log='xy', pch=20, xlim=c(0.001, 16), ylim=c(0.001, 16), main=paste('signorm_sf: ', toString(round(sf, digits=3)), sep=''))
 	abline(0,1, col='red')
 
-	heatscatter(d1[used_id]*sf_totalmean, d2[used_id], log='xy', pch=20, main=paste('totalmean_sf: ', toString(round(sf_totalmean, digits=3)), sep=''))
+	heatscatter(d1[used_id]*sf_totalmean, d2[used_id], log='xy', pch=20, xlim=c(0.001, 16), ylim=c(0.001, 16), main=paste('totalmean_sf: ', toString(round(sf_totalmean, digits=3)), sep=''))
 	abline(0,1, col='red')
 	dev.off()
 
