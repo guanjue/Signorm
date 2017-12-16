@@ -333,7 +333,7 @@ MAnorm = function(data_x_sig, data_y_sig, sampling_num, seed, MAplot_output_file
 
 signorm_robust = function(d1, d2, p, start_point, step, cor_lim, plot_name, sampling_num, use_log_axis, ignore_sig){
 	r=r2=NULL
-	ignore_sig = -log10(0.05)
+	ignore_sig = -log10(0.5)
 	used_range = p^seq(start_point,0, step)
 	for (i in seq(1,length(used_range))){
 		used_ida = as.logical( (d1>quantile(d1[as.logical((d1>ignore_sig) * (d1<15))], 1-used_range[i])) * (d2>quantile(d2[as.logical((d2>ignore_sig) * (d2<15))], 1-used_range[i])) * (d1<15) * (d2<15) )
