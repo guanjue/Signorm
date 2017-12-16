@@ -333,7 +333,7 @@ MAnorm = function(data_x_sig, data_y_sig, sampling_num, seed, MAplot_output_file
 
 signorm_robust = function(d1, d2, p, start_point, step, cor_lim, plot_name, sampling_num, use_log_axis, ignore_sig){
 	r=r2=NULL
-	#ignore_sig = -log10(0.9)
+	ignore_sig = -log10(0.05)
 	used_range = p^seq(start_point,0, step)
 	for (i in seq(1,length(used_range))){
 		used_ida = as.logical( (d1>quantile(d1[d1>ignore_sig], 1-used_range[i])) * (d2>quantile(d2[d2>ignore_sig], 1-used_range[i])) * (d1<15) * (d2<15) )
@@ -373,13 +373,13 @@ signorm_robust = function(d1, d2, p, start_point, step, cor_lim, plot_name, samp
 
 	### get upper limit 15
 	d1_sf = d1[used_id]*sf
-	d1_sf[d1_sf>=15*sf] = 15
+	d1_sf[d1_sf>=15] = 15
 	d2_sf = d2[used_id]*sf
-	d2_sf[d2_sf>=15*sf] = 15
+	d2_sf[d2_sf>=15] = 15
 	d1_sf_totalmean = d1[used_id]*sf_totalmean
-	d1_sf_totalmean[d1_sf_totalmean>=15*sf_totalmean] = 15
+	d1_sf_totalmean[d1_sf_totalmean>=15] = 15
 	d2_sf_totalmean = d2[used_id]*sf_totalmean
-	d2_sf_totalmean[d2_sf_totalmean>=15*sf_totalmean] = 15
+	d2_sf_totalmean[d2_sf_totalmean>=15] = 15
 
 	png(paste(plot_name, '.png', sep=''), width = 1000, height = 1000)
 	par(mfrow=c(2,2))
