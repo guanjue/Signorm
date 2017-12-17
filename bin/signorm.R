@@ -85,15 +85,14 @@ if (is.element(scale_factor_type, c(1,2,3,4))){
 } else if (scale_factor_type==7) {
 	### only normalize high signal part
 	print('t value norm')
-	### initialize t-r matrix hash  
+	### initialize t-r matrix hash
 	t_r_hash = hash( round(t_r_matrix[,1]/round_factor)*round_factor, t_r_matrix[,3] / t_r_matrix[,2] )
 	### give each t a independent sf
 	data_x_sig_norm = as.matrix( apply(cbind(data_x_sig, data_y_sig), 1, function(x) if(x[1]!=0){ x[1] * values(t_r_hash[toString(x[1]+x[2])]) } else{x[1]} ) )
 
 } else if (scale_factor_type==8) {
-	sf = signorm_robust(data_x_sig, data_y_sig, 2, 0, 0.05, 0.5, scatterplot_MAplot_output_file_name, 100000, '', ignore_sig)
+	sf = signorm_robust(data_x_sig, data_y_sig, 0.5, 0, 0.2, 0.5, scatterplot_MAplot_output_file_name, 100000, '', ignore_sig)
 	write.table(sf$bg_fg_10, paste(data_x_sig_norm_output_file, '.bg_fg_10.signorm_robust.txt', sep=''), quote=FALSE, col.names=FALSE, row.names=FALSE, sep='\t')
-
 	data_x_sig_norm = (data_x_sig+0.1)
 	data_x_sig_norm[data_x_sig_norm!=15.1] = data_x_sig_norm[data_x_sig_norm!=15.1] * sf$signorm_sf
 	signal_scale_factor_vector = c(sf$signorm_sf, sf$totalmean_sf)
@@ -107,13 +106,13 @@ if (is.element(scale_factor_type, c(1,2,3,4))){
 } else if (scale_factor_type==10) {
 	### only normalize high signal part
 	print('t value norm')
-	### initialize t-r matrix hash 
+	### initialize t-r matrix hash
 	if (round_type == 'log2'){
 		t_all = 2**(round(log2(data_x_sig + data_y_sig)/round_factor) * round_factor)
 	} else{
 		t_all = (round((data_x_sig + data_y_sig)/round_factor) * round_factor)
 	}
-	
+
 	print(summary(t_all))
 	t_pred = predict(polynomial_model, newdata=data.frame(x=t_all))
 	print(summary(t_pred))
