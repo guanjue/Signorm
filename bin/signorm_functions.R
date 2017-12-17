@@ -337,12 +337,14 @@ mode <- function(v) {
 
 signorm_robust = function(d1, d2, p, start_point, step, cor_lim, plot_name, sampling_num, use_log_axis, ignore_sig){
 	r=r2=NULL
-	ignore_sig_1 = mode(d1)
-	ignore_sig_2 = mode(d2)
+	ignore_sig_1 = 0#mode(d1)
+	ignore_sig_2 = 0#mode(d2)
 	used_range = rev( p^seq(start_point, 5, step) )
 	#used_range = rev(seq(start_point, 1, step))
+	d12 = d1+d2
 	for (i in seq(1,length(used_range))){
 		used_ida = as.logical( (d1>quantile(d1[as.logical((d1>ignore_sig_1) * (d1<15))], 1-used_range[i])) * (d2>quantile(d2[as.logical((d2>ignore_sig_2) * (d2<15))], 1-used_range[i])) * (d1<15) * (d2<15) )
+		#used_ida = as.logical( (d12>quantile(d12[ as.logical((d1<15) * (d2<15)) ], 1-used_range[i])) * (d1<15) * (d2<15) )
 		#r2[i] = cor( (d1[used_ida]), (d2[used_ida]), method = 'spearman')
 		r2[i] = cor( log(d1[used_ida]), log(d2[used_ida]), method = 'pearson')
 		r[i] = sum((d1[used_ida])) / sum((d2[used_ida]))
@@ -366,6 +368,7 @@ signorm_robust = function(d1, d2, p, start_point, step, cor_lim, plot_name, samp
 
 	if (r2[used_r2]>=cor_lim){
 		used_idb = as.logical( (d1>quantile(d1[as.logical((d1>ignore_sig_1) * (d1<15))], 1-used_range[which.max(r2)])) * (d2>quantile(d2[as.logical((d2>ignore_sig_2) * (d2<15))], 1-used_range[which.max(r2)])) * (d1<15) * (d2<15) )
+		#used_idb = as.logical( (d12>quantile(d12[ as.logical((d1<15) * (d2<15)) ], 1-used_range[which.max(r2)])) * (d1<15) * (d2<15) )
 		sum(used_idb)
 		#heatscatter(d1_s[used_idb], d2_s[used_idb], log='xy', pch=20)
 		#abline(0,1, col='red')
