@@ -340,7 +340,7 @@ signorm_robust = function(d1, d2, p, start_point, step, cor_lim, plot_name, samp
 	ignore_sig_1 = mode(d1)
 	ignore_sig_2 = mode(d2)
 	#used_range = p^seq(start_point, 0, step)
-	used_range = seq(start_point, 0, step)
+	used_range = rev(seq(start_point, 1, step))
 	for (i in seq(1,length(used_range))){
 		used_ida = as.logical( (d1>quantile(d1[as.logical((d1>ignore_sig_1) * (d1<15))], 1-used_range[i])) * (d2>quantile(d2[as.logical((d2>ignore_sig_2) * (d2<15))], 1-used_range[i])) * (d1<15) * (d2<15) )
 		#r2[i] = cor( (d1[used_ida]), (d2[used_ida]), method = 'spearman')
