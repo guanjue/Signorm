@@ -378,14 +378,13 @@ signorm_robust = function(d1, d2, p, start_point, step, cor_lim, plot_name, samp
 	}
 
 	### get upper limit 15
-	d1_sf = d1[used_id]*sf
-	d1_sf[d1_sf>=15] = 15
-	d2_sf = d2[used_id]*sf
-	d2_sf[d2_sf>=15] = 15
-	d1_sf_totalmean = d1[used_id]*sf_totalmean
-	d1_sf_totalmean[d1_sf_totalmean>=15] = 15
-	d2_sf_totalmean = d2[used_id]*sf_totalmean
-	d2_sf_totalmean[d2_sf_totalmean>=15] = 15
+	d1_sf = d1[used_id]
+	d1_sf[d1_sf!=15] = d1_sf[d1_sf!=15] * sf
+	d2_sf = d2[used_id]
+
+	d1_sf_totalmean = d1[used_id]
+	d1_sf_totalmean[d1_sf_totalmean!=15] = d1_sf_totalmean[d1_sf_totalmean!=15] * sf_totalmean
+	d2_sf_totalmean = d2[used_id]
 
 	png(paste(plot_name, '.png', sep=''), width = 1000, height = 1000)
 	par(mfrow=c(2,2))
