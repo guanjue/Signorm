@@ -346,7 +346,8 @@ signorm_robust = function(d1, d2, p, start_point, step, cor_lim, plot_name, samp
 		used_ida = as.logical( (d1>quantile(d1[as.logical((d1>ignore_sig_1) * (d1<15))], 1-used_range[i])) * (d2>quantile(d2[as.logical((d2>ignore_sig_2) * (d2<15))], 1-used_range[i])) * (d1<15) * (d2<15) )
 		#used_ida = as.logical( (d12>quantile(d12[ as.logical((d1<15) * (d2<15)) ], 1-used_range[i])) * (d1<15) * (d2<15) )
 		#r2[i] = cor( (d1[used_ida]), (d2[used_ida]), method = 'spearman')
-		r2[i] = cor( log(d1[used_ida]), log(d2[used_ida]), method = 'pearson')
+		d12_log = unqiue(cbind(log(d1[used_ida]), log(d2[used_ida])))
+		r2[i] = cor( d12_log[,1], d12_log[,2], method = 'pearson')
 		r[i] = sum((d1[used_ida])) / sum((d2[used_ida]))
 		print(paste(i, r2[i], r[i], sep='_'))
 	}
