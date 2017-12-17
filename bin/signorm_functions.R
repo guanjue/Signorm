@@ -330,13 +330,18 @@ MAnorm = function(data_x_sig, data_y_sig, sampling_num, seed, MAplot_output_file
 }
 
 
+mode <- function(v) {
+   uniqv <- unique(v)
+   uniqv[which.max(tabulate(match(v, uniqv)))]
+}
 
 signorm_robust = function(d1, d2, p, start_point, step, cor_lim, plot_name, sampling_num, use_log_axis, ignore_sig){
 	r=r2=NULL
-	ignore_sig = -log10(0.5)
+	ignore_sig_1 = mode(d1)
+	ignore_sig_2 = mode(d2)
 	used_range = p^seq(start_point,0, step)
 	for (i in seq(1,length(used_range))){
-		used_ida = as.logical( (d1>quantile(d1[as.logical((d1>ignore_sig) * (d1<15))], 1-used_range[i])) * (d2>quantile(d2[as.logical((d2>ignore_sig) * (d2<15))], 1-used_range[i])) * (d1<15) * (d2<15) )
+		used_ida = as.logical( (d1>quantile(d1[as.logical((d1>ignore_sig_1) * (d1<15))], 1-used_range[i])) * (d2>quantile(d2[as.logical((d2>ignore_sig_2) * (d2<15))], 1-used_range[i])) * (d1<15) * (d2<15) )
 		r2[i] = cor( (d1[used_ida]), (d2[used_ida]), method = 'spearman')
 		r[i] = sum((d1[used_ida])) / sum((d2[used_ida]))
 		print(paste(i, r2[i], r[i], sep='_'))
@@ -352,13 +357,13 @@ signorm_robust = function(d1, d2, p, start_point, step, cor_lim, plot_name, samp
 	#used_r2 = ansvar_norm[1] #
 	used_r2 = which.max(r2)
 
-	d1_thresh = quantile(d1[d1>ignore_sig], 1-used_range[which.max(r2)] )
-	d2_thresh = quantile(d2[d2>ignore_sig], 1-used_range[which.max(r2)] )
+	d1_thresh = quantile(d1[as.logical((d1>ignore_sig_1) * (d1<15))], 1-used_range[which.max(r2)] )
+	d2_thresh = quantile(d2[as.logical((d2>ignore_sig_2) * (d2<15))], 1-used_range[which.max(r2)] )
 	print(d1_thresh)
 	print(d2_thresh)
 
 	if (r2[used_r2]>=cor_lim){
-		used_idb = as.logical( (d1>quantile(d1[as.logical((d1>ignore_sig) * (d1<15))], 1-used_range[which.max(r2)])) * (d2>quantile(d2[as.logical((d2>ignore_sig) * (d2<15))], 1-used_range[which.max(r2)])) * (d1<15) * (d2<15) )
+		used_idb = as.logical( (d1>quantile(d1[as.logical((d1>ignore_sig_1) * (d1<15))], 1-used_range[which.max(r2)])) * (d2>quantile(d2[as.logical((d2>ignore_sig_2) * (d2<15))], 1-used_range[which.max(r2)])) * (d1<15) * (d2<15) )
 		sum(used_idb)
 		#heatscatter(d1_s[used_idb], d2_s[used_idb], log='xy', pch=20)
 		#abline(0,1, col='red')
