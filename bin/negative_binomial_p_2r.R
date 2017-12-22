@@ -6,8 +6,7 @@ args = commandArgs(trailingOnly=TRUE)
 
 signal_track_file = args[1]
 input_track_file = args[2]
-bg_bins_file = args[3]
-output_name = args[4]
+output_name = args[3]
 
 mean_vec = c()
 var_vec = c()
@@ -17,13 +16,11 @@ prob_vec = c()
 ### read data
 sig = read.table(signal_track_file, header = F)
 input = read.table(input_track_file, header = F)
-bg_bins = read.table(bg_bins_file, header = F)
 thesh = 0
 #####################################################################################################################
 #####################################################################################################################
 #####################################################################################################################
 ### get sig bg regions no bgs
-#sig_bg = sig[bg_bins[,1]==1,]
 sig_bg = sig[,1]
 sig_bg_non0 = sig_bg[sig_bg>thesh]
 sig_bg_mean = mean(sig_bg_non0)
@@ -45,7 +42,6 @@ if (sig_bg_prob>=0.9){
 
 sig_bg_size = sig_bg_mean * sig_bg_prob / (1-sig_bg_prob)
 ### get input bg regions
-#input_bg = input[bg_bins[,1]==1,]
 input_bg = input[,1]
 input_bg_non0 = input_bg[input_bg>thesh]
 input_bg_mean = mean(input_bg_non0)
@@ -68,7 +64,6 @@ nb_pval[nb_pval==0] = 0.1^15
 
 ############### second round
 ### get sig bg regions
-#sig_bg = sig[bg_bins[,1]==1,]
 sig_bg = sig[nb_pval>=0.001,]
 sig_bg_non0 = sig_bg[sig_bg>thesh]
 sig_bg_mean = mean(sig_bg_non0)
