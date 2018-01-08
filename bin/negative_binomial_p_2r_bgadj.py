@@ -38,8 +38,8 @@ def nbp_bg_adj(sample_sig_file, input_sig_file, outputname):
 
 	### get sample mean & var 
 	sample_non0 = sample[sample>thesh]
-	sample_mean = mean(sample_non0)
-	sample_var = var(sample_non0)
+	sample_mean = np.mean(sample_non0)
+	sample_var = np.var(sample_non0)
 
 	### get negative binomial parameters from sample track regions
 	sample_prob = sample_mean / sample_var
@@ -76,8 +76,8 @@ def nbp_bg_adj(sample_sig_file, input_sig_file, outputname):
 	### get sample bg regions
 	sample_bg = sample[nb_pval_list>=0.001,]
 	sample_bg_non0 = sample_bg[sample_bg>thesh]
-	sample_bg_mean = mean(sample_bg_non0)
-	sample_bg_var = var(sample_bg_non0)
+	sample_bg_mean = np.mean(sample_bg_non0)
+	sample_bg_var = np.var(sample_bg_non0)
 
 	print('check signal track overdispersion in background regions, var/mean=' + str(round(sample_bg_var/sample_bg_mean, 3)) )
 	print(sample_bg_mean)
