@@ -53,8 +53,8 @@ def nbp_bg_adj(sample_sig_file, input_sig_file, outputname):
 
 	### get background mean & var
 	background_non0 = background[background>thesh]
-	bg_mean = mean(background_non0)
-	bg_var = var(background_non0)
+	bg_mean = np.mean(background_non0)
+	bg_var = np.var(background_non0)
 
 	print('check input track overdispersion in background regions, var/mean=' + str(round(bg_var/bg_mean, 3)) )
 	print(sample_prob)
@@ -99,8 +99,8 @@ def nbp_bg_adj(sample_sig_file, input_sig_file, outputname):
 	### get background bg regions
 	background_bg = background[nb_pval_list>=0.001,]
 	background_bg_non0 = background_bg[background_bg>thesh]
-	background_bg_mean = mean(background_bg_non0)
-	background_bg_var = var(background_bg_non0)
+	background_bg_mean = np.mean(background_bg_non0)
+	background_bg_var = np.var(background_bg_non0)
 
 	print('check input track overdispersion in background regions, var/mean=' + str(round(background_bg_var/background_bg_mean, 3)) )
 	print(sig_bg_prob)
