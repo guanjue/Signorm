@@ -43,13 +43,10 @@ def nbp_bg_adj(sample_sig_file, input_sig_file, outputname):
 
 	### get negative binomial parameters from sample track regions
 	sample_prob = sample_mean / sample_var
-	if (sample_prob<0.1){
+	if sample_prob<0.1:
 		sample_prob = 0.1
-	}
-
-	if (sample_prob>=0.9){
+	if sample_prob>=0.9:
 		sample_prob = 0.9
-	}
 
 	### get size parameter for negative binomial distribution p-value (1st round)
 	sample_size = sample_mean * sample_prob / (1-sample_prob)
@@ -89,13 +86,12 @@ def nbp_bg_adj(sample_sig_file, input_sig_file, outputname):
 
 	### get negative binomial parameters from signal track bg regions
 	sample_bg_prob = sample_bg_mean / sample_bg_var
-	if (sample_bg_prob<0.1){
+	if sample_bg_prob<0.1:
 		sample_bg_prob = 0.1
-	}
 
-	if (sample_bg_prob>=0.9){
+	if sample_bg_prob>=0.9:
 		sample_bg_prob = 0.9
-	}
+
 
 	### get size parameter for negative binomial distribution p-value (2nd round)
 	sample_bg_size = sample_bg_mean * sample_bg_prob / (1-sample_bg_prob)
@@ -136,7 +132,7 @@ def nbp_bg_adj(sample_sig_file, input_sig_file, outputname):
 	mvsp.close()
 
 ###########################################
-# time print 'python negative_binomial_p_2r_bgadj.py -i <sample_track_signal> -t <background_track_signal> -o <output filename>'
+# time python negative_binomial_p_2r_bgadj.py -i <sample_track_signal> -t <background_track_signal> -o tmp.txt
 import getopt
 import sys
 
