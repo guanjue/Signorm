@@ -65,12 +65,10 @@ def nbp_bg_adj(sample_sig_file, input_sig_file, outputname):
 	print(bg_var)
 
 	### 1st round negative binomial p-value
-	nb_pval_list = []
+	nb_pval_list = np.empty((0,), float)
 	for sig in sample:
 		nb_pval_tmp = 1 - nbinom.cdf(sig, sample_size, sample_prob, loc=0)
-		nb_pval_list.append(nb_pval_tmp)
-	### convert to np array
-	nb_pval_list = np.array(nb_pval_list, dtype = float)
+		nb_pval_list = np.concatenate((nb_pval_list,np.array([nb_pval_tmp])))
 
 	############### second round
 	### get sample bg regions
@@ -111,12 +109,11 @@ def nbp_bg_adj(sample_sig_file, input_sig_file, outputname):
 	print(inpy_bg_var)
 
 	### 2nd round negative binomial p-value
-	nb_pval_list = []
+	nb_pval_list = np.empty((0,), float)
 	for sig, bg in zip(sample, background):
 		nb_pval_tmp = 1 - nbinom.cdf(sig, sample_bg_size * (bg+1)/(background_bg_mean+1), sample_bg_prob, loc=0)
-		nb_pval_list.append(nb_pval_tmp)
+		nb_pval_list = np.concatenate((nb_pval_list,np.array([nb_pval_tmp])))
 	### convert to np array
-	nb_pval_list = np.array(nb_pval_list, dtype = float)
 	nb_pval_list = -np.log10(nb_pval_list)
 	nb_pval_list = nb_pval_list.reshape(nb_pval_list.shape[0], 1)
 
