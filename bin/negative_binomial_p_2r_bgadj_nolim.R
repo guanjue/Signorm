@@ -61,7 +61,7 @@ print(inpy_bg_var)
 sig_input = cbind(sig, input)
 nb_pval = apply(sig_input, MARGIN=1, function(x) pnbinom(x[1], sig_bg_size, sig_bg_prob, lower.tail=FALSE) )
 ### get -log10(p-value)
-nb_pval[nb_pval==0] = min(nb_pval[nb_pval!=0])
+nb_pval[nb_pval==0] = 2.225074e-308
 
 ############### second round
 ### get sig bg regions
@@ -110,7 +110,7 @@ print(inpy_bg_var)
 sig_input = cbind(sig, input)
 nb_pval = apply(sig_input, MARGIN=1, function(x) pnbinom(x[1], sig_bg_size * (x[2]+1)/(input_bg_mean+1), sig_bg_prob, lower.tail=FALSE) )
 ### get -log10(p-value)
-#nb_pval[nb_pval==0] = 0.1^15
+nb_pval[nb_pval==0] = 2.225074e-308
 neglog10_nb_pval = -log10(nb_pval)
 
 ### write output
