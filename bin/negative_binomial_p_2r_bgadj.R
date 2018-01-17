@@ -61,6 +61,9 @@ print(inpy_bg_var)
 sig_input = cbind(sig, input)
 nb_pval = apply(sig_input, MARGIN=1, function(x) pnbinom(x[1], sig_bg_size, sig_bg_prob, lower.tail=FALSE) )
 ### get -log10(p-value)
+print(min(nb_pval[nb_pval!=0]))
+print(dim(nb_pval))
+print(dim(nb_pval[nb_pval==0]))
 nb_pval[nb_pval==0] = min(nb_pval[nb_pval!=0])
 
 ############### second round
