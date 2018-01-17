@@ -64,9 +64,9 @@ nb_pval = apply(sig_input, MARGIN=1, function(x) pnbinom(x[1], sig_bg_size, sig_
 print('get -log10(p-value)')
 print(min(nb_pval[nb_pval!=0]))
 print(length(nb_pval))
-print(length(nb_pval[nb_pval==0]))
+print(length(nb_pval[nb_pval<=1e-100]))
 nb_pval_min = min(nb_pval[nb_pval!=0])
-nb_pval[nb_pval==0] = nb_pval_min
+nb_pval[nb_pval<=1e-100] = 1e-100
 print(summary(nb_pval))
 ############### second round
 ### get sig bg regions
