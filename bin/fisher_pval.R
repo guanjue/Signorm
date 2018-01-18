@@ -6,7 +6,7 @@ args = commandArgs(trailingOnly=TRUE)
 cell_marker = args[1]
 tail = args[2]
 input_folder = args[3]
-
+siglim = as.numeric(args[4])
 ### extract filenames of the cell marker
 file_list = list.files(input_folder, pattern=paste('^', cell_marker, '(.*)', tail, '$', sep='') )
 print(file_list)
@@ -21,8 +21,8 @@ get_fisher_p = function(x){
 	if (length(x)!=1){
 		x_p = 10^(-x)
 		fp = sumlog(x_p)$p
-		if (fp<=0.1^15){
-			fp = 0.1^15
+		if (fp<=0.1^siglim){
+			fp = 0.1^siglim
 		}		
 	} else{
 		fp = 10^(-x)
