@@ -9,6 +9,7 @@ input_folder = args[3]
 
 ### extract filenames of the cell marker
 file_list = list.files(input_folder, pattern=paste('^', cell_marker, '(.*)', tail, '$', sep='') )
+print(file_list)
 ### read files of the cell marker
 data_matrix = NULL
 for (file in file_list){
