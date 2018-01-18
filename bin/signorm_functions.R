@@ -335,7 +335,7 @@ mode <- function(v) {
    uniqv[which.max(tabulate(match(v, uniqv)))]
 }
 
-signorm_robust = function(d1, d2, p, start_point, step, cor_lim, plot_name, sampling_num, use_log_axis, ignore_sig){
+signorm_robust = function(d1, d2, p, start_point, step, cor_lim, plot_name, sampling_num, use_log_axis, ignore_sig, siglim){
 	r=r2=NULL
 	ignore_sig_1 = 0#mode(d1)
 	ignore_sig_2 = 0#mode(d2)
@@ -343,8 +343,8 @@ signorm_robust = function(d1, d2, p, start_point, step, cor_lim, plot_name, samp
 	#used_range = rev(seq(start_point, 1, step))
 	d12 = d1+d2
 	for (i in seq(1,length(used_range))){
-		used_ida = as.logical( (d1>quantile(d1[as.logical((d1>ignore_sig_1) * (d1<15))], 1-used_range[i])) * (d2>quantile(d2[as.logical((d2>ignore_sig_2) * (d2<15))], 1-used_range[i])) * (d1<15) * (d2<15) )
-		#used_ida = as.logical( (d12>quantile(d12[ as.logical((d1<15) * (d2<15)) ], 1-used_range[i])) * (d1<15) * (d2<15) )
+		used_ida = as.logical( (d1>quantile(d1[as.logical((d1>ignore_sig_1) * (d1<siglim))], 1-used_range[i])) * (d2>quantile(d2[as.logical((d2>ignore_sig_2) * (d2<siglim))], 1-used_range[i])) * (d1<siglim) * (d2<siglim) )
+		#used_ida = as.logical( (d12>quantile(d12[ as.logical((d1<siglim) * (d2<siglim)) ], 1-used_range[i])) * (d1<siglim) * (d2<siglim) )
 		#r2[i] = cor( (d1[used_ida]), (d2[used_ida]), method = 'spearman')
 		d12_log = (cbind(log(d1[used_ida]), log(d2[used_ida])))
 		r2[i] = cor( d12_log[,1], d12_log[,2], method = 'pearson')
@@ -362,14 +362,14 @@ signorm_robust = function(d1, d2, p, start_point, step, cor_lim, plot_name, samp
 	#used_r2 = ansvar_norm[1] #
 	used_r2 = which.max(r2)
 
-	d1_thresh = quantile(d1[as.logical((d1>ignore_sig_1) * (d1<15))], 1-used_range[which.max(r2)] )
-	d2_thresh = quantile(d2[as.logical((d2>ignore_sig_2) * (d2<15))], 1-used_range[which.max(r2)] )
+	d1_thresh = quantile(d1[as.logical((d1>ignore_sig_1) * (d1<siglim))], 1-used_range[which.max(r2)] )
+	d2_thresh = quantile(d2[as.logical((d2>ignore_sig_2) * (d2<siglim))], 1-used_range[which.max(r2)] )
 	print(d1_thresh)
 	print(d2_thresh)
 
 	if (r2[used_r2]>=cor_lim){
-		used_idb = as.logical( (d1>quantile(d1[as.logical((d1>ignore_sig_1) * (d1<15))], 1-used_range[which.max(r2)])) * (d2>quantile(d2[as.logical((d2>ignore_sig_2) * (d2<15))], 1-used_range[which.max(r2)])) * (d1<15) * (d2<15) )
-		#used_idb = as.logical( (d12>quantile(d12[ as.logical((d1<15) * (d2<15)) ], 1-used_range[which.max(r2)])) * (d1<15) * (d2<15) )
+		used_idb = as.logical( (d1>quantile(d1[as.logical((d1>ignore_sig_1) * (d1<siglim))], 1-used_range[which.max(r2)])) * (d2>quantile(d2[as.logical((d2>ignore_sig_2) * (d2<siglim))], 1-used_range[which.max(r2)])) * (d1<siglim) * (d2<siglim) )
+		#used_idb = as.logical( (d12>quantile(d12[ as.logical((d1<siglim) * (d2<siglim)) ], 1-used_range[which.max(r2)])) * (d1<siglim) * (d2<siglim) )
 		sum(used_idb)
 		#heatscatter(d1_s[used_idb], d2_s[used_idb], log='xy', pch=20)
 		#abline(0,1, col='red')
@@ -382,15 +382,15 @@ signorm_robust = function(d1, d2, p, start_point, step, cor_lim, plot_name, samp
 		sf = sf_totalmean = sum(d2[]) / sum(d1[])
 	}
 
-	### get upper limit 15
+	### get upper limit siglim
 	d1_sf = d1[used_id]
-	d1_sf[d1_sf!=15] = d1_sf[d1_sf!=15] * sf
-	d1_sf[d1_sf>=15] = 15
+	d1_sf[d1_sf!=siglim] = d1_sf[d1_sf!=siglim] * sf
+	d1_sf[d1_sf>=siglim] = siglim
 	d2_sf = d2[used_id]
 
 	d1_sf_totalmean = d1[used_id]
-	d1_sf_totalmean[d1_sf_totalmean!=15] = d1_sf_totalmean[d1_sf_totalmean!=15] * sf_totalmean
-	d1_sf_totalmean[d1_sf_totalmean>=15] = 15
+	d1_sf_totalmean[d1_sf_totalmean!=siglim] = d1_sf_totalmean[d1_sf_totalmean!=siglim] * sf_totalmean
+	d1_sf_totalmean[d1_sf_totalmean>=siglim] = siglim
 	d2_sf_totalmean = d2[used_id]
 
 	png(paste(plot_name, '.png', sep=''), width = 1000, height = 1000)
