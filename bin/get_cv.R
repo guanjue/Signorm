@@ -8,7 +8,7 @@ data = read.table(input_matrix, header = F)
 ### avoid negative value
 data = data + smallnum
 ### get row 1 - Coefficient of Variation (1-CV)
-data_sv = apply(data, 1, function(x)  1-sd(x)/mean(x) )
+data_sv = apply(data, 1, function(x)  1-(sd(x)+0.1)/(mean(x)+0.1) )
 
 ### get output
 write.table(data_sv, output_filename, quote=FALSE, col.names=FALSE, row.names=FALSE, sep='\t')
