@@ -26,6 +26,9 @@ get_fisher_p = function(x){
 		}		
 	} else{
 		fp = 10^(-x)
+		if (fp<=0.1^siglim){
+			fp = 0.1^siglim
+		}		
 	}
 
 	fp_neglog10 = -log10(fp)
