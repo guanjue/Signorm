@@ -38,6 +38,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	sig2_output_name = sig2_wg_raw.split('.')[0]
 	######
 	### get sig1 columns
+	print('get sig1 columns')
 	sig1_col_id_plus = ''
 	for i in range(0,len(sig1_col_list)-1):
 		sig1_col_id_plus = sig1_col_id_plus + '$' + str(sig1_col_list[i]) + '+'
@@ -46,7 +47,6 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	call('tail -n+2 ' + peak_bed + ' | awk -F \'\t\' -v OFS=\'\t\' \'{' + 'if (' + sig1_col_id_plus + ' > 0)' + 'print $1, $2, $3, $4, ' + sig1_col_id_plus + ' }\' > ' + sig1_output_name + '.bed', shell=True)
 	### intersect with wg bed
 	call('bedtools intersect' + ' -a ' + wg_bed + ' -b ' + sig1_output_name + '.bed' + ' -c' + ' > ' + sig1_output_name + '.wg.bed', shell=True)
-
 	call('cut -f4 ' + sig1_output_name + '.wg.bed' + ' > ' + sig1_output_name + '.wg.txt', shell=True)
 
 	######
@@ -57,17 +57,25 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	sig2_col_id_plus = sig2_col_id_plus + '$' + str(sig2_col_list[len(sig2_col_list)-1])
 
 	### get sig2 column
+	print('get sig2 column...')
 	call('tail -n+2 ' + peak_bed + ' | awk -F \'\t\' -v OFS=\'\t\' \'{' + 'if (' + sig2_col_id_plus + ' > 0)' + 'print $1, $2, $3, $4, ' + sig2_col_id_plus + ' }\' > ' + sig2_output_name + '.bed', shell=True)
 	### intersect with wg bed
 	call('bedtools intersect' + ' -a ' + wg_bed + ' -b ' + sig2_output_name + '.bed' + ' -c' + ' > ' + sig2_output_name + '.wg.bed', shell=True)
 	### extract binary column
 	call('cut -f4 ' + sig2_output_name + '.wg.bed' + ' > ' + sig2_output_name + '.wg.txt', shell=True)
 
+	### get bg mean signal
+	print('get bg mean signal...')
+	call('paste '+ sig2_output_name + '.wg.bed' + ' ' + sig2_wg_raw + ' | awk -F \'\t\' -v OFS=\'\t\' \'{ if ($4 == 0) print $1, $2, $3, $4, $5 }\' > ' + sig2_output_name + '.bgsig.bed', shell=True)
+	call('cat ' + wg_bed + ' | awk -F \'\t\' -v OFS=\'\t\' \'{if ($2-400 >=0) print $1, $2-400, $3+400; else print $1, 0, $3+400 }\' > ' + wg_bed + '.expand.bed', shell=True)
+	call('bedtools map' + ' -c ' + '5' + ' -null 0 -F 0.5 -o max -a ' + wg_bed + '.expand.bed' + ' -b ' + sig2_output_name + '.bgsig.bed' + ' > ' + sig2_output_name + '.bgsig_mean.wg.bed', shell=True)
+	call('cut -f4 ' + sig2_output_name + '.bgsig_mean.wg.bed' + ' > ' + sig2_output_name + '.bgsig_mean.wg.txt', shell=True)
 
 
 	### read whole genome signals
 	sig1 = read2d_array(sig1_wg_raw, float)
 	sig2 = read2d_array(sig2_wg_raw, float)
+	sig2_bg = read2d_array(sig2_output_name + '.bgsig_mean.wg.txt', float)
 
 	### read whole genome binary label
 	sig1_binary = read2d_array(sig1_output_name + '.wg.txt', int)
@@ -75,6 +83,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 
 	### peak region (both != 0 in sig1 & sig2)
 	peak_binary = (sig1_binary[:,0] * sig2_binary[:,0]) != 0
+	peak_binary_num = np.sum(peak_binary)
 	peak_binary = peak_binary & (sig1_binary[:,0] < upperlim) & (sig2_binary[:,0] < upperlim)
 	### background region (both == 0 in sig1 & sig2)
 	bg_binary = (sig1_binary[:,0] + sig2_binary[:,0]) == 0
@@ -89,23 +98,42 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	### peak norm
 	sig2_peak = sig2_binary[:,0]
 	sig2_norm = []
-	for s,p in zip(sig2[:,0], sig2_peak):
+	problem = 0
+	problem_od = 0
+	for sp, bg in zip(zip(sig2[:,0], sig2_peak), sig2_bg):
+		s = sp[0]
+		p = sp[1]
 		if p != 0:
 			if s < upperlim:
+				if s <= bg:
+					### original data problematic one
+					problem_od = problem_od + 1
 				s_norm = s * peak_sf
 				if s_norm >= upperlim:
+					### keep the upper limit
 					s_norm = upperlim
+				elif s_norm <= (bg * bg_sf):
+					### make sure normalized peak is not smaller than local bg
+					if peak_sf < bg_sf:
+						problem = problem + 1
+						s_norm == bg * bg_sf
 			else:
+				### not normalize signal at the upper limit
 				s_norm = upperlim
 		else:
 			if s < upperlim:
 				s_norm = s * bg_sf
 				if s_norm >= upperlim:
+					### keep the upper limit
 					s_norm = upperlim
 			else:
+				### not normalize signal at the upper limit
 				s_norm = upperlim
 
 		sig2_norm.append(s_norm)
+
+	print('problematic bin number: ' + str(problem))
+	print('problematic OD bin number: ' + str(problem_od))
 	### convert to float np.array
 	sig2_norm = np.array(sig2_norm, float)
 	### reshape for writing oputput
@@ -120,7 +148,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	write2d_array(sig2_norm, sig2_output_name + '.pknorm.txt')
 
 	### write output: sf & FRiP
-	info = np.array([[total_mean_sf, peak_sf, bg_sf], [sig1_FRiP, sig2_norm_FRiP, sig2_FRiP]])
+	info = np.array([[total_mean_sf, peak_sf, bg_sf], [sig1_FRiP, sig2_norm_FRiP, sig2_FRiP], [peak_binary_num, problem, float(problem)/peak_binary_num], [peak_binary_num, problem_od, float(problem_od)/peak_binary_num]])
 	write2d_array(info, sig2_output_name + '.info.txt')
 
 
@@ -156,7 +184,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	plt.savefig(sig2_output_name + '.scatterplot.png')
 
 ############################################################################
-#time python plot_violin.py -i atac_list.txt -o atac_list -l T -s 2 -l 4 -u 100
+#time python /Volumes/MAC_Data/data/labs/zhang_lab/01projects/signorm/bin/peaknorm_order.py -w 200_noblack.11_22_2017.bed -p atacTable180124peaksFiltered.txt -n 100000 -a $sig1_col -b $sig1'.upperlim.txt' -c $sig2_col -d $sig2'.upperlim.txt' -u 32
 
 import getopt
 import sys
@@ -178,13 +206,13 @@ def main(argv):
 		elif opt=="-n":
 			sample_num=int(arg.strip())
 		elif opt=="-a":
-			sig1_col_list=str(arg.strip())			
+			sig1_col_list=str(arg.strip())
 		elif opt=="-b":
-			sig1_wg_raw=str(arg.strip())		
+			sig1_wg_raw=str(arg.strip())
 		elif opt=="-c":
-			sig2_col_list=str(arg.strip())			
+			sig2_col_list=str(arg.strip())
 		elif opt=="-d":
-			sig2_wg_raw=str(arg.strip())		
+			sig2_wg_raw=str(arg.strip())
 		elif opt=="-u":
 			upperlim=float(arg.strip())
 

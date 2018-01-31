@@ -5,6 +5,8 @@ from subprocess import call
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+from sklearn import linear_model
+from sklearn.svm import SVR
 ################################################################################################
 ### read 2d array
 def read2d_array(filename,dtype_used):
@@ -43,11 +45,11 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 		sig1_col_id_plus = sig1_col_id_plus + '$' + str(sig1_col_list[i]) + '+'
 	sig1_col_id_plus = sig1_col_id_plus + '$' + str(sig1_col_list[len(sig1_col_list)-1])
 	### get sig1 column
-	call('tail -n+2 ' + peak_bed + ' | awk -F \'\t\' -v OFS=\'\t\' \'{' + 'if (' + sig1_col_id_plus + ' > 0)' + 'print $1, $2, $3, $4, ' + sig1_col_id_plus + ' }\' > ' + sig1_output_name + '.bed', shell=True)
+	#call('tail -n+2 ' + peak_bed + ' | awk -F \'\t\' -v OFS=\'\t\' \'{' + 'if (' + sig1_col_id_plus + ' > 0)' + 'print $1, $2, $3, $4, ' + sig1_col_id_plus + ' }\' > ' + sig1_output_name + '.bed', shell=True)
 	### intersect with wg bed
-	call('bedtools intersect' + ' -a ' + wg_bed + ' -b ' + sig1_output_name + '.bed' + ' -c' + ' > ' + sig1_output_name + '.wg.bed', shell=True)
+	#call('bedtools intersect' + ' -a ' + wg_bed + ' -b ' + sig1_output_name + '.bed' + ' -c' + ' > ' + sig1_output_name + '.wg.bed', shell=True)
 
-	call('cut -f4 ' + sig1_output_name + '.wg.bed' + ' > ' + sig1_output_name + '.wg.txt', shell=True)
+	#call('cut -f4 ' + sig1_output_name + '.wg.bed' + ' > ' + sig1_output_name + '.wg.txt', shell=True)
 
 	######
 	### get sig2 columns
@@ -57,11 +59,11 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	sig2_col_id_plus = sig2_col_id_plus + '$' + str(sig2_col_list[len(sig2_col_list)-1])
 
 	### get sig2 column
-	call('tail -n+2 ' + peak_bed + ' | awk -F \'\t\' -v OFS=\'\t\' \'{' + 'if (' + sig2_col_id_plus + ' > 0)' + 'print $1, $2, $3, $4, ' + sig2_col_id_plus + ' }\' > ' + sig2_output_name + '.bed', shell=True)
+	#call('tail -n+2 ' + peak_bed + ' | awk -F \'\t\' -v OFS=\'\t\' \'{' + 'if (' + sig2_col_id_plus + ' > 0)' + 'print $1, $2, $3, $4, ' + sig2_col_id_plus + ' }\' > ' + sig2_output_name + '.bed', shell=True)
 	### intersect with wg bed
-	call('bedtools intersect' + ' -a ' + wg_bed + ' -b ' + sig2_output_name + '.bed' + ' -c' + ' > ' + sig2_output_name + '.wg.bed', shell=True)
+	#call('bedtools intersect' + ' -a ' + wg_bed + ' -b ' + sig2_output_name + '.bed' + ' -c' + ' > ' + sig2_output_name + '.wg.bed', shell=True)
 	### extract binary column
-	call('cut -f4 ' + sig2_output_name + '.wg.bed' + ' > ' + sig2_output_name + '.wg.txt', shell=True)
+	#call('cut -f4 ' + sig2_output_name + '.wg.bed' + ' > ' + sig2_output_name + '.wg.txt', shell=True)
 
 
 
@@ -80,9 +82,27 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	bg_binary = (sig1_binary[:,0] + sig2_binary[:,0]) == 0
 	bg_binary = bg_binary & (sig1_binary[:,0] < upperlim) & (sig2_binary[:,0] < upperlim)
 
-	### get scale factor
-	peak_sf = np.sum(sig1[peak_binary,0]+1) / np.sum(sig2[peak_binary,0]+1)
-	bg_sf = np.sum(sig1[bg_binary,0]+1) / np.sum(sig2[bg_binary,0]+1)
+	print(peak_binary[0:10])
+	print(bg_binary[0:10])
+	print(peak_binary[0:10] | bg_binary[0:10])
+	pk_bg_merge = peak_binary | bg_binary
+	print(np.sum(pk_bg_merge))
+	### merge peak region & bg region
+	sig1_regr = sig1[pk_bg_merge] + 1
+	sig2_regr = sig2[pk_bg_merge] + 1
+
+	print(sig1_regr.shape)
+	print(sig2_regr.shape)
+	### fit linear regression model
+	print('fit linear regression model...')
+	regr = linear_model.LinearRegression(fit_intercept=True, normalize=False, copy_X=True, n_jobs=1)
+	regr.fit(sig2_regr, sig1_regr)
+
+	regr_weight = regr.coef_[0]
+	regr_bias = regr.intercept_
+	print('linear model weight: '+str(regr_weight))
+	print('linear model bias: '+str(regr_bias))
+
 	### total reads sf (for compare)
 	total_mean_sf = np.sum(sig1) / np.sum(sig2)
 
@@ -90,20 +110,12 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	sig2_peak = sig2_binary[:,0]
 	sig2_norm = []
 	for s,p in zip(sig2[:,0], sig2_peak):
-		if p != 0:
-			if s < upperlim:
-				s_norm = s * peak_sf
-				if s_norm >= upperlim:
-					s_norm = upperlim
-			else:
+		if s < upperlim:
+			s_norm = s * regr_weight + regr_bias
+			if s_norm >= upperlim:
 				s_norm = upperlim
 		else:
-			if s < upperlim:
-				s_norm = s * bg_sf
-				if s_norm >= upperlim:
-					s_norm = upperlim
-			else:
-				s_norm = upperlim
+			s_norm = upperlim
 
 		sig2_norm.append(s_norm)
 	### convert to float np.array
@@ -120,7 +132,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	write2d_array(sig2_norm, sig2_output_name + '.pknorm.txt')
 
 	### write output: sf & FRiP
-	info = np.array([[total_mean_sf, peak_sf, bg_sf], [sig1_FRiP, sig2_norm_FRiP, sig2_FRiP]])
+	info = np.array([[total_mean_sf, regr_weight, regr_bias], [sig1_FRiP, sig2_norm_FRiP, sig2_FRiP]])
 	write2d_array(info, sig2_output_name + '.info.txt')
 
 
