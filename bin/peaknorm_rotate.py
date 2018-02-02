@@ -84,9 +84,11 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	B = (np.sum(sig1[peak_binary,0]+1) - np.sum(sig1[bg_binary,0]+1)) / (np.sum(sig2[peak_binary,0]+1) - np.sum(sig2[bg_binary,0]+1)) 
 	A = np.sum(sig1[peak_binary,0]+1) - np.sum(sig2[peak_binary,0]+1) * B
 
+	print('transformation: '+'B: '+str(B)+'; A: '+str(A))
 	### transformation
 	sig2_norm = sig2[:,0] * B + A
-
+	print(sig2[0:10])
+	print(sig2_norm[0:10])
 	### total reads sf (for compare)
 	total_mean_sf = np.sum(sig1) / np.sum(sig2)
 
