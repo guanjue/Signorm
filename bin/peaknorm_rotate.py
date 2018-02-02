@@ -30,7 +30,7 @@ def write2d_array(array,output):
 
 ################################################################################################
 ###
-def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_list, sig2_wg_raw, upperlim):
+def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_list, sig2_wg_raw, upperlim, lowerlim):
 	sig1_col_list = sig1_col_list.split(',')
 	sig2_col_list = sig2_col_list.split(',')
 
@@ -86,7 +86,20 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 
 	print('transformation: '+'B: '+str(B)+'; A: '+str(A))
 	### transformation
-	sig2_norm = sig2[:,0] * B + A
+	sig2_norm = []
+	for s in sig2[:,0]:
+		if (s > lowerlim) and (s < upperlim):
+			s_norm = s * B + A
+			if s_norm >= upperlim:
+				s_norm = upperlim
+			elif s_norm <= lowerlim:
+				s_norm = lowerlim
+		elif (s >= upperlim) or (s <= lowerlim):
+			s_norm = s
+		sig2_norm.append(s_norm)
+
+	sig2_norm = np.array(sig2_norm, float)
+	
 	print(sig2[0:10])
 	print(sig2_norm[0:10])
 	### total reads sf (for compare)
@@ -148,7 +161,7 @@ import getopt
 import sys
 def main(argv):
 	try:
-		opts, args = getopt.getopt(argv,"hw:p:n:a:b:c:d:u:")
+		opts, args = getopt.getopt(argv,"hw:p:n:a:b:c:d:u:l:")
 	except getopt.GetoptError:
 		print 'time python index_label2meansig.py -i input_file_list -o outputname -l log2 -s small_num -d lowerlim -u upperlim'
 		sys.exit(2)
@@ -173,8 +186,10 @@ def main(argv):
 			sig2_wg_raw=str(arg.strip())		
 		elif opt=="-u":
 			upperlim=float(arg.strip())
+		elif opt=="-l":
+			lowerlim=float(arg.strip())
 
-	pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_list, sig2_wg_raw, upperlim)
+	pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_list, sig2_wg_raw, upperlim, lowerlim)
 
 if __name__=="__main__":
 	main(sys.argv[1:])
