@@ -81,8 +81,8 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	bg_binary = bg_binary & (sig1_binary[:,0] < upperlim) & (sig2_binary[:,0] < upperlim)
 
 	### get transformation factor
-	B = (np.sum(sig1[peak_binary,0]+1) - np.sum(sig1[bg_binary,0]+1)) / (np.sum(sig2[peak_binary,0]+1) - np.sum(sig2[bg_binary,0]+1)) 
-	A = np.sum(sig1[peak_binary,0]+1) - np.sum(sig2[peak_binary,0]+1) * B
+	B = (np.mean(sig1[peak_binary,0]+1) - np.mean(sig1[bg_binary,0]+1)) / (np.mean(sig2[peak_binary,0]+1) - np.mean(sig2[bg_binary,0]+1)) 
+	A = np.mean(sig1[peak_binary,0]+1) - np.mean(sig2[peak_binary,0]+1) * B
 
 	print('transformation: '+'B: '+str(B)+'; A: '+str(A))
 	### transformation
