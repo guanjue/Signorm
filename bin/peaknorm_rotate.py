@@ -104,7 +104,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	write2d_array(sig2_norm, sig2_output_name + '.pknorm.txt')
 
 	### write output: sf & FRiP
-	info = np.array([[total_mean_sf, peak_sf, bg_sf], [sig1_FRiP, sig2_norm_FRiP, sig2_FRiP]])
+	info = np.array([[total_mean_sf, B, A], [sig1_FRiP, sig2_norm_FRiP, sig2_FRiP]])
 	write2d_array(info, sig2_output_name + '.info.txt')
 
 
