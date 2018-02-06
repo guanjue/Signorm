@@ -68,7 +68,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	print('get bg mean signal...')
 	call('paste '+ sig2_output_name + '.wg.bed' + ' ' + sig2_wg_raw + ' | awk -F \'\t\' -v OFS=\'\t\' \'{ if ($4 == 0) print $1, $2, $3, $4, $5 }\' > ' + sig2_output_name + '.bgsig.bed', shell=True)
 	call('cat ' + wg_bed + ' | awk -F \'\t\' -v OFS=\'\t\' \'{if ($2-400 >=0) print $1, $2-400, $3+400; else print $1, 0, $3+400 }\' > ' + wg_bed + '.expand.bed', shell=True)
-	call('bedtools map' + ' -c ' + '5' + ' -null 0 -F 0.5 -o max -a ' + wg_bed + '.expand.bed' + ' -b ' + sig2_output_name + '.bgsig.bed' + ' > ' + sig2_output_name + '.bgsig_mean.wg.bed', shell=True)
+	call('bedtools map' + ' -c ' + '5' + ' -null 0 -F 0.5 -o max -sorted -a ' + wg_bed + '.expand.bed' + ' -b ' + sig2_output_name + '.bgsig.bed' + ' > ' + sig2_output_name + '.bgsig_mean.wg.bed', shell=True)
 	call('cut -f4 ' + sig2_output_name + '.bgsig_mean.wg.bed' + ' > ' + sig2_output_name + '.bgsig_mean.wg.txt', shell=True)
 
 
