@@ -124,6 +124,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 
 
 	### plot scatter plot
+	np.random.seed(2018)
 	idx = np.random.randint(sig2_norm.shape[0], size=sample_num)
 	plot_x = np.log2(sig2_norm[idx,0]+1)
 	plot_y = np.log2(sig1[idx,0]+1)
