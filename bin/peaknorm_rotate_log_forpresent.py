@@ -126,7 +126,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	### plot scatter plot
 	np.random.seed(2018)
 	idx = np.random.randint(sig2_norm.shape[0], size=sample_num)
-	idx_pk = idx[bg_binary]
+	peak_binary_sample = peak_binary[idx]
 	plot_x = np.log2(sig2_norm[idx,0]+1)
 	plot_y = np.log2(sig1[idx,0]+1)
 	lims_max = np.max(np.concatenate((plot_x, plot_y)))
@@ -134,7 +134,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 
 	plt.figure()
 	plt.scatter(plot_x, plot_y, marker='.')
-	plt.scatter(plot_x[idx_pk], plot_y[idx_pk], marker='.', color='r')
+	plt.scatter(plot_x[peak_binary_sample], plot_y[peak_binary_sample], marker='.', color='r')
 	plt.plot([lims_min, lims_max], [lims_min, lims_max], 'k', color = 'r')
 	plt.xlabel(sig2_output_name + '.pknorm')
 	plt.ylabel(sig1_output_name + '.pknorm')
@@ -150,7 +150,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 
 	plt.figure()
 	plt.scatter(plot_x, plot_y, marker='.')
-	plt.scatter(plot_x[idx_pk], plot_y[idx_pk], marker='.', color='r')
+	plt.scatter(plot_x[peak_binary_sample], plot_y[peak_binary_sample], marker='.', color='r')
 	plt.plot([lims_min, lims_max], [lims_min, lims_max], 'k', color = 'r')
 	plt.xlabel(sig2_output_name + '.pknorm')
 	plt.ylabel(sig1_output_name + '.pknorm')
