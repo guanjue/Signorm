@@ -146,8 +146,8 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	plt.savefig(sig2_output_name + '.pknorm.scatterplot.png')
 
 
-	plot_x = np.log2(sig2[idx,0]+1)
-	plot_y = np.log2(sig1[idx,0]+1)
+	plot_x = np.log2(sig2[idx,0])
+	plot_y = np.log2(sig1[idx,0])
 	lims_max = np.max(np.concatenate((plot_x, plot_y)))
 	lims_min = np.min(np.concatenate((plot_x, plot_y)))
 
