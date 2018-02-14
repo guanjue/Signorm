@@ -89,13 +89,14 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	bg_binary = bg_binary & (sig1_binary[:,0] < upperlim) & (sig2_binary[:,0] < upperlim)
 
 	### get transformation factor
-	B = ( np.log2(np.mean(sig1[peak_binary,0]+1)) - np.log2(np.mean(sig1[bg_binary,0]+1)) ) / ( np.log2(np.mean(sig2[peak_binary,0]+1)) - np.log2(np.mean(sig2[bg_binary,0]+1)) )
-	A = np.mean(sig1[peak_binary,0]+1) / (np.mean(sig2[peak_binary,0]+1) ** B)
+	B = ( np.log2(np.mean(sig1[peak_binary,0]+0.1)) - np.log2(np.mean(sig1[bg_binary,0]+0.1)) ) / ( np.log2(np.mean(sig2[peak_binary,0]+0.1)) - np.log2(np.mean(sig2[bg_binary,0]+0.1)) )
+	A = np.mean(sig1[peak_binary,0]+0.1) / (np.mean(sig2[peak_binary,0]+0.1) ** B)
 
 	print('transformation: '+'B: '+str(B)+'; A: '+str(A))
 	### transformation
 	sig2_norm = []
 	for s in sig2[:,0]:
+		s = s+0.1
 		if (s > lowerlim) and (s < upperlim):
 			s_norm = A * (s ** B)
 			if s_norm >= upperlim:
@@ -136,17 +137,19 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	idx = np.random.randint(sig2_norm.shape[0], size=sample_num)
 	peak_binary_sample = peak_binary[idx]
 	bg_binary_sample = bg_binary[idx]
-	plot_x = np.log2(sig2_norm[idx,0]+1)
-	plot_y = np.log2(sig1[idx,0]+1)
+	plot_x = np.log2(sig2_norm[idx,0]+0.1)
+	plot_y = np.log2(sig1[idx,0]+0.1)
 	lims_max = np.max(np.concatenate((plot_x, plot_y)))
 	lims_min = np.min(np.concatenate((plot_x, plot_y)))
 
 	plt.figure()
 	plt.scatter(plot_x, plot_y, marker='.', color='dodgerblue')
 	plt.scatter(plot_x[peak_binary_sample], plot_y[peak_binary_sample], marker='.', color='coral')
+	plt.scatter(plot_x[bg_binary_sample], plot_y[bg_binary_sample], marker='.', color='gray')
 	plt.scatter(np.mean(plot_x[peak_binary_sample]), np.mean(plot_y[peak_binary_sample]), marker='.', color='k')
 	plt.scatter(np.mean(plot_x[bg_binary_sample]), np.mean(plot_y[bg_binary_sample]), marker='.', color='k')
-	plt.plot([lims_min, lims_max], [lims_min, lims_max], 'k', color = 'gray')
+	plt.plot([np.mean(plot_x[bg_binary_sample]), np.mean(plot_x[peak_binary_sample])], [np.mean(plot_y[bg_binary_sample]), np.mean(plot_y[peak_binary_sample])])
+	plt.plot([lims_min, lims_max], [lims_min, lims_max], 'k', color = 'k')
 	plt.xlabel(sig2_output_name + '.pknorm')
 	plt.ylabel(sig1_output_name + '.pknorm')
 	plt.xlim(lims_min, lims_max)
@@ -154,22 +157,25 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	plt.savefig(sig2_output_name + '.pknorm.scatterplot.png')
 
 
-	plot_x = np.log2(sig2[idx,0]+1)
-	plot_y = np.log2(sig1[idx,0]+1)
+	plot_x = np.log2(sig2[idx,0]+0.1)
+	plot_y = np.log2(sig1[idx,0]+0.1)
 	lims_max = np.max(np.concatenate((plot_x, plot_y)))
 	lims_min = np.min(np.concatenate((plot_x, plot_y)))
 
 	plt.figure()
 	plt.scatter(plot_x, plot_y, marker='.', color='dodgerblue')
 	plt.scatter(plot_x[peak_binary_sample], plot_y[peak_binary_sample], marker='.', color='coral')
+	plt.scatter(plot_x[bg_binary_sample], plot_y[bg_binary_sample], marker='.', color='gray')
 	plt.scatter(np.mean(plot_x[peak_binary_sample]), np.mean(plot_y[peak_binary_sample]), marker='.', color='k')
 	plt.scatter(np.mean(plot_x[bg_binary_sample]), np.mean(plot_y[bg_binary_sample]), marker='.', color='k')
-	plt.plot([lims_min, lims_max], [lims_min, lims_max], 'k', color = 'gray')
+	plt.plot([np.mean(plot_x[bg_binary_sample]), np.mean(plot_x[peak_binary_sample])], [np.mean(plot_y[bg_binary_sample]), np.mean(plot_y[peak_binary_sample])])
+	plt.plot([lims_min, lims_max], [lims_min, lims_max], 'k', color = 'k')
 	plt.xlabel(sig2_output_name + '.pknorm')
 	plt.ylabel(sig1_output_name + '.pknorm')
 	plt.xlim(lims_min, lims_max)
 	plt.ylim(lims_min, lims_max)
 	plt.savefig(sig2_output_name + '.scatterplot.png')
+
 
 ############################################################################
 #time python plot_violin.py -i atac_list.txt -o atac_list -l T -s 2 -l 4 -u 100
