@@ -134,7 +134,9 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 
 	plt.figure()
 	plt.scatter(plot_x, plot_y, marker='.')
-	plt.scatter(plot_x[peak_binary_sample], plot_y[peak_binary_sample], marker='.', color='r')
+	plt.scatter(plot_x[peak_binary_sample], plot_y[peak_binary_sample], marker='.', color='coral')
+	plt.scatter(np.mean(plot_x[peak_binary_sample]), np.mean(plot_y[peak_binary_sample]), marker='.', color='r')
+	plt.scatter(np.mean(plot_x[not peak_binary_sample]), np.mean(plot_y[not peak_binary_sample]), marker='.', color='r')
 	plt.plot([lims_min, lims_max], [lims_min, lims_max], 'k', color = 'r')
 	plt.xlabel(sig2_output_name + '.pknorm')
 	plt.ylabel(sig1_output_name + '.pknorm')
@@ -150,7 +152,9 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 
 	plt.figure()
 	plt.scatter(plot_x, plot_y, marker='.')
-	plt.scatter(plot_x[peak_binary_sample], plot_y[peak_binary_sample], marker='.', color='r')
+	plt.scatter(plot_x[peak_binary_sample], plot_y[peak_binary_sample], marker='.', color='coral')
+	plt.scatter(np.mean(plot_x[peak_binary_sample]), np.mean(plot_y[peak_binary_sample]), marker='.', color='r')
+	plt.scatter(np.mean(plot_x[not peak_binary_sample]), np.mean(plot_y[not peak_binary_sample]), marker='.', color='r')
 	plt.plot([lims_min, lims_max], [lims_min, lims_max], 'k', color = 'r')
 	plt.xlabel(sig2_output_name + '.pknorm')
 	plt.ylabel(sig1_output_name + '.pknorm')
