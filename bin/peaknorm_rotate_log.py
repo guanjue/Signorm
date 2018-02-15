@@ -69,10 +69,15 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	sig1 = read2d_array(sig1_wg_raw, float)
 	sig2 = read2d_array(sig2_wg_raw, float)
 
+	### add small_number
+	small_num = 1
+	sig1 = sig1 + small_num
+	sig2 = sig2 + small_num
+
 	### total reads norm
 	print('ref sum')
 	print(np.sum(sig1))
-	sig1 = sig1 / np.sum(sig1) * 5000000
+	sig1 = sig1 / np.sum(sig1) * 15000000
 	print(np.sum(sig1))
 	#sig1[sig1 > upperlim] = upperlim
 
@@ -88,14 +93,14 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	bg_binary = bg_binary & (sig1_binary[:,0] < upperlim) & (sig2_binary[:,0] < upperlim)
 
 	### get transformation factor
-	B = ( np.log2(np.mean(sig1[peak_binary,0]+0.1)) - np.log2(np.mean(sig1[bg_binary,0]+0.1)) ) / ( np.log2(np.mean(sig2[peak_binary,0]+0.1)) - np.log2(np.mean(sig2[bg_binary,0]+0.1)) )
-	A = np.mean(sig1[peak_binary,0]+0.1) / (np.mean(sig2[peak_binary,0]+0.1) ** B)
+	B = ( np.log2(np.mean(sig1[peak_binary,0])) - np.log2(np.mean(sig1[bg_binary,0])) ) / ( np.log2(np.mean(sig2[peak_binary,0])) - np.log2(np.mean(sig2[bg_binary,0])) )
+	A = np.mean(sig1[peak_binary,0]) / (np.mean(sig2[peak_binary,0]) ** B)
 
 	print('transformation: '+'B: '+str(B)+'; A: '+str(A))
 	### transformation
 	sig2_norm = []
 	for s in sig2[:,0]:
-		s = s+0.1
+		s = s
 		if (s > lowerlim) and (s < upperlim):
 			s_norm = A * (s ** B)
 			if s_norm >= upperlim:
@@ -136,8 +141,8 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	idx = np.random.randint(sig2_norm.shape[0], size=sample_num)
 	peak_binary_sample = peak_binary[idx]
 	bg_binary_sample = bg_binary[idx]
-	plot_x = np.log2(sig2_norm[idx,0]+0.1)
-	plot_y = np.log2(sig1[idx,0]+0.1)
+	plot_x = np.log2(sig2_norm[idx,0])
+	plot_y = np.log2(sig1[idx,0])
 	lims_max = np.max(np.concatenate((plot_x, plot_y)))
 	lims_min = np.min(np.concatenate((plot_x, plot_y)))
 
@@ -156,8 +161,8 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	plt.savefig(sig2_output_name + '.pknorm.scatterplot.png')
 
 
-	plot_x = np.log2(sig2[idx,0]+0.1)
-	plot_y = np.log2(sig1[idx,0]+0.1)
+	plot_x = np.log2(sig2[idx,0])
+	plot_y = np.log2(sig1[idx,0])
 	lims_max = np.max(np.concatenate((plot_x, plot_y)))
 	lims_min = np.min(np.concatenate((plot_x, plot_y)))
 
