@@ -115,11 +115,6 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 		sig2_norm.append(s_norm)
 
 	sig2_norm = np.array(sig2_norm, float)
-
-	### rotated means for sig2
-	sig2_log_pk_m_pkn = np.mean(np.log2(sig2_norm[peak_binary,0]+small_num))
-	sig2_log_bg_m_pkn = np.mean(np.log2(sig2_norm[bg_binary,0]+small_num))
-
 	
 	print(sig2[0:10])
 	print(sig2_norm[0:10])
@@ -130,6 +125,10 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	sig2_norm = np.array(sig2_norm, float)
 	### reshape for writing oputput
 	sig2_norm = np.reshape(sig2_norm, (sig2_norm.shape[0],1))
+
+	### rotated means for sig2
+	sig2_log_pk_m_pkn = np.mean(np.log2(sig2_norm[peak_binary,0]+small_num))
+	sig2_log_bg_m_pkn = np.mean(np.log2(sig2_norm[bg_binary,0]+small_num))
 
 	###FRiP score
 	sig2_norm_FRiP = np.sum(sig2_norm[(sig2_binary[:,0]!=0),0]) / np.sum(sig2_norm)
