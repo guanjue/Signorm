@@ -72,7 +72,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	### total reads norm
 	print('ref sum')
 	print(np.sum(sig1))
-	sig1 = sig1 / np.sum(sig1) * 1000000
+	sig1 = sig1 / np.sum(sig1) * 5000000
 	print(np.sum(sig1))
 	sig1[sig1 > upperlim] = upperlim
 	print(np.sum(sig1))
