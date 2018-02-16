@@ -148,8 +148,8 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	idx = np.random.randint(sig2_norm.shape[0], size=sample_num)
 	peak_binary_sample = peak_binary[idx]
 	bg_binary_sample = bg_binary[idx]
-	plot_x = np.log2(sig2_norm[idx,0]+small_num)
-	plot_y = np.log2(sig1[idx,0]+small_num)
+	plot_x = np.log2(np.log2(sig2_norm[idx,0]+small_num))
+	plot_y = np.log2(np.log2(sig1[idx,0]+small_num))
 	lims_max = np.max(np.concatenate((plot_x, plot_y)))
 	lims_min = np.min(np.concatenate((plot_x, plot_y)))
 
@@ -171,8 +171,8 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	plt.savefig(sig2_output_name + '.pknorm.scatterplot.png')
 
 
-	plot_x = np.log2(sig2[idx,0]+small_num)
-	plot_y = np.log2(sig1[idx,0]+small_num)
+	plot_x = np.log2(np.log2(sig2[idx,0]+small_num))
+	plot_y = np.log2(np.log2(sig1[idx,0]+small_num))
 	lims_max = np.max(np.concatenate((plot_x, plot_y)))
 	lims_min = np.min(np.concatenate((plot_x, plot_y)))
 
