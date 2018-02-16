@@ -77,6 +77,15 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	sig2 = read2d_array(sig2_wg_raw, float)
 	sig2_bg = read2d_array(sig2_output_name + '.bgsig_mean.wg.txt', float)
 
+	### total reads norm
+	print('ref sum')
+	print(np.sum(sig1))
+	sig1 = sig1 / np.sum(sig1) * 5000000
+	print(np.sum(sig1))
+	#sig1[sig1 > upperlim] = upperlim
+	if sig1_wg_raw == sig2_wg_raw:
+		sig2 = sig1
+		
 	### read whole genome binary label
 	sig1_binary = read2d_array(sig1_output_name + '.wg.txt', int)
 	sig2_binary = read2d_array(sig2_output_name + '.wg.txt', int)
