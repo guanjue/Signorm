@@ -98,7 +98,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	bg_binary = (sig1_binary[:,0] + sig2_binary[:,0]) == 0
 	bg_binary = bg_binary & (sig1_binary[:,0] < upperlim) & (sig2_binary[:,0] < upperlim)
 
-	small_num = 1
+	small_num = 0.1
 
 	### get scale factor
 	peak_sf = np.sum(sig1[peak_binary,0]+small_num) / np.sum(sig2[peak_binary,0]+small_num)
