@@ -70,7 +70,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	sig2 = read2d_array(sig2_wg_raw, float)
 
 	### add small_number
-	small_num = 0.1
+	small_num = 1.1
 
 	### total reads norm
 	print('ref sum')
@@ -91,10 +91,10 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	bg_binary = bg_binary & (sig1_binary[:,0] < upperlim) & (sig2_binary[:,0] < upperlim)
 
 	### get transformation factor
-	sig1_log_pk_m_od = np.mean(np.log2(sig1[peak_binary,0]+small_num))
-	sig1_log_bg_m_od = np.mean(np.log2(sig1[bg_binary,0]+small_num))
-	sig2_log_pk_m_od = np.mean(np.log2(sig2[peak_binary,0]+small_num))
-	sig2_log_bg_m_od = np.mean(np.log2(sig2[bg_binary,0]+small_num))
+	sig1_log_pk_m_od = np.mean(np.log2(np.log2(sig1[peak_binary,0]+small_num)))
+	sig1_log_bg_m_od = np.mean(np.log2(np.log2(sig1[bg_binary,0]+small_num)))
+	sig2_log_pk_m_od = np.mean(np.log2(np.log2(sig2[peak_binary,0]+small_num)))
+	sig2_log_bg_m_od = np.mean(np.log2(np.log2(sig2[bg_binary,0]+small_num)))
 
 	B = (sig1_log_pk_m_od - sig1_log_bg_m_od) /  (sig2_log_pk_m_od - sig2_log_bg_m_od)
 	A = sig1_log_pk_m_od - B * sig2_log_pk_m_od
@@ -105,7 +105,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	for s in sig2[:,0]:
 		s = s
 		if (s > lowerlim) and (s < upperlim):
-			s_norm = 2**(A + B * np.log2(s + small_num)) - small_num
+			s_norm = 2**(2**(A + B * np.log2(s + small_num))) - small_num
 			if s_norm >= upperlim:
 				s_norm = upperlim
 			elif s_norm <= lowerlim:
@@ -127,8 +127,8 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	sig2_norm = np.reshape(sig2_norm, (sig2_norm.shape[0],1))
 
 	### rotated means for sig2
-	sig2_log_pk_m_pkn = np.mean(np.log2(sig2_norm[peak_binary,0]+small_num))
-	sig2_log_bg_m_pkn = np.mean(np.log2(sig2_norm[bg_binary,0]+small_num))
+	sig2_log_pk_m_pkn = np.mean(np.log2(np.log2(sig2_norm[peak_binary,0]+small_num)))
+	sig2_log_bg_m_pkn = np.mean(np.log2(np.log2(sig2_norm[bg_binary,0]+small_num)))
 
 	###FRiP score
 	sig2_norm_FRiP = np.sum(sig2_norm[(sig2_binary[:,0]!=0),0]) / np.sum(sig2_norm)
