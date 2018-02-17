@@ -172,10 +172,6 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	sig2_FRiP = np.sum(sig2[(sig2_binary[:,0]!=0),0]) / np.sum(sig2)
 	sig1_FRiP = np.sum(sig1[(sig1_binary[:,0]!=0),0]) / np.sum(sig1)
 
-	sig2_norm_FRiP = np.mean(sig2_norm[(sig2_binary[:,0]!=0),0]) / np.mean(sig2_norm[(sig2_binary[:,0]==0),0]) 
-	sig2_FRiP = np.mean(sig2_norm[(sig2[:,0]!=0),0]) / np.mean(sig2[(sig2_binary[:,0]==0),0]) 
-	sig1_FRiP = np.sum(sig1[(sig1_binary[:,0]!=0),0]) / np.sum(sig1)
-
 	### write output: normalized signal
 	write2d_array(sig2_norm, sig2_output_name + '.pknorm.txt')
 
