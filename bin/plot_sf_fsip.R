@@ -73,7 +73,7 @@ dev.off()
 ######### plot FSiP factor plot
 FSiP = cbind(sig2_fsip, sig2_norm_fsip)
 pdf(paste(outputname, '.FSiP.box.pdf', sep=''))
-boxplot(FSiP), ylim=c(0,1))
+boxplot(FSiP, ylim=c(0,1))
 dev.off()
 
 
