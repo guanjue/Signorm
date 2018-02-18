@@ -117,7 +117,7 @@ def nbp_bg_adj(sample_sig_file, input_sig_file, outputname):
 	i=0
 	nb_pval_list = np.empty((0,), float)
 	for sig, bg in zip(sample, background):
-		if i%10000 == 0:
+		if i%100000 == 0:
 			print(i)
 		i = i+1
 		nb_pval_tmp = np.array( 1 - nbinom.cdf(sig, sample_bg_size * (bg+1)/(background_bg_mean+1), sample_bg_prob, loc=0) )
