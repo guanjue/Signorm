@@ -101,7 +101,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	print(np.sum(sig1))
 	#sig1[sig1 > upperlim] = upperlim
 	'''
-	if sig1_wg_raw == sig2_wg_raw:
+	if sig1_output_name == sig2_output_name:
 		sig2 = sig1
 	
 
