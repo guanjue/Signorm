@@ -128,10 +128,10 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	print(sum(bg_binary))
 
 	### get transformation factor
-	sig1_log_pk_m_od = np.mean(np.log2(sig1[sig1_binary,0]+small_num))
-	sig1_log_bg_m_od = np.mean(np.log2(sig1[bg1_binary,0]+small_num))
-	sig2_log_pk_m_od = np.mean(np.log2(sig2[sig2_binary,0]+small_num))
-	sig2_log_bg_m_od = np.mean(np.log2(sig2[bg2_binary,0]+small_num))
+	sig1_log_pk_m_od = np.mean(np.log2(sig1[sig1_binary[:,0],0]+small_num))
+	sig1_log_bg_m_od = np.mean(np.log2(sig1[bg1_binary[:,0],0]+small_num))
+	sig2_log_pk_m_od = np.mean(np.log2(sig2[sig2_binary[:,0],0]+small_num))
+	sig2_log_bg_m_od = np.mean(np.log2(sig2[bg2_binary[:,0],0]+small_num))
 
 	B = (sig1_log_pk_m_od - sig1_log_bg_m_od) /  (sig2_log_pk_m_od - sig2_log_bg_m_od)
 	A = sig1_log_pk_m_od - B * sig2_log_pk_m_od
@@ -164,13 +164,13 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	sig2_norm = np.reshape(sig2_norm, (sig2_norm.shape[0],1))
 
 	### rotated means for sig2 for plotting
-	sig1_1log_pk_m_od = np.mean(np.log2(sig1[sig1_binary,0]+small_num))
-	sig1_1log_bg_m_od = np.mean(np.log2(sig1[bg1_binary,0]+small_num))
-	sig2_1log_pk_m_od = np.mean(np.log2(sig2[sig2_binary,0]+small_num))
-	sig2_1log_bg_m_od = np.mean(np.log2(sig2[bg2_binary,0]+small_num))
+	sig1_1log_pk_m_od = np.mean(np.log2(sig1[sig1_binary[:,0],0]+small_num))
+	sig1_1log_bg_m_od = np.mean(np.log2(sig1[bg1_binary[:,0],0]+small_num))
+	sig2_1log_pk_m_od = np.mean(np.log2(sig2[sig2_binary[:,0],0]+small_num))
+	sig2_1log_bg_m_od = np.mean(np.log2(sig2[bg2_binary[:,0],0]+small_num))
 
-	sig2_1log_pk_m_pkn = np.mean(np.log2(sig2_norm[sig2_binary,0]+small_num))
-	sig2_1log_bg_m_pkn = np.mean(np.log2(sig2_norm[bg2_binary,0]+small_num))
+	sig2_1log_pk_m_pkn = np.mean(np.log2(sig2_norm[sig2_binary[:,0],0]+small_num))
+	sig2_1log_bg_m_pkn = np.mean(np.log2(sig2_norm[bg2_binary[:,0],0]+small_num))
 
 	###FRiP score
 	sig2_norm_FRiP = np.sum(sig2_norm[(sig2_binary[:,0]!=0),0]) / np.sum(sig2_norm)
