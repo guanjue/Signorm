@@ -141,14 +141,14 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	sig2_norm = []
 	for s in sig2[:,0]:
 		s = s
-		if (s > lowerlim) and (s < upperlim):
-			s_norm = 2**(A + B * np.log2(s + small_num)) - small_num
-			if s_norm >= upperlim:
-				s_norm = upperlim
-			elif s_norm <= lowerlim:
-				s_norm = lowerlim
-		elif (s >= upperlim) or (s <= lowerlim):
-			s_norm = s
+		#if (s > lowerlim) and (s < upperlim):
+		s_norm = 2**(A + B * np.log2(s + small_num)) - small_num
+		if s_norm >= upperlim:
+			s_norm = upperlim
+		elif s_norm <= lowerlim:
+			s_norm = lowerlim
+		#elif (s >= upperlim) or (s <= lowerlim):
+		#	s_norm = s
 		sig2_norm.append(s_norm)
 
 	sig2_norm = np.array(sig2_norm, float)
