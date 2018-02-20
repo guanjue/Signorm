@@ -55,8 +55,8 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	sig1_col_list = sig1_col_list.split(',')
 	sig2_col_list = sig2_col_list.split(',')
 
-	sig1_output_name = sig1_wg_raw.split('.')[0]
-	sig2_output_name = sig2_wg_raw.split('.')[0]
+	sig1_output_name = sig1_wg_raw.split('.')[0]+'_'+sig1_wg_raw.split('.')[1]
+	sig2_output_name = sig2_wg_raw.split('.')[0]+'_'+sig2_wg_raw.split('.')[1]
 	######
 	### get sig1 columns
 	sig1_col_id_plus = ''
@@ -109,9 +109,11 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	### read whole genome binary label
 	#sig1_binary = p_adjust(10**(-sig1), 'fdr') <= 0.05
 	sig1_binary = 10**(-sig1) <= 0.001
+	bg1_binary = 10**(-sig1) > 0.001
 	print(sum(sig1_binary))
 	#sig2_binary = p_adjust(10**(-sig2), 'fdr') <= 0.05
 	sig2_binary = 10**(-sig2) <= 0.001
+	bg2_binary = 10**(-sig2) > 0.001
 	print(sum(sig2_binary))
 
 	### peak region (both != 0 in sig1 & sig2)
@@ -126,10 +128,10 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	print(sum(bg_binary))
 
 	### get transformation factor
-	sig1_log_pk_m_od = np.mean(np.log2(sig1[peak_binary,0]+small_num))
-	sig1_log_bg_m_od = np.mean(np.log2(sig1[bg_binary,0]+small_num))
-	sig2_log_pk_m_od = np.mean(np.log2(sig2[peak_binary,0]+small_num))
-	sig2_log_bg_m_od = np.mean(np.log2(sig2[bg_binary,0]+small_num))
+	sig1_log_pk_m_od = np.mean(np.log2(sig1[sig1_binary,0]+small_num))
+	sig1_log_bg_m_od = np.mean(np.log2(sig1[bg1_binary,0]+small_num))
+	sig2_log_pk_m_od = np.mean(np.log2(sig2[sig2_binary,0]+small_num))
+	sig2_log_bg_m_od = np.mean(np.log2(sig2[bg2_binary,0]+small_num))
 
 	B = (sig1_log_pk_m_od - sig1_log_bg_m_od) /  (sig2_log_pk_m_od - sig2_log_bg_m_od)
 	A = sig1_log_pk_m_od - B * sig2_log_pk_m_od
@@ -162,13 +164,13 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	sig2_norm = np.reshape(sig2_norm, (sig2_norm.shape[0],1))
 
 	### rotated means for sig2 for plotting
-	sig1_1log_pk_m_od = np.mean(np.log2(sig1[peak_binary,0]+small_num))
-	sig1_1log_bg_m_od = np.mean(np.log2(sig1[bg_binary,0]+small_num))
-	sig2_1log_pk_m_od = np.mean(np.log2(sig2[peak_binary,0]+small_num))
-	sig2_1log_bg_m_od = np.mean(np.log2(sig2[bg_binary,0]+small_num))
+	sig1_1log_pk_m_od = np.mean(np.log2(sig1[sig1_binary,0]+small_num))
+	sig1_1log_bg_m_od = np.mean(np.log2(sig1[bg1_binary,0]+small_num))
+	sig2_1log_pk_m_od = np.mean(np.log2(sig2[sig2_binary,0]+small_num))
+	sig2_1log_bg_m_od = np.mean(np.log2(sig2[bg2_binary,0]+small_num))
 
-	sig2_1log_pk_m_pkn = np.mean(np.log2(sig2_norm[peak_binary,0]+small_num))
-	sig2_1log_bg_m_pkn = np.mean(np.log2(sig2_norm[bg_binary,0]+small_num))
+	sig2_1log_pk_m_pkn = np.mean(np.log2(sig2_norm[sig2_binary,0]+small_num))
+	sig2_1log_bg_m_pkn = np.mean(np.log2(sig2_norm[bg2_binary,0]+small_num))
 
 	###FRiP score
 	sig2_norm_FRiP = np.sum(sig2_norm[(sig2_binary[:,0]!=0),0]) / np.sum(sig2_norm)
