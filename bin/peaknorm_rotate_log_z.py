@@ -84,14 +84,17 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	### extract binary column
 	#call('cut -f4 ' + sig2_output_name + '.wg.bed' + ' > ' + sig2_output_name + '.wg.txt', shell=True)
 
-
-
-	### read whole genome signals
-	sig1 = read2d_array(sig1_wg_raw, float)
-	sig2 = read2d_array(sig2_wg_raw, float)
-
 	### add small_number
 	small_num = 1
+
+	### read whole genome signals
+	sig1 = read2d_array(sig1_wg_raw, float) - small_num
+	sig1[sig1<small_num] = small_num
+	sig2 = read2d_array(sig2_wg_raw, float) - small_num
+	sig2[sig2<small_num] = small_num
+
+	### add small_number
+	small_num = 0
 
 	### total reads norm
 	print('ref sum')
@@ -140,7 +143,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	for s in sig2[:,0]:
 		s = s
 		if (s > lowerlim) and (s < upperlim):
-			s_norm = 2**(A + B * np.log2(s + small_num))
+			s_norm = 2**(A + B * np.log2(s + small_num)) - small_num
 			if s_norm >= upperlim:
 				s_norm = upperlim
 			elif s_norm <= lowerlim:
