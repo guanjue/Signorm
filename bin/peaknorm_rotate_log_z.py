@@ -113,20 +113,26 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	print(sum(sig2_binary))
 
 	### peak region (both != 0 in sig1 & sig2)
-	peak_binary = (sig1_binary[:,0] * sig2_binary[:,0]) != 0
-	print(sum(peak_binary))
-	peak_binary = peak_binary & (10**(-sig1) < np.max(10**(-sig1))) & (10**(-sig2) < np.max(10**(-sig2)))
+	peak_binary_pk = (sig1_binary[:,0] * sig2_binary[:,0]) != 0
+	print(sum(peak_binary_pk))
+	peak_binary = peak_binary_pk & (10**(-sig1[:,0]) < np.max(10**(-sig1[:,0]))) & (10**(-sig2[:,0]) < np.max(10**(-sig2[:,0])))
 	print(sum(peak_binary))
 	### background region (both == 0 in sig1 & sig2)
-	bg_binary = (sig1_binary[:,0] + sig2_binary[:,0]) == 0
-	print(sum(bg_binary))
-	bg_binary = bg_binary & (10**(-sig1) < np.max(10**(-sig1))) & (10**(-sig2) < np.max(10**(-sig2)))
+	bg_binary_bg = (sig1_binary[:,0] + sig2_binary[:,0]) == 0
+	print(sum(bg_binary_bg))
+	bg_binary = bg_binary_bg & (10**(-sig1[:,0]) < upperlim) & (10**(-sig2[:,0]) < upperlim)
 	print(sum(bg_binary))
 
+
 	### get transformation factor
-	sig1_log_pk_m_od = np.mean(np.log2(sig1[peak_binary,0]+small_num))
+	if sum(peak_binary) > 0:
+		sig1_log_pk_m_od = np.mean(np.log2(sig1[peak_binary,0]+small_num))
+		sig2_log_pk_m_od = np.mean(np.log2(sig2[peak_binary,0]+small_num))
+	else:
+		sig1_log_pk_m_od = np.mean(np.log2(sig1[peak_binary,0]+small_num))
+		sig2_log_pk_m_od = sig1_log_pk_m_od
+
 	sig1_log_bg_m_od = np.mean(np.log2(sig1[bg_binary,0]+small_num))
-	sig2_log_pk_m_od = np.mean(np.log2(sig2[peak_binary,0]+small_num))
 	sig2_log_bg_m_od = np.mean(np.log2(sig2[bg_binary,0]+small_num))
 
 	B = (sig1_log_pk_m_od - sig1_log_bg_m_od) /  (sig2_log_pk_m_od - sig2_log_bg_m_od)
@@ -137,13 +143,13 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	sig2_norm = []
 	for s in sig2[:,0]:
 		s = s
-		if (s > lowerlim) and (s < np.max(sig2_binary[:,0])):
+		if (s > lowerlim) and (s < upperlim):
 			s_norm = 2**(A + B * np.log2(s + small_num)) - small_num
-			if s_norm >= np.max(sig2_binary[:,0]):
-				s_norm = np.max(sig2_binary[:,0])
+			if s_norm >= upperlim:
+				s_norm = upperlim
 			elif s_norm <= lowerlim:
 				s_norm = lowerlim
-		elif (s >= np.max(sig2_binary[:,0])) or (s <= lowerlim):
+		elif (s >= upperlim) or (s <= lowerlim):
 			s_norm = s
 		sig2_norm.append(s_norm)
 
@@ -184,8 +190,8 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	### plot scatter plot
 	np.random.seed(2018)
 	idx = np.random.randint(sig2_norm.shape[0], size=sample_num)
-	peak_binary_sample = peak_binary[idx]
-	bg_binary_sample = bg_binary[idx]
+	peak_binary_sample = peak_binary_pk[idx]
+	bg_binary_sample = bg_binary_bg[idx]
 	plot_x = np.log2(sig2_norm[idx,0]+small_num)
 	plot_y = np.log2(sig1[idx,0]+small_num)
 	plot_xn = np.log2(sig2[idx,0]+small_num)
