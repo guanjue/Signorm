@@ -85,16 +85,13 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	#call('cut -f4 ' + sig2_output_name + '.wg.bed' + ' > ' + sig2_output_name + '.wg.txt', shell=True)
 
 	### add small_number
-	small_num = 1
 
 	### read whole genome signals
 	sig1 = read2d_array(sig1_wg_raw, float)
-	sig1[sig1<small_num] = small_num
 	sig2 = read2d_array(sig2_wg_raw, float)
-	sig2[sig2<small_num] = small_num
 
 	### add small_number
-	small_num = 0
+	small_num = 0.1
 
 	### total reads norm
 	print('ref sum')
@@ -110,11 +107,11 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 
 
 	### read whole genome binary label
-	#sig1_binary = p_adjust(10**(-sig1), 'fdr') <= 0.05
-	sig1_binary = 10**(-sig1) <= 0.001
+	sig1_binary = p_adjust(10**(-sig1), 'fdr') <= 0.05
+	#sig1_binary = 10**(-sig1) <= 0.001
 	print(sum(sig1_binary))
-	#sig2_binary = p_adjust(10**(-sig2), 'fdr') <= 0.05
-	sig2_binary = 10**(-sig2) <= 0.001
+	sig2_binary = p_adjust(10**(-sig2), 'fdr') <= 0.05
+	#sig2_binary = 10**(-sig2) <= 0.001
 	print(sum(sig2_binary))
 
 	### peak region (both != 0 in sig1 & sig2)
@@ -193,8 +190,10 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	bg_binary_sample = bg_binary[idx]
 	plot_x = np.log2(sig2_norm[idx,0]+small_num)
 	plot_y = np.log2(sig1[idx,0]+small_num)
-	lims_max = np.max(np.concatenate((plot_x, plot_y)))
-	lims_min = np.min(np.concatenate((plot_x, plot_y)))
+	plot_xn = np.log2(sig2[idx,0]+small_num)
+	plot_yn = np.log2(sig1[idx,0]+small_num)
+	lims_max = np.max(np.concatenate((plot_x, plot_y, plot_xn, plot_yn)))
+	lims_min = np.min(np.concatenate((plot_x, plot_y, plot_xn, plot_yn)))
 
 	plt.figure()
 	plt.scatter(plot_x, plot_y, marker='.', color='dodgerblue')
@@ -214,22 +213,22 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	plt.savefig(sig2_output_name + '.pknorm.scatterplot.png')
 
 
-	plot_x = np.log2(sig2[idx,0]+small_num)
-	plot_y = np.log2(sig1[idx,0]+small_num)
-	lims_max = np.max(np.concatenate((plot_x, plot_y)))
-	lims_min = np.min(np.concatenate((plot_x, plot_y)))
+	plot_xn = np.log2(sig2[idx,0]+small_num)
+	plot_yn = np.log2(sig1[idx,0]+small_num)
+	lims_max = np.max(np.concatenate((plot_x, plot_y, plot_xn, plot_yn)))
+	lims_min = np.min(np.concatenate((plot_x, plot_y, plot_xn, plot_yn)))
 
 	plt.figure()
-	plt.scatter(plot_x, plot_y, marker='.', color='dodgerblue')
-	plt.scatter(plot_x[bg_binary_sample], plot_y[bg_binary_sample], marker='.', color='gray')
-	plt.scatter(plot_x[peak_binary_sample], plot_y[peak_binary_sample], marker='.', color='coral')
+	plt.scatter(plot_xn, plot_yn, marker='.', color='dodgerblue')
+	plt.scatter(plot_xn[bg_binary_sample], plot_yn[bg_binary_sample], marker='.', color='gray')
+	plt.scatter(plot_xn[peak_binary_sample], plot_yn[peak_binary_sample], marker='.', color='coral')
 	plt.scatter(sig2_1log_pk_m_od, sig1_1log_pk_m_od, marker='.', color='k')
 	plt.scatter(sig2_1log_bg_m_od, sig1_1log_bg_m_od, marker='.', color='k')
 	plt.plot([lims_min, lims_max], [lims_min, lims_max], 'k', color = 'k')
 	plt.plot([sig2_1log_bg_m_od, sig2_1log_pk_m_od], [sig1_1log_bg_m_od, sig1_1log_pk_m_od])
-	#plt.scatter(np.mean(plot_x[peak_binary_sample]), np.mean(plot_y[peak_binary_sample]), marker='.', color='k')
-	#plt.scatter(np.mean(plot_x[bg_binary_sample]), np.mean(plot_y[bg_binary_sample]), marker='.', color='k')
-	#plt.plot([np.mean(plot_x[bg_binary_sample]), np.mean(plot_x[peak_binary_sample])], [np.mean(plot_y[bg_binary_sample]), np.mean(plot_y[peak_binary_sample])])
+	#plt.scatter(np.mean(plot_xn[peak_binary_sample]), np.mean(plot_yn[peak_binary_sample]), marker='.', color='k')
+	#plt.scatter(np.mean(plot_xn[bg_binary_sample]), np.mean(plot_yn[bg_binary_sample]), marker='.', color='k')
+	#plt.plot([np.mean(plot_xn[bg_binary_sample]), np.mean(plot_xn[peak_binary_sample])], [np.mean(plot_yn[bg_binary_sample]), np.mean(plot_yn[peak_binary_sample])])
 	plt.xlabel(sig2_output_name + '.pknorm')
 	plt.ylabel(sig1_output_name + '.pknorm')
 	plt.xlim(lims_min, lims_max)
