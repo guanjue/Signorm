@@ -91,7 +91,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	sig2 = read2d_array(sig2_wg_raw, float)
 
 	### add small_number
-	small_num = 1
+	small_num = 0.1
 
 	### total reads norm
 	print('ref sum')
