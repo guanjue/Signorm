@@ -115,12 +115,12 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	### peak region (both != 0 in sig1 & sig2)
 	peak_binary = (sig1_binary[:,0] * sig2_binary[:,0]) != 0
 	print(sum(peak_binary))
-	peak_binary = peak_binary & (sig1_binary[:,0] < np.max(sig1_binary[:,0])) & (sig2_binary[:,0] < np.max(sig2_binary[:,0]))
+	peak_binary = peak_binary & (10**(-sig1) < np.max(10**(-sig1))) & (10**(-sig2) < np.max(10**(-sig2)))
 	print(sum(peak_binary))
 	### background region (both == 0 in sig1 & sig2)
 	bg_binary = (sig1_binary[:,0] + sig2_binary[:,0]) == 0
 	print(sum(bg_binary))
-	bg_binary = bg_binary & (sig1_binary[:,0] < np.max(sig1_binary[:,0])) & (sig2_binary[:,0] < np.max(sig2_binary[:,0]))
+	bg_binary = bg_binary & (10**(-sig1) < np.max(10**(-sig1))) & (10**(-sig2) < np.max(10**(-sig2)))
 	print(sum(bg_binary))
 
 	### get transformation factor
