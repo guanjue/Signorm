@@ -191,7 +191,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 		sig1_1log_bg_m_od = np.mean(np.log2(sig1[bg_binary,0]+small_num))
 		sig2_1log_bg_m_od = np.mean(np.log2(sig2[bg_binary,0]+small_num))
 
-		sig2_1log_pk_m_pkn = sig1_1log_bg_m_od
+		sig2_1log_pk_m_pkn = sig1_1log_pk_m_od
 		sig2_1log_bg_m_pkn = np.mean(np.log2(sig2_norm[bg_binary,0]+small_num))
 
 	###FRiP score
