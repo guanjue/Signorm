@@ -115,15 +115,14 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	### peak region (both != 0 in sig1 & sig2)
 	peak_binary_pk = (sig1_binary[:,0] * sig2_binary[:,0]) != 0
 	print(sum(peak_binary_pk))
-	peak_binary = peak_binary_pk & (10**(-sig1[:,0]) < np.max(10**(-sig1[:,0]))) & (10**(-sig2[:,0]) < np.max(10**(-sig2[:,0])))
-	print(np.max(10**(-sig1[:,0])))
+	peak_binary = peak_binary_pk & (sig1[:,0] < np.max(sig1[:,0])) & (sig2[:,0] < np.max(sig2[:,0]))
+	print(np.max(sig1[:,0]))
 	print(sum(peak_binary))
-	print(sum((10**(-sig1[:,0]) < np.max(10**(-sig1[:,0])))))
 
 	### background region (both == 0 in sig1 & sig2)
 	bg_binary_bg = (sig1_binary[:,0] + sig2_binary[:,0]) == 0
 	print(sum(bg_binary_bg))
-	bg_binary = bg_binary_bg & (10**(-sig1[:,0]) < upperlim) & (10**(-sig2[:,0]) < upperlim)
+	bg_binary = bg_binary_bg & (sig1[:,0] < upperlim) & (sig2[:,0] < upperlim)
 	print(sum(bg_binary))
 
 
