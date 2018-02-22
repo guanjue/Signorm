@@ -107,13 +107,15 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 
 
 	### read whole genome binary label
-	#sig1_binary = p_adjust(10**(-sig1), 'fdr') <= 0.05
-	sig1_binary = 10**(-sig1) <= 0.001
-	bg1_binary = 10**(-sig1) > 0.001
+	sig1_binary = p_adjust(10**(-sig1), 'fdr') < 0.05
+	bg1_binary = p_adjust(10**(-sig1), 'fdr') >= 0.05
+	#sig1_binary = 10**(-sig1) <= 0.001
+	#bg1_binary = 10**(-sig1) > 0.001
 	print(sum(sig1_binary))
-	#sig2_binary = p_adjust(10**(-sig2), 'fdr') <= 0.05
-	sig2_binary = 10**(-sig2) <= 0.001
-	bg2_binary = 10**(-sig2) > 0.001
+	sig2_binary = p_adjust(10**(-sig2), 'fdr') < 0.05
+	bg2_binary = p_adjust(10**(-sig2), 'fdr') >= 0.05
+	#sig2_binary = 10**(-sig2) <= 0.001
+	#bg2_binary = 10**(-sig2) > 0.001
 	print(sum(sig2_binary))
 
 	### peak region (both != 0 in sig1 & sig2)
@@ -129,11 +131,11 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 
 	### get transformation factor
 	if sum(peak_binary) > 0:
-		sig1_log_pk_m_od = np.mean(np.log2(sig1[peak_binary,0]+small_num))
-		sig2_log_pk_m_od = np.mean(np.log2(sig2[peak_binary,0]+small_num))
+		sig1_log_pk_m_od = np.mean(np.log2(sig1[sig1_binary[:,0],0]+small_num))
+		sig2_log_pk_m_od = np.mean(np.log2(sig2[sig2_binary[:,0],0]+small_num))
 	else:
 		print('no peaks')
-		sig1_log_pk_m_od = np.mean(np.log2(sig1[peak_binary,0]+small_num))
+		sig1_log_pk_m_od = np.mean(np.log2(sig1[sig1_binary[:,0],0]+small_num))
 		sig2_log_pk_m_od = sig1_log_pk_m_od
 		write2d_array(str(sig1_log_pk_m_od), sig2_output_name + '.nopeaks.txt')
 
@@ -172,11 +174,11 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 
 	### rotated means for sig2 for plotting
 	if sum(peak_binary) > 0:
-		sig1_1log_pk_m_od = np.mean(np.log2(sig1[peak_binary,0]+small_num))
-		sig2_1log_pk_m_od = np.mean(np.log2(sig2[peak_binary,0]+small_num))
+		sig1_1log_pk_m_od = np.mean(np.log2(sig1[sig1_binary[:,0],0]+small_num))
+		sig2_1log_pk_m_od = np.mean(np.log2(sig2[sig2_binary[:,0],0]+small_num))
 	else:
 		print('no peaks')
-		sig1_1log_pk_m_od = np.mean(np.log2(sig1[peak_binary,0]+small_num))
+		sig1_1log_pk_m_od = np.mean(np.log2(sig1[sig1_binary[:,0],0]+small_num))
 		sig2_1log_pk_m_od = sig1_1log_pk_m_od
 		write2d_array(str(sig1_log_pk_m_od), sig2_output_name + '.1nopeaks.txt')
 
