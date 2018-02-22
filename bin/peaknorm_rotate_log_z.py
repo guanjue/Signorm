@@ -131,6 +131,8 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 		sig1_log_pk_m_od = np.mean(np.log2(sig1[peak_binary,0]+small_num))
 		sig2_log_pk_m_od = np.mean(np.log2(sig2[peak_binary,0]+small_num))
 	else:
+		print('no peaks')
+		write2d_array(str(sig1_log_pk_m_od), sig2_output_name + '.nopeaks.txt')
 		sig1_log_pk_m_od = np.mean(np.log2(sig1[peak_binary,0]+small_num))
 		sig2_log_pk_m_od = sig1_log_pk_m_od
 
