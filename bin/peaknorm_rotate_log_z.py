@@ -105,11 +105,11 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 
 
 	### read whole genome binary label
-	#sig1_binary = p_adjust(10**(-sig1), 'fdr') < 0.05
-	sig1_binary = 10**(-sig1) <= 0.001
+	sig1_binary = p_adjust(10**(-sig1), 'fdr') < 0.1
+	#sig1_binary = 10**(-sig1) <= 0.001
 	print(sum(sig1_binary))
-	#sig2_binary = p_adjust(10**(-sig2), 'fdr') < 0.05
-	sig2_binary = 10**(-sig2) <= 0.001
+	sig2_binary = p_adjust(10**(-sig2), 'fdr') < 0.1
+	#sig2_binary = 10**(-sig2) <= 0.001
 	print(sum(sig2_binary))
 
 	### peak region (both != 0 in sig1 & sig2)
