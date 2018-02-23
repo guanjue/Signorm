@@ -75,7 +75,7 @@ def gradientDescent(sig1_pk,sig1_bg, sig2_pk,sig2_bg, A, B, alpha, beta, numIter
 		# But to be consistent with the gradient, I include it)
 		cost = loss ** 2
 		print("Iteration %d | Cost: %f" % (i, cost))
-		if cost <= 0.00000001:
+		if loss <= 0.00000001:
 			print('converged!')
 			break
 		# avg gradient per example
@@ -164,7 +164,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 
 
 	### get transformation factor
-	AB = gradientDescent(sig1[peak_binary,0],sig1[bg_binary,0], sig2[peak_binary,0],sig2[bg_binary,0], 1.0, 1.0, 0.001, 0.0001, 1000)
+	AB = gradientDescent(sig1[peak_binary,0]+small_num,sig1[bg_binary,0]+small_num, sig2[peak_binary,0]+small_num,sig2[bg_binary,0]+small_num, 1.0, 1.0, 0.001, 0.0001, 1000)
 	A=AB[0]
 	B=AB[1]
 	print('transformation: '+'B: '+str(B)+'; A: '+str(A))
@@ -173,7 +173,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	for s in sig2[:,0]:
 		s = s
 		if (s > lowerlim) and (s < upperlim):
-			s_norm = (A*(s)**B)
+			s_norm = (A*(s+small_num)**B)-small_num
 			if s_norm >= upperlim:
 				s_norm = upperlim
 			elif s_norm <= lowerlim:
