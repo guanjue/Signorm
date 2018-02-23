@@ -86,6 +86,7 @@ def gradientDescent(sig1_pk,sig1_bg, sig2_pk,sig2_bg, A, B, alpha, beta, numIter
 		# update
 		A = A - alpha * gradientA
 		B = B - beta * gradientB
+		print([A, B])
 	return np.array([A, B])
 
 ################################################################################################
