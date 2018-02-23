@@ -234,6 +234,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	plt.ylabel(sig1_output_name + '.pknorm')
 	plt.xlim(lims_min, lims_max)
 	plt.ylim(lims_min, lims_max)
+	plt.axis('scaled')
 	plt.savefig(sig2_output_name + '.pknorm.scatterplot.png')
 
 
@@ -257,6 +258,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	plt.ylabel(sig1_output_name + '.pknorm')
 	plt.xlim(lims_min, lims_max)
 	plt.ylim(lims_min, lims_max)
+	plt.axis('scaled')
 	plt.savefig(sig2_output_name + '.scatterplot.png')
 
 
