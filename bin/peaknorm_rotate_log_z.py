@@ -75,9 +75,9 @@ def gradientDescent(sig1_pk,sig1_bg, sig2_pk,sig2_bg, A, B, alpha, beta, numIter
 		# But to be consistent with the gradient, I include it)
 		cost = loss ** 2
 		print("Iteration %d | Cost: %f" % (i, cost))
-		#if cost <= 0.00000001:
-		#	print('converged!')
-		#	break
+		if cost <= 0.0000000001:
+			print('converged!')
+			break
 		# avg gradient per example
 		gradientA = (np.mean(h_sig2_pk) + np.mean(h_sig2_bg)) / 2 * loss
 		print(gradientA)
