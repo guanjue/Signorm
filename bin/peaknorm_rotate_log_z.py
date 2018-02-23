@@ -79,11 +79,13 @@ def gradientDescent(sig1_pk,sig1_bg, sig2_pk,sig2_bg, A, B, alpha, beta, numIter
 			print('converged!')
 			break
 		# avg gradient per example
-		gradient = (np.mean(sig2_pk) + np.mean(sig2_bg)) * loss / 2
-		print(gradient)
+		gradientA = (np.mean(h_sig2_pk) + np.mean(h_sig2_bg)) / 2 * loss
+		print(gradientA)
+		gradientB = (np.mean(np.log(sig2_pk)*h_sig2_pk) + np.mean(np.log(sig2_bg)*h_sig2_bg)) / 2 * loss 
+		print(gradientB)
 		# update
-		A = A - alpha * gradient
-		B = B - beta * gradient
+		A = A - alpha * gradientA
+		B = B - beta * gradientB
 	return np.array([A, B])
 
 ################################################################################################
