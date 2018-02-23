@@ -67,9 +67,9 @@ def iterate_minibatches(sig1, sig2, batchsize, shuffle=False):
 ### gradient descent
 def gradientDescent(sig1_pk,sig1_bg, sig2_pk,sig2_bg, A, B, alpha, beta, numIterations):
 	for i in range(0, 100):
-		h_sig1_pk = A*(sig1_pk**B)
-		h_sig1_bg = A*(sig1_bg**B)
-		loss = (np.mean(h_sig1_pk) - np.mean(sig2_pk)) + (np.mean(h_sig1_bg) - np.mean(sig2_bg))
+		h_sig2_pk = A*(sig2_pk**B)
+		h_sig2_bg = A*(sig2_bg**B)
+		loss = (np.mean(h_sig2_pk) - np.mean(sig1_pk)) + (np.mean(h_sig2_bg) - np.mean(sig1_bg))
 		print(loss)
 		# avg cost per example (the 2 in 2*m doesn't really matter here.
 		# But to be consistent with the gradient, I include it)
@@ -79,7 +79,7 @@ def gradientDescent(sig1_pk,sig1_bg, sig2_pk,sig2_bg, A, B, alpha, beta, numIter
 			print('converged!')
 			break
 		# avg gradient per example
-		gradient = (np.mean(sig1_pk) + np.mean(sig1_bg)) * loss / 2
+		gradient = (np.mean(sig2_pk) + np.mean(sig2_bg)) * loss / 2
 		print(gradient)
 		# update
 		A = A - alpha * gradient
