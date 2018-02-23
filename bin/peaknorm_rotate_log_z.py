@@ -66,7 +66,7 @@ def iterate_minibatches(sig1, sig2, batchsize, shuffle=False):
 ################################################################################################
 ### gradient descent
 def gradientDescent(sig1_pk,sig1_bg, sig2_pk,sig2_bg, A, B, alpha, beta, numIterations):
-	for i in range(0, 100):
+	for i in range(0, numIterations):
 		h_sig2_pk = A*(sig2_pk**B)
 		h_sig2_bg = A*(sig2_bg**B)
 		loss = (np.mean(h_sig2_pk) - np.mean(sig1_pk)) + (np.mean(h_sig2_bg) - np.mean(sig1_bg))
@@ -164,7 +164,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 
 
 	### get transformation factor
-	AB = gradientDescent(sig1[peak_binary,0]+small_num,sig1[bg_binary,0]+small_num, sig2[peak_binary,0]+small_num,sig2[bg_binary,0]+small_num, 1.0, 1.0, 0.001, 0.0001, 1000)
+	AB = gradientDescent(sig1[peak_binary,0]+small_num,sig1[bg_binary,0]+small_num, sig2[peak_binary,0]+small_num,sig2[bg_binary,0]+small_num, 1.0, 1.0, 0.001, 0.001, 200)
 	A=AB[0]
 	B=AB[1]
 	print('transformation: '+'B: '+str(B)+'; A: '+str(A))
