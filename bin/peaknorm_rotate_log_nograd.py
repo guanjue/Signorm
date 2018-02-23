@@ -50,41 +50,6 @@ def p_adjust(pvalue, method):
 	return p0
 
 ################################################################################################
-### mini batch
-def iterate_minibatches(sig1, sig2, batchsize, shuffle=False):
-	assert sig1.shape[0] == sig2.shape[0]
-	if shuffle:
-		indices = np.arange(sig1.shape[0])
-		np.random.shuffle(indices)
-	for start_idx in range(0, sig1.shape[0] - batchsize + 1, batchsize):
-		if shuffle:
-			excerpt = indices[start_idx:start_idx + batchsize]
-		else:
-			excerpt = slice(start_idx, start_idx + batchsize)
-		yield sig1[excerpt], sig2[excerpt]
-
-################################################################################################
-### gradient descent
-def gradientDescent(sig1_pk,sig1_bg, sig2_pk,sig2_bg, A, B, alpha, beta, numIterations):
-	for i in range(0, 100):
-		h_sig1_pk = A*(sig1_pk**B)
-		h_sig1_bg = A*(sig1_bg**B)
-		weight = sig1_bg.shape[0] / sig1_pk.shape[0]
-		loss = (np.mean(h_sig1_pk) - np.mean(sig2_pk)) * weight + (np.mean(h_sig1_bg) - np.mean(sig2_bg))
-		print(loss)
-		# avg cost per example (the 2 in 2*m doesn't really matter here.
-		# But to be consistent with the gradient, I include it)
-		cost = loss ** 2
-		print("Iteration %d | Cost: %f" % (i, cost))
-		# avg gradient per example
-		gradient = np.mean(x * loss)
-		print(gradient)
-		# update
-		A = A - alpha * gradient
-		B = B - beta * gradient
-	return np.array([A, B])
-
-################################################################################################
 ###
 def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_list, sig2_wg_raw, upperlim, lowerlim):
 	sig1_col_list = sig1_col_list.split(',')
@@ -150,28 +115,42 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	### peak region (both != 0 in sig1 & sig2)
 	peak_binary_pk = (sig1_binary[:,0] * sig2_binary[:,0]) != 0
 	print(sum(peak_binary_pk))
-	peak_binary = peak_binary_pk & (sig1[:,0] != sig1[0,0]) & (sig2[:,0] != sig2[0,0]) #& (sig1[:,0] < np.max(sig1[:,0])) & (sig2[:,0] < upperlim)
+	peak_binary = peak_binary_pk & (sig1[:,0] < np.max(sig1[:,0])) & (sig2[:,0] < upperlim)
 	print(np.max(sig1[:,0]))
 	print(sum(peak_binary))
 
 	### background region (both == 0 in sig1 & sig2)
 	bg_binary_bg = (sig1_binary[:,0] + sig2_binary[:,0]) == 0
 	print(sum(bg_binary_bg))
-	bg_binary = bg_binary_bg & (sig1[:,0] != sig1[0,0]) & (sig2[:,0] != sig2[0,0]) #& (sig1[:,0] < upperlim) & (sig2[:,0] < upperlim)
+	bg_binary = bg_binary_bg & (sig1[:,0] < upperlim) & (sig2[:,0] < upperlim)
 	print(sum(bg_binary))
 
 
 	### get transformation factor
-	AB = gradientDescent(sig1[peak_binary,0],sig1[bg_binary,0], sig2[peak_binary,0],sig2[bg_binary,0], 1.0, 1.0, 0.001, 0.0001, 1000)
-	A=AB[0]
-	B=AB[1]
+	if sum(peak_binary) > 0:
+		sig1_log_pk_m_od = np.mean(np.log2(sig1[peak_binary,0]+small_num))
+		sig2_log_pk_m_od = np.mean(np.log2(sig2[peak_binary,0]+small_num))
+	else:
+		print('no peaks')
+		peak_binary_sig1_pk = sig1_binary[:,0] != 0
+		peak_binary_sig1 = peak_binary_sig1_pk & (sig1[:,0] < np.max(sig1[:,0])) 
+		sig1_log_pk_m_od = np.mean(np.log2(sig1[peak_binary_sig1,0]+small_num))
+		sig2_log_pk_m_od = sig1_log_pk_m_od
+		write2d_array(str(sig1_log_pk_m_od), sig2_output_name + '.nopeaks.txt')
+
+	sig1_log_bg_m_od = np.mean(np.log2(sig1[bg_binary,0]+small_num))
+	sig2_log_bg_m_od = np.mean(np.log2(sig2[bg_binary,0]+small_num))
+
+	B = (sig1_log_pk_m_od - sig1_log_bg_m_od) /  (sig2_log_pk_m_od - sig2_log_bg_m_od)
+	A = sig1_log_pk_m_od - B * sig2_log_pk_m_od
+
 	print('transformation: '+'B: '+str(B)+'; A: '+str(A))
 	### transformation
 	sig2_norm = []
 	for s in sig2[:,0]:
 		s = s
 		if (s > lowerlim) and (s < upperlim):
-			s_norm = (A*(s)**B)
+			s_norm = 2**(A + B * np.log2(s + small_num)) - small_num
 			if s_norm >= upperlim:
 				s_norm = upperlim
 			elif s_norm <= lowerlim:
@@ -193,14 +172,27 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	sig2_norm = np.reshape(sig2_norm, (sig2_norm.shape[0],1))
 
 	### rotated means for sig2 for plotting
-	sig1_1log_pk_m_od = np.log2(np.mean(sig1[peak_binary,0]))
-	sig2_1log_pk_m_od = np.log2(np.mean(sig2[peak_binary,0]))
+	if sum(peak_binary) > 0:
+		sig1_1log_pk_m_od = np.mean(np.log2(sig1[peak_binary,0]+small_num))
+		sig2_1log_pk_m_od = np.mean(np.log2(sig2[peak_binary,0]+small_num))
 
-	sig1_1log_bg_m_od = np.log2(np.mean(sig1[bg_binary,0]))
-	sig2_1log_bg_m_od = np.log2(np.mean(sig2[bg_binary,0]))
+		sig1_1log_bg_m_od = np.mean(np.log2(sig1[bg_binary,0]+small_num))
+		sig2_1log_bg_m_od = np.mean(np.log2(sig2[bg_binary,0]+small_num))
 
-	sig2_1log_pk_m_pkn = np.log2(np.mean(sig2_norm[peak_binary,0]))
-	sig2_1log_bg_m_pkn = np.log2(np.mean(sig2_norm[bg_binary,0]))
+		sig2_1log_pk_m_pkn = np.mean(np.log2(sig2_norm[peak_binary,0]+small_num))
+		sig2_1log_bg_m_pkn = np.mean(np.log2(sig2_norm[bg_binary,0]+small_num))
+
+	else:
+		print('no peaks')
+		sig1_1log_pk_m_od = np.mean(np.log2(sig1[peak_binary_sig1,0]+small_num))
+		sig2_1log_pk_m_od = sig1_1log_pk_m_od
+		write2d_array(str(sig1_log_pk_m_od), sig2_output_name + '.1nopeaks.txt')
+
+		sig1_1log_bg_m_od = np.mean(np.log2(sig1[bg_binary,0]+small_num))
+		sig2_1log_bg_m_od = np.mean(np.log2(sig2[bg_binary,0]+small_num))
+
+		sig2_1log_pk_m_pkn = sig1_1log_pk_m_od
+		sig2_1log_bg_m_pkn = np.mean(np.log2(sig2_norm[bg_binary,0]+small_num))
 
 	###FRiP score
 	sig2_norm_FRiP = np.sum(sig2_norm[(sig2_binary[:,0]!=0),0]) / np.sum(sig2_norm)
@@ -220,10 +212,10 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	idx = np.random.randint(sig2_norm.shape[0], size=sample_num)
 	peak_binary_sample = peak_binary_pk[idx]
 	bg_binary_sample = bg_binary_bg[idx]
-	plot_x = np.log2(sig2_norm[idx,0])
-	plot_y = np.log2(sig1[idx,0])
-	plot_xn = np.log2(sig2[idx,0])
-	plot_yn = np.log2(sig1[idx,0])
+	plot_x = np.log2(sig2_norm[idx,0]+small_num)
+	plot_y = np.log2(sig1[idx,0]+small_num)
+	plot_xn = np.log2(sig2[idx,0]+small_num)
+	plot_yn = np.log2(sig1[idx,0]+small_num)
 	lims_max = np.max(np.concatenate((plot_x, plot_y, plot_xn, plot_yn)))
 	lims_min = np.min(np.concatenate((plot_x, plot_y, plot_xn, plot_yn)))
 
@@ -246,8 +238,8 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	plt.savefig(sig2_output_name + '.pknorm.scatterplot.png')
 
 
-	plot_xn = np.log2(sig2[idx,0])
-	plot_yn = np.log2(sig1[idx,0])
+	plot_xn = np.log2(sig2[idx,0]+small_num)
+	plot_yn = np.log2(sig1[idx,0]+small_num)
 	lims_max = np.max(np.concatenate((plot_x, plot_y, plot_xn, plot_yn)))
 	lims_min = np.min(np.concatenate((plot_x, plot_y, plot_xn, plot_yn)))
 
