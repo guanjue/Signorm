@@ -53,6 +53,7 @@ def p_adjust(pvalue, method):
 ### gradient descent
 def gradientDescent(sig1_pk,sig1_bg, sig2_pk,sig2_bg, A, B, alpha, beta, numIterations):
 	best_loss0 = 1e+10
+	p = 0
 	for i in range(0, numIterations):
 		h_sig2_pk0 = abs(A)*(sig2_pk**B)
 		h_sig2_bg0 = abs(A)*(sig2_bg**B)
@@ -71,7 +72,6 @@ def gradientDescent(sig1_pk,sig1_bg, sig2_pk,sig2_bg, A, B, alpha, beta, numIter
 		#loss_B = abs(np.sqrt(np.mean(h_sig2_pk_B**2)) - np.sqrt(np.mean(sig1_pk)**2+np.var(sig1_pk))) + abs(np.sqrt(np.mean(h_sig2_bg_B**2)) - np.sqrt(np.mean(sig1_bg)**2+np.var(sig1_bg)))
 
 		print(loss0)
-		p = 0
 		if loss0 < best_loss0:
 			best_AB = [A, B]
 			best_loss0 = loss0
