@@ -67,8 +67,8 @@ def gradientDescent(sig1_pk,sig1_bg, sig2_pk,sig2_bg, A, B, alpha, beta, numIter
 		#loss0 = abs(np.sqrt(np.mean(h_sig2_pk0**2)) - np.sqrt(np.mean(sig1_pk)**2+np.var(sig1_pk))) + abs(np.sqrt(np.mean(h_sig2_bg0**2)) - np.sqrt(np.mean(sig1_bg)**2+np.var(sig1_bg)))
 
 		### next step
-		h_sig2_pk_B = (sig2_pk**(2*(B+beta)))
-		h_sig2_bg_B = (sig2_bg**(2*(B+beta)))
+		h_sig2_pk_B = (sig2_pk**(B+beta))
+		h_sig2_bg_B = (sig2_bg**(B+beta))
 		h_sig2_pk0_mean_B = np.mean(h_sig2_pk_B)
 		h_sig2_bg0_mean_B = np.mean(h_sig2_bg_B)
 		loss_B = abs( (h_sig2_pk0_mean_B / h_sig2_bg0_mean_B) - (sig1_pk_mean / sig1_bg_mean) )
@@ -180,7 +180,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 
 
 	### get transformation factor
-	AB = gradientDescent(sig1[peak_binary,0]+small_num,sig1[bg_binary,0]+small_num, sig2[peak_binary,0]+small_num,sig2[bg_binary,0]+small_num, 1.0, 1.0, 0.001, 0.001, 200)
+	AB = gradientDescent(sig1[peak_binary,0]+small_num,sig1[bg_binary,0]+small_num, sig2[peak_binary,0]+small_num,sig2[bg_binary,0]+small_num, 1.0, 1.0, 0.0005, 0.0005, 200)
 	A=AB[0]
 	B=AB[1]
 	print('transformation: '+'B: '+str(B)+'; A: '+str(A))
