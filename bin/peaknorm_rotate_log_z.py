@@ -94,7 +94,7 @@ def gradientDescent(sig1_pk,sig1_bg, sig2_pk,sig2_bg, A, B, alpha, beta, numIter
 		gradientB = - loss0 + loss_B
 		print(gradientB)
 		# update
-		B = B - beta * 10 * gradientB
+		B = B - beta * 5 * gradientB
 		A = sig1_bg_mean / h_sig2_bg0_mean_B
 
 		print([A,B])
