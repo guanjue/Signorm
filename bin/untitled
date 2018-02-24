@@ -50,55 +50,61 @@ def p_adjust(pvalue, method):
 	return p0
 
 ################################################################################################
+### mini batch
+def iterate_minibatches(sig1, sig2, batchsize, shuffle=False):
+	assert sig1.shape[0] == sig2.shape[0]
+	if shuffle:
+		indices = np.arange(sig1.shape[0])
+		np.random.shuffle(indices)
+	for start_idx in range(0, sig1.shape[0] - batchsize + 1, batchsize):
+		if shuffle:
+			excerpt = indices[start_idx:start_idx + batchsize]
+		else:
+			excerpt = slice(start_idx, start_idx + batchsize)
+		yield sig1[excerpt], sig2[excerpt]
+
+################################################################################################
 ### gradient descent
 def gradientDescent(sig1_pk,sig1_bg, sig2_pk,sig2_bg, A, B, alpha, beta, numIterations):
-	best_loss0 = 1e+10
+	best_loss0 = 1000000
 	for i in range(0, numIterations):
 		h_sig2_pk0 = abs(A)*(sig2_pk**B)
 		h_sig2_bg0 = abs(A)*(sig2_bg**B)
-		loss0 = abs(np.mean(h_sig2_pk0) - np.mean(sig1_pk)) + abs(np.mean(h_sig2_bg0) - np.mean(sig1_bg))
+		loss0 = (np.mean(h_sig2_pk0) - np.mean(sig1_pk)) + (np.mean(h_sig2_bg0) - np.mean(sig1_bg)) 
 		#loss0 = abs(np.sqrt(np.mean(h_sig2_pk0**2)) - np.sqrt(np.mean(sig1_pk)**2+np.var(sig1_pk))) + abs(np.sqrt(np.mean(h_sig2_bg0**2)) - np.sqrt(np.mean(sig1_bg)**2+np.var(sig1_bg)))
 
 		### next step
 		h_sig2_pk_A = abs(A+alpha)*(sig2_pk**B)
 		h_sig2_bg_A = abs(A+alpha)*(sig2_bg**B)
-		loss_A = abs(np.mean(h_sig2_pk_A) - np.mean(sig1_pk)) + abs(np.mean(h_sig2_bg_A) - np.mean(sig1_bg))
+		loss_A = (np.mean(h_sig2_pk_A) - np.mean(sig1_pk)) + (np.mean(h_sig2_bg_A) - np.mean(sig1_bg)) 
 		#loss_A = abs(np.sqrt(np.mean(h_sig2_pk_A**2)) - np.sqrt(np.mean(sig1_pk)**2+np.var(sig1_pk))) + abs(np.sqrt(np.mean(h_sig2_bg_A**2)) - np.sqrt(np.mean(sig1_bg)**2+np.var(sig1_bg)))
 
 		h_sig2_pk_B = abs(A)*(sig2_pk**(B+beta))
 		h_sig2_bg_B = abs(A)*(sig2_bg**(B+beta))
-		loss_B = abs(np.mean(h_sig2_pk_B) - np.mean(sig1_pk)) + abs(np.mean(h_sig2_bg_B) - np.mean(sig1_bg))
+		loss_B = (np.mean(h_sig2_pk_B) - np.mean(sig1_pk)) + (np.mean(h_sig2_bg_B) - np.mean(sig1_bg)) 
 		#loss_B = abs(np.sqrt(np.mean(h_sig2_pk_B**2)) - np.sqrt(np.mean(sig1_pk)**2+np.var(sig1_pk))) + abs(np.sqrt(np.mean(h_sig2_bg_B**2)) - np.sqrt(np.mean(sig1_bg)**2+np.var(sig1_bg)))
 
 		print(loss0)
-		p = 0
 		if loss0 < best_loss0:
 			best_AB = [A, B]
-			best_loss0 = loss0
-			p=0
-		else:
-			p = p+1
-			if p > 20:
-				print('opt')
-				break
 		# avg cost per example (the 2 in 2*m doesn't really matter here.
 		# But to be consistent with the gradient, I include it)
 		print("Iteration %d | Cost: %f" % (i, loss0))
-		if loss0 <= 0.0000000001:
+		if cost <= 0.0000000001:
 			print('converged!')
 			break
 		# avg gradient per example
-		gradientA = - loss0 + loss_A
+		gradientA = loss0 - loss_A
 		print(gradientA)
-		gradientB = - loss0 + loss_B
+		gradientB = loss0 - loss_B
 		print(gradientB)
 		# update
 		A = abs(A - alpha * gradientA)
 		B = B - beta * gradientB
-	print('best')
-	print(best_AB)
-	print(best_loss0)
+
+		print(best_AB)
 	return np.array(best_AB)
+
 ################################################################################################
 ###
 def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_list, sig2_wg_raw, upperlim, lowerlim):
@@ -177,7 +183,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 
 
 	### get transformation factor
-	AB = gradientDescent(sig1[peak_binary,0]+small_num,sig1[bg_binary,0]+small_num, sig2[peak_binary,0]+small_num,sig2[bg_binary,0]+small_num, 1.0, 1.0, 0.001, 0.001, 200)
+	AB = gradientDescent(sig1[peak_binary,0]+small_num,sig1[bg_binary,0]+small_num, sig2[peak_binary,0]+small_num,sig2[bg_binary,0]+small_num, 1.0, 1.0, 0.0001, 0.0001, 200)
 	A=AB[0]
 	B=AB[1]
 	print('transformation: '+'B: '+str(B)+'; A: '+str(A))
@@ -324,5 +330,6 @@ def main(argv):
 
 if __name__=="__main__":
 	main(sys.argv[1:])
+
 
 
