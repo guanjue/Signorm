@@ -142,7 +142,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	sig2 = read2d_array(sig2_wg_raw, float)
 
 	### add small_number
-	small_num = 0.1
+	small_num = 1e-5
 
 	### total reads norm
 	print('ref sum')
@@ -188,14 +188,15 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	sig2_norm = []
 	for s in sig2[:,0]:
 		s = s
-		if (s > lowerlim) and (s < upperlim):
-			s_norm = (A*(s+small_num)**B)-small_num
-			if s_norm >= upperlim:
-				s_norm = upperlim
-			elif s_norm <= lowerlim:
-				s_norm = lowerlim
-		elif (s >= upperlim) or (s <= lowerlim):
-			s_norm = s
+		s_norm = (A*(s+small_num)**B)-small_num
+		#if (s > lowerlim) and (s < upperlim):
+		#	s_norm = (A*(s+small_num)**B)-small_num
+		#	if s_norm >= upperlim:
+		#		s_norm = upperlim
+		#	elif s_norm <= lowerlim:
+		#		s_norm = lowerlim
+		#elif (s >= upperlim) or (s <= lowerlim):
+		#	s_norm = s
 		sig2_norm.append(s_norm)
 
 	sig2_norm = np.array(sig2_norm, float)
