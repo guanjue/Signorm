@@ -57,18 +57,23 @@ def gradientDescent(sig1_pk,sig1_bg, sig2_pk,sig2_bg, A, B, alpha, beta, numIter
 	for i in range(0, numIterations):
 		h_sig2_pk0 = abs(A)*(sig2_pk**B)
 		h_sig2_bg0 = abs(A)*(sig2_bg**B)
-		loss0 = abs(np.mean(h_sig2_pk0) - np.mean(sig1_pk)) + abs(np.mean(h_sig2_bg0) - np.mean(sig1_bg))
+		h_sig2_pk0_mean = np.mean(h_sig2_pk0)
+		h_sig2_bg0_mean = np.mean(h_sig2_bg0)
+		sig1_pk_mean = np.mean(sig1_pk)
+		sig1_bg_mean = np.mean(sig1_bg)
+
+		loss0 = abs(h_sig2_pk0_mean - sig1_pk_mean) + abs(h_sig2_bg0_mean - sig1_bg_mean)
 		#loss0 = abs(np.sqrt(np.mean(h_sig2_pk0**2)) - np.sqrt(np.mean(sig1_pk)**2+np.var(sig1_pk))) + abs(np.sqrt(np.mean(h_sig2_bg0**2)) - np.sqrt(np.mean(sig1_bg)**2+np.var(sig1_bg)))
 
 		### next step
 		h_sig2_pk_A = abs(A+alpha)*(sig2_pk**B)
 		h_sig2_bg_A = abs(A+alpha)*(sig2_bg**B)
-		loss_A = abs(np.mean(h_sig2_pk_A) - np.mean(sig1_pk)) + abs(np.mean(h_sig2_bg_A) - np.mean(sig1_bg))
+		loss_A = abs(np.mean(h_sig2_pk_A) - sig1_pk_mean) + abs(np.mean(h_sig2_bg_A) - sig1_bg_mean)
 		#loss_A = abs(np.sqrt(np.mean(h_sig2_pk_A**2)) - np.sqrt(np.mean(sig1_pk)**2+np.var(sig1_pk))) + abs(np.sqrt(np.mean(h_sig2_bg_A**2)) - np.sqrt(np.mean(sig1_bg)**2+np.var(sig1_bg)))
 
 		h_sig2_pk_B = abs(A)*(sig2_pk**(B+beta))
 		h_sig2_bg_B = abs(A)*(sig2_bg**(B+beta))
-		loss_B = abs(np.mean(h_sig2_pk_B) - np.mean(sig1_pk)) + abs(np.mean(h_sig2_bg_B) - np.mean(sig1_bg))
+		loss_B = abs(np.mean(h_sig2_pk_B) - sig1_pk_mean) + abs(np.mean(h_sig2_bg_B) - sig1_bg_mean)
 		#loss_B = abs(np.sqrt(np.mean(h_sig2_pk_B**2)) - np.sqrt(np.mean(sig1_pk)**2+np.var(sig1_pk))) + abs(np.sqrt(np.mean(h_sig2_bg_B**2)) - np.sqrt(np.mean(sig1_bg)**2+np.var(sig1_bg)))
 
 		print(loss0)
@@ -94,7 +99,8 @@ def gradientDescent(sig1_pk,sig1_bg, sig2_pk,sig2_bg, A, B, alpha, beta, numIter
 		print(gradientB)
 		# update
 		A = abs(A - alpha * gradientA)
-		B = B - beta * gradientB
+		B = B - beta * gradientB * (h_sig2_pk0_mean + h_sig2_bg0_mean) / 2
+		print([A,B])
 	print('best')
 	print(best_AB)
 	print(best_loss0)
