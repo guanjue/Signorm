@@ -67,8 +67,8 @@ def iterate_minibatches(sig1, sig2, batchsize, shuffle=False):
 ### gradient descent
 def gradientDescent(sig1_pk,sig1_bg, sig2_pk,sig2_bg, A, B, alpha, beta, numIterations):
 	for i in range(0, numIterations):
-		h_sig2_pk = A*(sig2_pk**B)
-		h_sig2_bg = A*(sig2_bg**B)
+		h_sig2_pk = abs(A)*(sig2_pk**B)
+		h_sig2_bg = abs(A)*(sig2_bg**B)
 		#loss = (np.mean(h_sig2_pk) - np.mean(sig1_pk)) + (np.mean(h_sig2_bg) - np.mean(sig1_bg)) 
 		loss = (np.sqrt(np.mean(h_sig2_pk**2)) - np.sqrt(np.mean(sig1_pk)**2+np.var(sig1_pk))) + (np.sqrt(np.mean(h_sig2_bg**2)) - np.sqrt(np.mean(sig1_bg)**2+np.var(sig1_bg)))
 		print(loss)
@@ -315,6 +315,5 @@ def main(argv):
 
 if __name__=="__main__":
 	main(sys.argv[1:])
-
 
 
