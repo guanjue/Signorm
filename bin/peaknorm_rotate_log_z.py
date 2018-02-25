@@ -61,8 +61,6 @@ def gradientDescent(sig1_pk,sig1_bg, sig2_pk,sig2_bg, A, B, alpha, beta, numIter
 		h_sig2_bg0_mean = np.mean(h_sig2_bg0)
 		sig1_pk_mean = np.mean(sig1_pk**2)
 		sig1_bg_mean = np.mean(sig1_bg**2)
-
-		#loss0 = abs(h_sig2_pk0_mean - sig1_pk_mean) + abs(h_sig2_bg0_mean - sig1_bg_mean)
 		loss0 =abs( (h_sig2_pk0_mean / h_sig2_bg0_mean) - (sig1_pk_mean / sig1_bg_mean) )
 		#loss0 = abs(np.sqrt(np.mean(h_sig2_pk0**2)) - np.sqrt(np.mean(sig1_pk)**2+np.var(sig1_pk))) + abs(np.sqrt(np.mean(h_sig2_bg0**2)) - np.sqrt(np.mean(sig1_bg)**2+np.var(sig1_bg)))
 
@@ -164,14 +162,10 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	for s in sig2[:,0]:
 		s = s
 		s_norm = (A*(s+small_num)**B)-small_num
-		#if (s > lowerlim) and (s < upperlim):
-		#	s_norm = (A*(s+small_num)**B)-small_num
 		if s_norm >= upperlim:
 			s_norm = upperlim
 		elif s_norm <= lowerlim:
 			s_norm = lowerlim
-		#elif (s >= upperlim) or (s <= lowerlim):
-		#	s_norm = s
 		sig2_norm.append(s_norm)
 
 	sig2_norm = np.array(sig2_norm, float)

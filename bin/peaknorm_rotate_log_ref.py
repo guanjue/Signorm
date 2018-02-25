@@ -91,7 +91,7 @@ def gradientDescent(sig1_pk,sig1_bg, sig2_pk,sig2_bg, A, B, alpha, beta, numIter
 			print('converged!')
 			break
 		# avg gradient per example
-		gradientB = - loss0 + loss_B
+		gradientB = (-loss0+loss_B)
 		print(gradientB)
 		# update
 		B = B - 1e-3 * gradientB / abs(gradientB) * abs(loss0)
@@ -165,14 +165,11 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	sig2_norm = []
 	for s in sig2[:,0]:
 		s = s
-		#if (s > lowerlim) and (s < upperlim):
 		s_norm = (A*(s+small_num)**B)-small_num
 		if s_norm >= upperlim:
 			s_norm = upperlim
 		elif s_norm <= lowerlim:
 			s_norm = lowerlim
-		#elif (s >= upperlim) or (s <= lowerlim):
-		#	s_norm = s
 		sig2_norm.append(s_norm)
 
 	sig2_norm = np.array(sig2_norm, float)
@@ -188,14 +185,14 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	sig2_norm = np.reshape(sig2_norm, (sig2_norm.shape[0],1))
 
 	### rotated means for sig2 for plotting
-	sig1_1log_pk_m_od = np.mean(np.log2(sig1[sig1_binary[:,0],0]+small_num))
-	sig2_1log_pk_m_od = np.mean(np.log2(sig2[sig2_binary[:,0],0]+small_num))
+	sig1_1log_pk_m_od = np.log2(np.mean(sig1[sig1_binary[:,0],0]+small_num))
+	sig2_1log_pk_m_od = np.log2(np.mean(sig2[sig2_binary[:,0],0]+small_num))
 
-	sig1_1log_bg_m_od = np.mean(np.log2(sig1[bg1_binary[:,0],0]+small_num))
-	sig2_1log_bg_m_od = np.mean(np.log2(sig2[bg2_binary[:,0],0]+small_num))
+	sig1_1log_bg_m_od = np.log2(np.mean(sig1[bg1_binary[:,0],0]+small_num))
+	sig2_1log_bg_m_od = np.log2(np.mean(sig2[bg2_binary[:,0],0]+small_num))
 
-	sig2_1log_pk_m_pkn = np.mean(np.log2(sig2_norm[sig2_binary[:,0],0]+small_num))
-	sig2_1log_bg_m_pkn = np.mean(np.log2(sig2_norm[bg2_binary[:,0],0]+small_num))
+	sig2_1log_pk_m_pkn = np.log2(np.mean(sig2_norm[sig2_binary[:,0],0]+small_num))
+	sig2_1log_bg_m_pkn = np.log2(np.mean(sig2_norm[bg2_binary[:,0],0]+small_num))
 
 	###FRiP score
 	sig2_norm_FRiP = np.sum(sig2_norm[(sig2_binary[:,0]!=0),0]) / np.sum(sig2_norm)
