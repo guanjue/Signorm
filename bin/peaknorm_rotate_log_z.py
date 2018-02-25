@@ -55,20 +55,20 @@ def gradientDescent(sig1_pk,sig1_bg, sig2_pk,sig2_bg, A, B, alpha, beta, numIter
 	best_loss0 = 1e+10
 	p = 0
 	for i in range(0, numIterations):
-		h_sig2_pk0 = A*sig2_pk**B
-		h_sig2_bg0 = A*sig2_bg**B
+		h_sig2_pk0 = A*(sig2_pk**(2*B))
+		h_sig2_bg0 = A*(sig2_bg**(2*B))
 		h_sig2_pk0_mean = np.mean(h_sig2_pk0)
 		h_sig2_bg0_mean = np.mean(h_sig2_bg0)
-		sig1_pk_mean = np.mean(sig1_pk)
-		sig1_bg_mean = np.mean(sig1_bg)
+		sig1_pk_mean = np.mean(sig1_pk**2)
+		sig1_bg_mean = np.mean(sig1_bg**2)
 
 		#loss0 = abs(h_sig2_pk0_mean - sig1_pk_mean) + abs(h_sig2_bg0_mean - sig1_bg_mean)
 		loss0 =abs( (h_sig2_pk0_mean / h_sig2_bg0_mean) - (sig1_pk_mean / sig1_bg_mean) )
 		#loss0 = abs(np.sqrt(np.mean(h_sig2_pk0**2)) - np.sqrt(np.mean(sig1_pk)**2+np.var(sig1_pk))) + abs(np.sqrt(np.mean(h_sig2_bg0**2)) - np.sqrt(np.mean(sig1_bg)**2+np.var(sig1_bg)))
 
 		### next step
-		h_sig2_pk_B = A*(sig2_pk**(B+beta))
-		h_sig2_bg_B = A*(sig2_bg**(B+beta))
+		h_sig2_pk_B = A*(sig2_pk**(2*(B+beta)))
+		h_sig2_bg_B = A*(sig2_bg**(2*(B+beta)))
 		h_sig2_pk0_mean_B = np.mean(h_sig2_pk_B)
 		h_sig2_bg0_mean_B = np.mean(h_sig2_bg_B)
 		loss_B = abs( (h_sig2_pk0_mean_B / h_sig2_bg0_mean_B) - (sig1_pk_mean / sig1_bg_mean) )
@@ -94,7 +94,7 @@ def gradientDescent(sig1_pk,sig1_bg, sig2_pk,sig2_bg, A, B, alpha, beta, numIter
 		gradientB = - loss0 + loss_B
 		print(gradientB)
 		# update
-		B = B - 1e-3 * gradientB / abs(gradientB) * abs(loss0)
+		B = B - 1e-5 * gradientB / abs(gradientB) * abs(loss0)
 		A = sig1_bg_mean / h_sig2_bg0_mean_B
 
 		print([A,B])
@@ -111,39 +111,13 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 
 	sig1_output_name = sig1_wg_raw.split('.')[0]
 	sig2_output_name = sig2_wg_raw.split('.')[0]
-	######
-	### get sig1 columns
-	sig1_col_id_plus = ''
-	for i in range(0,len(sig1_col_list)-1):
-		sig1_col_id_plus = sig1_col_id_plus + '$' + str(sig1_col_list[i]) + '+'
-	sig1_col_id_plus = sig1_col_id_plus + '$' + str(sig1_col_list[len(sig1_col_list)-1])
-	### get sig1 column
-	#call('tail -n+2 ' + peak_bed + ' | awk -F \'\t\' -v OFS=\'\t\' \'{' + 'if (' + sig1_col_id_plus + ' > 0)' + 'print $1, $2, $3, $4, ' + sig1_col_id_plus + ' }\' > ' + sig1_output_name + '.bed', shell=True)
-	### intersect with wg bed
-	#call('bedtools intersect' + ' -a ' + wg_bed + ' -b ' + sig1_output_name + '.bed' + ' -c' + ' > ' + sig1_output_name + '.wg.bed', shell=True)
-
-	#call('cut -f4 ' + sig1_output_name + '.wg.bed' + ' > ' + sig1_output_name + '.wg.txt', shell=True)
-
-	######
-	### get sig2 columns
-	sig2_col_id_plus = ''
-	for i in range(0,len(sig2_col_list)-1):
-		sig2_col_id_plus = sig2_col_id_plus + '$' + str(sig2_col_list[i]) + '+'
-	sig2_col_id_plus = sig2_col_id_plus + '$' + str(sig2_col_list[len(sig2_col_list)-1])
-
-	### get sig2 column
-	#call('tail -n+2 ' + peak_bed + ' | awk -F \'\t\' -v OFS=\'\t\' \'{' + 'if (' + sig2_col_id_plus + ' > 0)' + 'print $1, $2, $3, $4, ' + sig2_col_id_plus + ' }\' > ' + sig2_output_name + '.bed', shell=True)
-	### intersect with wg bed
-	#call('bedtools intersect' + ' -a ' + wg_bed + ' -b ' + sig2_output_name + '.bed' + ' -c' + ' > ' + sig2_output_name + '.wg.bed', shell=True)
-	### extract binary column
-	#call('cut -f4 ' + sig2_output_name + '.wg.bed' + ' > ' + sig2_output_name + '.wg.txt', shell=True)
 
 	### read whole genome signals
 	sig1 = read2d_array(sig1_wg_raw, float)
 	sig2 = read2d_array(sig2_wg_raw, float)
 
 	### add small_number
-	small_num = 1e-1
+	small_num = 1e-2
 
 	### total reads norm
 	print('ref sum')
