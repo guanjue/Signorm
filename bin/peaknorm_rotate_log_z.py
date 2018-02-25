@@ -76,6 +76,16 @@ def gradientDescent(sig1_pk,sig1_bg, sig2_pk,sig2_bg, A, B, alpha, beta, numIter
 		if loss0 < best_loss0:
 			best_AB = [A, B]
 			best_loss0 = loss0
+			print('pk')
+			print(sig1_pk_mean)
+			print(np.mean(sig2_bg))
+			print(h_sig2_pk0_mean)
+			print(h_sig2_pk0_mean_B)
+			print('bg')
+			print(sig1_bg_mean)
+			print(np.mean(sig2_bg))
+			print(h_sig2_bg0_mean)
+			print(h_sig2_bg0_mean_B)
 			p=0
 		else:
 			p = p+1
