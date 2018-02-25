@@ -50,60 +50,6 @@ def p_adjust(pvalue, method):
 	return p0
 
 ################################################################################################
-### gradient descent
-def gradientDescent(sig1_pk,sig1_bg, sig2_pk,sig2_bg, A, B, alpha, beta, numIterations):
-	best_loss0 = 1e+10
-	p = 0
-	for i in range(0, numIterations):
-		h_sig2_pk0 = sig2_pk**B
-		h_sig2_bg0 = sig2_bg**B
-		h_sig2_pk0_mean = np.mean(h_sig2_pk0)
-		h_sig2_bg0_mean = np.mean(h_sig2_bg0)
-		sig1_pk_mean = np.mean(sig1_pk)
-		sig1_bg_mean = np.mean(sig1_bg)
-
-		#loss0 = abs(h_sig2_pk0_mean - sig1_pk_mean) + abs(h_sig2_bg0_mean - sig1_bg_mean)
-		loss0 =abs( (h_sig2_pk0_mean / h_sig2_bg0_mean) - (sig1_pk_mean / sig1_bg_mean) )
-		#loss0 = abs(np.sqrt(np.mean(h_sig2_pk0**2)) - np.sqrt(np.mean(sig1_pk)**2+np.var(sig1_pk))) + abs(np.sqrt(np.mean(h_sig2_bg0**2)) - np.sqrt(np.mean(sig1_bg)**2+np.var(sig1_bg)))
-
-		### next step
-		h_sig2_pk_B = (sig2_pk**(B+beta))
-		h_sig2_bg_B = (sig2_bg**(B+beta))
-		h_sig2_pk0_mean_B = np.mean(h_sig2_pk_B)
-		h_sig2_bg0_mean_B = np.mean(h_sig2_bg_B)
-		loss_B = abs( (h_sig2_pk0_mean_B / h_sig2_bg0_mean_B) - (sig1_pk_mean / sig1_bg_mean) )
-		#loss_B = abs(np.sqrt(np.mean(h_sig2_pk_B**2)) - np.sqrt(np.mean(sig1_pk)**2+np.var(sig1_pk))) + abs(np.sqrt(np.mean(h_sig2_bg_B**2)) - np.sqrt(np.mean(sig1_bg)**2+np.var(sig1_bg)))
-
-		print(loss0)
-		if loss0 < best_loss0:
-			best_AB = [A, B]
-			best_loss0 = loss0
-			p=0
-		else:
-			p = p+1
-			if p > 20:
-				print('opt')
-				break
-		# avg cost per example (the 2 in 2*m doesn't really matter here.
-		# But to be consistent with the gradient, I include it)
-		print("Iteration %d | Cost: %f" % (i, loss0))
-		if loss0 <= 0.0000000001:
-			print('converged!')
-			break
-		# avg gradient per example
-		gradientB = - loss0 + loss_B
-		print(gradientB)
-		# update
-		B = B - beta * 1000 * gradientB
-		A = sig1_bg_mean / h_sig2_bg0_mean_B
-
-		print([A,B])
-	print('best')
-	print(best_AB)
-	print(best_loss0)
-	return np.array(best_AB)
-
-################################################################################################
 ###
 def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_list, sig2_wg_raw, upperlim, lowerlim):
 	sig1_col_list = sig1_col_list.split(',')
@@ -111,6 +57,34 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 
 	sig1_output_name = sig1_wg_raw.split('.')[0]+'_'+sig1_wg_raw.split('.')[1]
 	sig2_output_name = sig2_wg_raw.split('.')[0]+'_'+sig2_wg_raw.split('.')[1]
+	######
+	### get sig1 columns
+	sig1_col_id_plus = ''
+	for i in range(0,len(sig1_col_list)-1):
+		sig1_col_id_plus = sig1_col_id_plus + '$' + str(sig1_col_list[i]) + '+'
+	sig1_col_id_plus = sig1_col_id_plus + '$' + str(sig1_col_list[len(sig1_col_list)-1])
+	### get sig1 column
+	#call('tail -n+2 ' + peak_bed + ' | awk -F \'\t\' -v OFS=\'\t\' \'{' + 'if (' + sig1_col_id_plus + ' > 0)' + 'print $1, $2, $3, $4, ' + sig1_col_id_plus + ' }\' > ' + sig1_output_name + '.bed', shell=True)
+	### intersect with wg bed
+	#call('bedtools intersect' + ' -a ' + wg_bed + ' -b ' + sig1_output_name + '.bed' + ' -c' + ' > ' + sig1_output_name + '.wg.bed', shell=True)
+
+	#call('cut -f4 ' + sig1_output_name + '.wg.bed' + ' > ' + sig1_output_name + '.wg.txt', shell=True)
+
+	######
+	### get sig2 columns
+	sig2_col_id_plus = ''
+	for i in range(0,len(sig2_col_list)-1):
+		sig2_col_id_plus = sig2_col_id_plus + '$' + str(sig2_col_list[i]) + '+'
+	sig2_col_id_plus = sig2_col_id_plus + '$' + str(sig2_col_list[len(sig2_col_list)-1])
+
+	### get sig2 column
+	#call('tail -n+2 ' + peak_bed + ' | awk -F \'\t\' -v OFS=\'\t\' \'{' + 'if (' + sig2_col_id_plus + ' > 0)' + 'print $1, $2, $3, $4, ' + sig2_col_id_plus + ' }\' > ' + sig2_output_name + '.bed', shell=True)
+	### intersect with wg bed
+	#call('bedtools intersect' + ' -a ' + wg_bed + ' -b ' + sig2_output_name + '.bed' + ' -c' + ' > ' + sig2_output_name + '.wg.bed', shell=True)
+	### extract binary column
+	#call('cut -f4 ' + sig2_output_name + '.wg.bed' + ' > ' + sig2_output_name + '.wg.txt', shell=True)
+
+
 
 	### read whole genome signals
 	sig1 = read2d_array(sig1_wg_raw, float)
@@ -147,18 +121,23 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	### peak region (both != 0 in sig1 & sig2)
 	peak_binary_pk = (sig1_binary[:,0] * sig2_binary[:,0]) != 0
 	print(sum(peak_binary_pk))
-	peak_binary = peak_binary_pk & (sig1[:,0] != sig1[0,0]) & (sig2[:,0] != sig2[0,0]) #& (sig1[:,0] < upperlim) & (sig2[:,0] < upperlim)
+	peak_binary = peak_binary_pk & (sig1[:,0] < upperlim) & (sig2[:,0] < upperlim)
 	print(sum(peak_binary))
 	### background region (both == 0 in sig1 & sig2)
 	bg_binary_bg = (sig1_binary[:,0] + sig2_binary[:,0]) == 0
 	print(sum(bg_binary_bg))
-	bg_binary = bg_binary_bg & (sig1[:,0] != sig1[0,0]) & (sig2[:,0] != sig2[0,0]) #& (sig1[:,0] < upperlim) & (sig2[:,0] < upperlim)
+	bg_binary = bg_binary_bg & (sig1[:,0] < upperlim) & (sig2[:,0] < upperlim)
 	print(sum(bg_binary))
 
 	### get transformation factor
-	AB = gradientDescent(sig1[peak_binary,0]+small_num,sig1[bg_binary,0]+small_num, sig2[peak_binary,0]+small_num,sig2[bg_binary,0]+small_num, 1.0, 1.0, 0.001, 0.001, 200)
-	A=AB[0]
-	B=AB[1]
+	sig1_log_pk_m_od = np.mean(np.log2(sig1[sig1_binary[:,0],0]+small_num))
+	sig2_log_pk_m_od = np.mean(np.log2(sig2[sig2_binary[:,0],0]+small_num))
+
+	sig1_log_bg_m_od = np.mean(np.log2(sig1[bg_binary,0]+small_num))
+	sig2_log_bg_m_od = np.mean(np.log2(sig2[bg_binary,0]+small_num))
+
+	B = (sig1_log_pk_m_od - sig1_log_bg_m_od) /  (sig2_log_pk_m_od - sig2_log_bg_m_od)
+	A = sig1_log_pk_m_od - B * sig2_log_pk_m_od
 
 	print('transformation: '+'B: '+str(B)+'; A: '+str(A))
 	### transformation
