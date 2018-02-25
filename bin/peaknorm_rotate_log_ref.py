@@ -156,7 +156,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	print(sum(bg_binary))
 
 	### get transformation factor
-	AB = gradientDescent(sig1[sig1_binary,0]+small_num,sig1[bg_binary,0]+small_num, sig2[sig2_binary,0]+small_num,sig2[bg_binary,0]+small_num, 1.0, 1.0, 0.0001, 0.0001, 200)
+	AB = gradientDescent(sig1[sig1_binary[:,0],0]+small_num,sig1[bg_binary,0]+small_num, sig2[sig2_binary[:,0],0]+small_num,sig2[bg_binary,0]+small_num, 1.0, 1.0, 0.0001, 0.0001, 200)
 	A=AB[0]
 	B=AB[1]
 
