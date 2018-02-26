@@ -5,8 +5,6 @@ from subprocess import call
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-import scipy.stats as stats
-
 ################################################################################################
 ### read 2d array
 def read2d_array(filename,dtype_used):
@@ -56,42 +54,28 @@ def p_adjust(pvalue, method):
 def gradientDescent(sig1_pk,sig1_bg, sig2_pk,sig2_bg, A, B, alpha, beta, numIterations):
 	best_loss0 = 1e+10
 	p = 0
-	sig1_pk_mean = np.mean(sig1_pk**2)
-	sig1_bg_mean = np.mean(sig1_bg**2)
-	h_sig2_pk0 = (sig2_pk**(2*B))
-	h_sig2_bg0 = (sig2_bg**(2*B))
-	h_sig2_pk0_mean = np.mean(h_sig2_pk0)
-	h_sig2_bg0_mean = np.mean(h_sig2_bg0)
-
+	sig1_pk_mean = np.mean(sig1_pk**1)
+	sig1_bg_mean = np.mean(sig1_bg**1)
 	for i in range(0, numIterations):
-
-		fb = sig1_pk_mean * h_sig2_bg0_mean - sig1_bg_mean * h_sig2_pk0_mean
-
-		### next step
-		h_sig2_pk_B = (sig2_pk**(2*(B+beta)))
-		h_sig2_bg_B = (sig2_bg**(2*(B+beta)))
-		h_sig2_pk0_mean_B = np.mean(h_sig2_pk_B)
-		h_sig2_bg0_mean_B = np.mean(h_sig2_bg_B)
-
-		dfb = (sig1_pk_mean * h_sig2_bg0_mean_B - sig1_bg_mean * h_sig2_pk0_mean_B) / beta
-
-		B = B - fb / dfb
-
-		h_sig2_pk0 = (sig2_pk**(2*B))
-		h_sig2_bg0 = (sig2_bg**(2*B))
+		h_sig2_pk0 = (sig2_pk**(1*B))
+		h_sig2_bg0 = (sig2_bg**(1*B))
 		h_sig2_pk0_mean = np.mean(h_sig2_pk0)
 		h_sig2_bg0_mean = np.mean(h_sig2_bg0)
+		loss0 =abs( (h_sig2_pk0_mean / h_sig2_bg0_mean) - (sig1_pk_mean / sig1_bg_mean) )
+		#loss0 = abs(np.sqrt(np.mean(h_sig2_pk0**2)) - np.sqrt(np.mean(sig1_pk)**2+np.var(sig1_pk))) + abs(np.sqrt(np.mean(h_sig2_bg0**2)) - np.sqrt(np.mean(sig1_bg)**2+np.var(sig1_bg)))
 
-		A = sig1_bg_mean / h_sig2_bg0_mean
+		### next step
+		h_sig2_pk_B = (sig2_pk**(1*(B+beta)))
+		h_sig2_bg_B = (sig2_bg**(1*(B+beta)))
+		h_sig2_pk0_mean_B = np.mean(h_sig2_pk_B)
+		h_sig2_bg0_mean_B = np.mean(h_sig2_bg_B)
+		loss_B = abs( (h_sig2_pk0_mean_B / h_sig2_bg0_mean_B) - (sig1_pk_mean / sig1_bg_mean) )
+		#loss_B = abs(np.sqrt(np.mean(h_sig2_pk_B**2)) - np.sqrt(np.mean(sig1_pk)**2+np.var(sig1_pk))) + abs(np.sqrt(np.mean(h_sig2_bg_B**2)) - np.sqrt(np.mean(sig1_bg)**2+np.var(sig1_bg)))
 
-		print("Iteration %d | dFB: %f" % (i, dfb))
-		print([A,B])
-
-		last_AB = [A, B]
-
-		if fb / dfb < 1e-5:
-			print('converged!')
+		print(loss0)
+		if loss0 < best_loss0:
 			best_AB = [A, B]
+			best_loss0 = loss0
 			print('pk')
 			print(sig1_pk_mean)
 			print(np.mean(sig2_bg))
@@ -102,11 +86,26 @@ def gradientDescent(sig1_pk,sig1_bg, sig2_pk,sig2_bg, A, B, alpha, beta, numIter
 			print(np.mean(sig2_bg))
 			print(h_sig2_bg0_mean)
 			print(h_sig2_bg0_mean_B)
+			p=0
+		else:
+			p = p+1
+			if p > 20:
+				print('opt')
+				break
+		# avg cost per example (the 2 in 2*m doesn't really matter here.
+		# But to be consistent with the gradient, I include it)
+		print("Iteration %d | Cost: %f" % (i, loss0))
+		if loss0 <= 0.0000000001:
+			print('converged!')
 			break
+		# avg gradient per example
+		gradientB = - loss0 + loss_B
+		print(gradientB)
+		# update
+		B = B - 1e-3 * gradientB / abs(gradientB) * abs(loss0)
+		A = sig1_bg_mean / h_sig2_bg0_mean_B
 
-	if fb / dfb >= 1e-5:
-		best_AB = last_AB
-
+		print([A,B])
 	print('best')
 	print(best_AB)
 	print(best_loss0)
@@ -143,14 +142,10 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 
 	### read whole genome binary label
 	#sig1_binary = p_adjust(10**(-sig1), 'fdr') < 0.05
-	#sig1_binary = 10**(-sig1) <= 0.001
-	sig1_z_p = stats.norm.cdf((sig1 - np.mean(sig1))/ np.std(sig1))
-	sig1_binary = p_adjust(sig1_z_p, 'fdr') < 0.05
+	sig1_binary = 10**(-sig1) <= 0.001
 	print(sum(sig1_binary))
 	#sig2_binary = p_adjust(10**(-sig2), 'fdr') < 0.05
-	#sig2_binary = 10**(-sig2) <= 0.001
-	sig2_z_p = stats.norm.cdf((sig2 - np.mean(sig1))/ np.std(sig2))
-	sig2_binary = p_adjust(sig2_z_p, 'fdr') < 0.05
+	sig2_binary = 10**(-sig2) <= 0.001
 	print(sum(sig2_binary))
 
 	### peak region (both != 0 in sig1 & sig2)
