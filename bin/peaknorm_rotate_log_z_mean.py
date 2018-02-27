@@ -142,7 +142,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 
 
 	### get transformation factor
-	AB = NewtonRaphsonMethod(sig1[peak_binary,0],sig1[bg_binary,0], sig2[peak_binary,0],sig2[bg_binary,0], 1.0, 2.0, 2, 0.0001, 200)
+	AB = NewtonRaphsonMethod(sig1[peak_binary,0],sig1[bg_binary,0], sig2[peak_binary,0],sig2[bg_binary,0], 1.0, 2.0, 1, 0.0001, 200)
 	A=AB[0]
 	B=AB[1]
 	print('transformation: '+'B: '+str(B)+'; A: '+str(A))
