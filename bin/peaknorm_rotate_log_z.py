@@ -96,7 +96,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	sig2_output_name = sig2_wg_raw.split('.')[0]
 
 	### add small_number
-	small_num = 1e-2
+	small_num = 1e-1
 
 	### read whole genome signals
 	sig1 = read2d_array(sig1_wg_raw, float) + small_num
