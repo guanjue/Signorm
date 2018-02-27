@@ -113,7 +113,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	if sum(sig1_binary)[0] <= 1e4:
 		sig1_thresh = np.sort(sig1, axis=None)[-10000]
 		print('rank sig1')
-		sig1_binary = sig1 >= sig1_thresh
+		sig1_binary = sig1 > sig1_thresh
 
 	print(sum(sig1_binary))
 
@@ -123,7 +123,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	if sum(sig2_binary)[0] <= 1e4:
 		sig2_thresh = np.sort(sig2, axis=None)[-10000]
 		print('rank sig2')
-		sig2_binary = sig2 >= sig2_thresh
+		sig2_binary = sig2 > sig2_thresh
 
 	print(sum(sig2_binary))
 
