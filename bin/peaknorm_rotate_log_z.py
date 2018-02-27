@@ -70,7 +70,7 @@ def NewtonRaphsonMethod(sig1_pk,sig1_bg, sig2_pk,sig2_bg, A,B, moment, converge_
 
 		last_AB = [A, B]
 
-		if fb / dfb < converge_thresh:
+		if abs(fb / dfb) < converge_thresh:
 			print('converged!')
 			used_AB = [A, B]
 			print('pk')
@@ -81,7 +81,7 @@ def NewtonRaphsonMethod(sig1_pk,sig1_bg, sig2_pk,sig2_bg, A,B, moment, converge_
 			print(np.mean(sig2_bg))
 			break
 
-	if fb / dfb >= converge_thresh:
+	if abs(fb / dfb) >= converge_thresh:
 		print('NOT converged...')
 		used_AB = last_AB
 
@@ -109,36 +109,36 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	### read whole genome binary label
 	sig1_z_p_fdr = p_adjust(1 - norm.cdf((sig1 - np.mean(sig1))/ np.std(sig1)), 'fdr')
 	sig1_binary = sig1_z_p_fdr < 0.05
-
-	if np.sum(sig1_binary) <= 1e4:
+	sig1_pk_num = np.sum(sig1_binary)
+	if sig1_pk_num <= 1e4:
 		sig1_thresh = np.sort(sig1, axis=None)[-10000]
 		print('rank sig1')
 		sig1_binary = sig1 > sig1_thresh
 
-	print(np.sum(sig1_binary))
+	print(sig1_pk_num)
 
 	sig2_z_p_fdr = p_adjust(1 - norm.cdf((sig2 - np.mean(sig2))/ np.std(sig2)), 'fdr')
 	sig2_binary = sig2_z_p_fdr < 0.05
-
-	if np.sum(sig2_binary) <= 1e4:
+	sig2_pk_num = np.sum(sig2_binary)
+	if sig2_pk_num <= 1e4:
 		sig2_thresh = np.sort(sig2, axis=None)[-10000]
 		print('rank sig2')
 		sig2_binary = sig2 > sig2_thresh
 
-	print(np.sum(sig2_binary))
+	print(sig2_pk_num)
 
 	### peak region (both != 0 in sig1 & sig2)
-	peak_binary_pk = (sig1_binary[:,0] * sig2_binary[:,0]) != 0
-	print(sum(peak_binary_pk))
+	peak_binary_pk = (sig1_binary[:,0] & sig2_binary[:,0])
+	print(np.sum(peak_binary_pk))
 	peak_binary = peak_binary_pk & (sig1[:,0] != sig1[0,0]) & (sig2[:,0] != sig2[0,0]) 
 	print(np.max(sig1[:,0]))
-	print(sum(peak_binary))
+	print(np.sum(peak_binary))
 
 	### background region (both == 0 in sig1 & sig2)
-	bg_binary_bg = (sig1_binary[:,0] + sig2_binary[:,0]) == 0
-	print(sum(bg_binary_bg))
+	bg_binary_bg = ~(sig1_binary[:,0] | sig2_binary[:,0])
+	print(np.sum(bg_binary_bg))
 	bg_binary = bg_binary_bg & (sig1[:,0] != sig1[0,0]) & (sig2[:,0] != sig2[0,0]) 
-	print(sum(bg_binary))
+	print(np.sum(bg_binary))
 
 
 	### get transformation factor
