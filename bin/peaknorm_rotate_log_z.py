@@ -151,10 +151,10 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	for s in sig2[:,0]:
 		s = s
 		s_norm = (A* s**B)
-		#if s_norm >= upperlim:
-		#	s_norm = upperlim
-		#elif s_norm <= lowerlim:
-		#	s_norm = lowerlim
+		if s_norm >= upperlim:
+			s_norm = upperlim
+		elif s_norm <= lowerlim:
+			s_norm = lowerlim
 		sig2_norm.append(s_norm)
 
 	### total reads sf (for compare)
