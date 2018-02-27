@@ -110,7 +110,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	sig1_z_p_fdr = p_adjust(1 - norm.cdf((sig1 - np.mean(sig1))/ np.std(sig1)), 'fdr')
 	sig1_binary = sig1_z_p_fdr < 0.05
 
-	if np.sum(sig1_binary)[0] <= 1e4:
+	if np.sum(sig1_binary) <= 1e4:
 		sig1_thresh = np.sort(sig1, axis=None)[-10000]
 		print('rank sig1')
 		sig1_binary = sig1 > sig1_thresh
@@ -120,7 +120,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	sig2_z_p_fdr = p_adjust(1 - norm.cdf((sig2 - np.mean(sig2))/ np.std(sig2)), 'fdr')
 	sig2_binary = sig2_z_p_fdr < 0.05
 
-	if np.sum(sig2_binary)[0] <= 1e4:
+	if np.sum(sig2_binary) <= 1e4:
 		sig2_thresh = np.sort(sig2, axis=None)[-10000]
 		print('rank sig2')
 		sig2_binary = sig2 > sig2_thresh
