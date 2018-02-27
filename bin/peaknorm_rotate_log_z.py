@@ -112,6 +112,8 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 
 	if sum(sig1_binary)[0] <= 1e4:
 		sig1_thresh = np.sort(sig1, axis=None)[-10000]
+		print(np.sort(sig1, axis=None))
+		print(sig1_thresh)
 		print('rank sig1')
 		sig1_binary = sig1 > sig1_thresh
 
