@@ -108,19 +108,22 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	
 	### read whole genome binary label
 	sig1_z_p = norm.cdf((sig1 - np.mean(sig1))/ np.std(sig1))
-	sig1_binary = p_adjust(sig1_z_p, 'fdr') < 0.05
+	print(sig1_z_p)
+	sig1_binary = p_adjust(sig1_z_p[:,0], 'fdr') < 0.05
+	print(p_adjust(sig1_z_p, 'fdr'))
+	print(sig1_binary)
 
 	if sum(sig1_binary)[0] <= 1e4:
 		sig1_thresh = np.sort(sig1, axis=None)[-10000]
-		print(np.sort(sig1, axis=None))
-		print(sig1_thresh)
+		#print(np.sort(sig1, axis=None))
+		#print(sig1_thresh)
 		print('rank sig1')
 		sig1_binary = sig1 > sig1_thresh
 
 	print(sum(sig1_binary))
 
 	sig2_z_p = norm.cdf((sig2 - np.mean(sig2))/ np.std(sig2))
-	sig2_binary = p_adjust(sig2_z_p, 'fdr') < 0.05
+	sig2_binary = p_adjust(sig2_z_p[:,0], 'fdr') < 0.05
 
 	if sum(sig2_binary)[0] <= 1e4:
 		sig2_thresh = np.sort(sig2, axis=None)[-10000]
