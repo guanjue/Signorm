@@ -119,7 +119,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	#	bg1_binary = sig1 <= sig1_thresh
 	sig1_binary = 10**(-sig1+small_num) <= 0.001
 	bg1_binary = 10**(-sig1+small_num) > 0.001
-	print(sig1_pk_num)
+	#print(sig1_pk_num)
 
 	#sig2_z_p_fdr = p_adjust(1 - norm.cdf((sig2 - np.mean(sig2))/ np.std(sig2)), 'fdr')
 	#sig2_binary = sig2_z_p_fdr < 0.05
@@ -133,7 +133,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	#	bg2_binary = sig2 <= sig2_thresh
 	sig2_binary = 10**(-sig2+small_num) <= 0.001
 	bg2_binary = 10**(-sig2+small_num) > 0.001
-	print(sig2_pk_num)
+	#print(sig2_pk_num)
 
 	### peak region (both != 0 in sig1 & sig2)
 	peak_binary_pk = (sig1_binary[:,0] & sig2_binary[:,0])
