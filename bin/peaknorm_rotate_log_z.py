@@ -52,7 +52,7 @@ def p_adjust(pvalue, method):
 	return p0
 
 ################################################################################################
-### Newton–Raphson method
+### NewtonRaphsonMethod
 def NewtonRaphsonMethod(sig1_pk,sig1_bg, sig2_pk,sig2_bg, A,B, moment, converge_thresh, numIterations):
 	sig1_pk_mean = np.mean(sig1_pk**moment)
 	sig1_bg_mean = np.mean(sig1_bg**moment)
