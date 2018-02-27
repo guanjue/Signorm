@@ -59,7 +59,7 @@ def NewtonRaphsonMethod(sig1_pk,sig1_bg, sig2_pk,sig2_bg, A,B, moment, converge_
 
 	for i in range(0, numIterations):
 		fb = sig1_bg_mean * np.mean(sig2_pk**(moment*B)) - sig1_pk_mean * np.mean(sig2_bg**(moment*B))
-		dfb = sig1_bg_mean * np.mean(np.log(sig2_pk) * sig2_pk**(moment*B)) - sig1_pk_mean * np.mean(np.log(sig2_bg) * sig2_bg**(moment*B))
+		dfb = moment * sig1_bg_mean * np.mean(np.log(sig2_pk) * sig2_pk**(moment*B)) - moment * sig1_pk_mean * np.mean(np.log(sig2_bg) * sig2_bg**(moment*B))
 
 		### next step
 		B = B - fb / dfb	
@@ -142,7 +142,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 
 
 	### get transformation factor
-	AB = NewtonRaphsonMethod(sig1[peak_binary,0],sig1[bg_binary,0], sig2[peak_binary,0],sig2[bg_binary,0], 1.0, 1.0, 2, 0.0001, 200)
+	AB = NewtonRaphsonMethod(sig1[peak_binary,0],sig1[bg_binary,0], sig2[peak_binary,0],sig2[bg_binary,0], 1.0, 2.0, 2, 0.0001, 200)
 	A=AB[0]
 	B=AB[1]
 	print('transformation: '+'B: '+str(B)+'; A: '+str(A))
