@@ -99,8 +99,8 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	small_num = 1e-1
 
 	### read whole genome signals
-	sig1 = read2d_array(sig1_wg_raw, float) + small_num
-	sig2 = read2d_array(sig2_wg_raw, float) + small_num
+	sig1 = read2d_array(sig1_wg_raw, float)
+	sig2 = read2d_array(sig2_wg_raw, float)
 
 	### total reads norm
 	if sig1_output_name == sig2_output_name:
@@ -114,7 +114,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	#	sig1_thresh = np.sort(sig1, axis=None)[-10000]
 	#	print('rank sig1')
 	#	sig1_binary = sig1 > sig1_thresh
-	sig1_binary = 10**(-sig1+small_num) <= 0.001
+	sig1_binary = 10**(-sig1) <= 0.001
 	#print(sig1_pk_num)
 
 	#sig2_z_p_fdr = p_adjust(1 - norm.cdf((sig2 - np.mean(sig2))/ np.std(sig2)), 'fdr')
@@ -124,7 +124,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	#	sig2_thresh = np.sort(sig2, axis=None)[-10000]
 	#	print('rank sig2')
 	#	sig2_binary = sig2 > sig2_thresh
-	sig2_binary = 10**(-sig2+small_num) <= 0.001
+	sig2_binary = 10**(-sig2) <= 0.001
 	#print(sig2_pk_num)
 
 	### peak region (both != 0 in sig1 & sig2)
@@ -142,7 +142,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 
 
 	### get transformation factor
-	AB = NewtonRaphsonMethod(sig1[peak_binary,0],sig1[bg_binary,0], sig2[peak_binary,0],sig2[bg_binary,0], 1.0, 2.0, 1, 0.0001, 200)
+	AB = NewtonRaphsonMethod(sig1[peak_binary,0]+small_num,sig1[bg_binary,0]+small_num, sig2[peak_binary,0]+small_num,sig2[bg_binary,0]+small_num, 1.0, 2.0, 1, 0.0001, 200)
 	A=AB[0]
 	B=AB[1]
 	print('transformation: '+'B: '+str(B)+'; A: '+str(A))
@@ -150,7 +150,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	sig2_norm = []
 	for s in sig2[:,0]:
 		s = s
-		s_norm = (A* s**B)
+		s_norm = (A* (s+small_num)**B) - small_num
 		if s_norm >= upperlim:
 			s_norm = upperlim
 		elif s_norm <= lowerlim:
@@ -169,14 +169,14 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	sig2_norm = np.reshape(sig2_norm, (sig2_norm.shape[0],1))
 
 	### rotated means for sig2 for plotting
-	sig1_1log_pk_m_od = np.log2(np.mean(sig1[peak_binary,0]))
-	sig2_1log_pk_m_od = np.log2(np.mean(sig2[peak_binary,0]))
+	sig1_1log_pk_m_od = np.log2(np.mean(sig1[peak_binary,0])+small_num)
+	sig2_1log_pk_m_od = np.log2(np.mean(sig2[peak_binary,0])+small_num)
 
-	sig1_1log_bg_m_od = np.log2(np.mean(sig1[bg_binary,0]))
-	sig2_1log_bg_m_od = np.log2(np.mean(sig2[bg_binary,0]))
+	sig1_1log_bg_m_od = np.log2(np.mean(sig1[bg_binary,0])+small_num)
+	sig2_1log_bg_m_od = np.log2(np.mean(sig2[bg_binary,0])+small_num)
 
-	sig2_1log_pk_m_pkn = np.log2(np.mean(sig2_norm[peak_binary,0]))
-	sig2_1log_bg_m_pkn = np.log2(np.mean(sig2_norm[bg_binary,0]))
+	sig2_1log_pk_m_pkn = np.log2(np.mean(sig2_norm[peak_binary,0])+small_num)
+	sig2_1log_bg_m_pkn = np.log2(np.mean(sig2_norm[bg_binary,0])+small_num)
 
 	###FRiP score
 	sig2_norm_FRiP = np.sum(sig2_norm[(sig2_binary[:,0]!=0),0]) / np.sum(sig2_norm)
@@ -196,10 +196,10 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	idx = np.random.randint(sig2_norm.shape[0], size=sample_num)
 	peak_binary_sample = peak_binary_pk[idx]
 	bg_binary_sample = bg_binary_bg[idx]
-	plot_x = np.log2(sig2_norm[idx,0])
-	plot_y = np.log2(sig1[idx,0])
-	plot_xn = np.log2(sig2[idx,0])
-	plot_yn = np.log2(sig1[idx,0])
+	plot_x = np.log2(sig2_norm[idx,0]+small_num)
+	plot_y = np.log2(sig1[idx,0]+small_num)
+	plot_xn = np.log2(sig2[idx,0]+small_num)
+	plot_yn = np.log2(sig1[idx,0]+small_num)
 	lims_max = np.max(np.concatenate((plot_x, plot_y, plot_xn, plot_yn)))
 	lims_min = np.min(np.concatenate((plot_x, plot_y, plot_xn, plot_yn)))
 
@@ -223,8 +223,8 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	plt.savefig(sig2_output_name + '.pknorm.scatterplot.png')
 
 
-	plot_xn = np.log2(sig2[idx,0])
-	plot_yn = np.log2(sig1[idx,0])
+	plot_xn = np.log2(sig2[idx,0]+small_num)
+	plot_yn = np.log2(sig1[idx,0]+small_num)
 	lims_max = np.max(np.concatenate((plot_x, plot_y, plot_xn, plot_yn)))
 	lims_min = np.min(np.concatenate((plot_x, plot_y, plot_xn, plot_yn)))
 
