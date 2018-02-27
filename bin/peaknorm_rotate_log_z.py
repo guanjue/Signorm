@@ -5,7 +5,7 @@ from subprocess import call
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-from scipy.stats as norm
+from scipy.stats import norm
 
 ################################################################################################
 ### read 2d array
