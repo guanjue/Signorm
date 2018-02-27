@@ -107,24 +107,24 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 		sig2 = sig1
 	
 	### read whole genome binary label
-	sig1_z_p_fdr = p_adjust(1 - norm.cdf((sig1 - np.mean(sig1))/ np.std(sig1)), 'fdr')
-	sig1_binary = sig1_z_p_fdr < 0.05
-	sig1_pk_num = np.sum(sig1_binary)
-	if sig1_pk_num <= 1e4:
-		sig1_thresh = np.sort(sig1, axis=None)[-10000]
-		print('rank sig1')
-		sig1_binary = sig1 > sig1_thresh
-
+	#sig1_z_p_fdr = p_adjust(1 - norm.cdf((sig1 - np.mean(sig1))/ np.std(sig1)), 'fdr')
+	#sig1_binary = sig1_z_p_fdr < 0.05
+	#sig1_pk_num = np.sum(sig1_binary)
+	#if sig1_pk_num <= 1e4:
+	#	sig1_thresh = np.sort(sig1, axis=None)[-10000]
+	#	print('rank sig1')
+	#	sig1_binary = sig1 > sig1_thresh
+	sig1_binary = 10**(-sig1+small_num) <= 0.001
 	print(sig1_pk_num)
 
-	sig2_z_p_fdr = p_adjust(1 - norm.cdf((sig2 - np.mean(sig2))/ np.std(sig2)), 'fdr')
-	sig2_binary = sig2_z_p_fdr < 0.05
-	sig2_pk_num = np.sum(sig2_binary)
-	if sig2_pk_num <= 1e4:
-		sig2_thresh = np.sort(sig2, axis=None)[-10000]
-		print('rank sig2')
-		sig2_binary = sig2 > sig2_thresh
-
+	#sig2_z_p_fdr = p_adjust(1 - norm.cdf((sig2 - np.mean(sig2))/ np.std(sig2)), 'fdr')
+	#sig2_binary = sig2_z_p_fdr < 0.05
+	#sig2_pk_num = np.sum(sig2_binary)
+	#if sig2_pk_num <= 1e4:
+	#	sig2_thresh = np.sort(sig2, axis=None)[-10000]
+	#	print('rank sig2')
+	#	sig2_binary = sig2 > sig2_thresh
+	sig2_binary = 10**(-sig2+small_num) <= 0.001
 	print(sig2_pk_num)
 
 	### peak region (both != 0 in sig1 & sig2)
@@ -142,7 +142,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 
 
 	### get transformation factor
-	AB = NewtonRaphsonMethod(sig1[peak_binary,0],sig1[bg_binary,0], sig2[peak_binary,0],sig2[bg_binary,0], 1.0, 2.0, 2, 0.0001, 200)
+	AB = NewtonRaphsonMethod(sig1[peak_binary,0],sig1[bg_binary,0], sig2[peak_binary,0],sig2[bg_binary,0], 1.0, 2.0, 1, 0.0001, 200)
 	A=AB[0]
 	B=AB[1]
 	print('transformation: '+'B: '+str(B)+'; A: '+str(A))
