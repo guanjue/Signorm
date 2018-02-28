@@ -247,7 +247,7 @@ def main(argv):
 		elif opt=="-m":
 			moment=int(arg.strip())
 		elif opt=="-i":
-			B_i=float(arg.strip())
+			B_init=float(arg.strip())
 		elif opt=="-s":
 			sample_num=int(arg.strip())		
 		elif opt=="-n":
