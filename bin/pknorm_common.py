@@ -84,7 +84,7 @@ def NewtonRaphsonMethod(sig1_pk,sig1_bg, sig2_pk,sig2_bg, A,B, moment, converge_
 
 ################################################################################################
 ### PKnorm
-def pknorm(sig1_wg_raw, sig2_wg_raw, sample_num, small_num, rank_lim):
+def pknorm(sig1_wg_raw, sig2_wg_raw, moment, B_init, sample_num, small_num, rank_lim):
 	sig1_output_name = sig1_wg_raw.split('.')[0]
 	sig2_output_name = sig2_wg_raw.split('.')[0]
 
@@ -131,7 +131,7 @@ def pknorm(sig1_wg_raw, sig2_wg_raw, sample_num, small_num, rank_lim):
 
 
 	### get transformation factor
-	AB = NewtonRaphsonMethod(sig1[peak_binary,0]+small_num,sig1[bg_binary,0]+small_num, sig2[peak_binary,0]+small_num,sig2[bg_binary,0]+small_num, 1.0, 2.0, 1, 0.0001, 200)
+	AB = NewtonRaphsonMethod(sig1[peak_binary,0]+small_num,sig1[bg_binary,0]+small_num, sig2[peak_binary,0]+small_num,sig2[bg_binary,0]+small_num, 1.0, 2.0, moment, 0.0001, 200)
 	A=AB[0]
 	B=AB[1]
 	print('transformation: '+'B: '+str(B)+'; A: '+str(A))
@@ -232,18 +232,22 @@ import getopt
 import sys
 def main(argv):
 	try:
-		opts, args = getopt.getopt(argv,"hr:t:s:n:l:")
+		opts, args = getopt.getopt(argv,"hr:t:m:i:s:n:l:")
 	except getopt.GetoptError:
-		print 'time python pknorm_common.py -r ref.txt -t target.txt -s plotpoints_num -n add_small_num -l rank_lim'
+		print 'time python pknorm_common.py -r ref.txt -t target.txt -m moment -i initial_B -s plotpoints_num -n add_small_num -l rank_lim'
 		sys.exit(2)
 
 	for opt,arg in opts:
 		if opt=="-h":
-			print 'time python pknorm_common.py -r ref.txt -t target.txt -s plotpoints_num -n add_small_num -l rank_lim'		
+			print 'time python pknorm_common.py -r ref.txt -t target.txt -m moment -i initial_B -s plotpoints_num -n add_small_num -l rank_lim'		
 		elif opt=="-r":
 			sig1_wg_raw=str(arg.strip())				
 		elif opt=="-t":
 			sig2_wg_raw=str(arg.strip())
+		elif opt=="-m":
+			moment=int(arg.strip())
+		elif opt=="-i":
+			B_i=float(arg.strip())
 		elif opt=="-s":
 			sample_num=int(arg.strip())		
 		elif opt=="-n":
@@ -251,7 +255,7 @@ def main(argv):
 		elif opt=="-l":
 			rank_lim=int(arg.strip())
 
-	pknorm(sig1_wg_raw, sig2_wg_raw, sample_num, small_num, rank_lim)
+	pknorm(sig1_wg_raw, sig2_wg_raw, moment, B_init, sample_num, small_num, rank_lim)
 
 if __name__=="__main__":
 	main(sys.argv[1:])
