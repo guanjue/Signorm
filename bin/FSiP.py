@@ -2,9 +2,7 @@
 import os
 import numpy as np
 from subprocess import call
-import matplotlib
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt
+
 ################################################################################################
 ### read 2d array
 def read2d_array(filename,dtype_used):
