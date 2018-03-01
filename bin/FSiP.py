@@ -44,16 +44,16 @@ def FSiP(wg_bed, peak_bed, sig2_col_list, sig2_wg_raw):
 
 	### get sig2 column
 	print('get sig2 column...')
-	call('tail -n+2 ' + peak_bed + ' | awk -F \'\t\' -v OFS=\'\t\' \'{' + 'if (' + sig2_col_id_plus + ' > 0)' + 'print $1, $2, $3, $4, ' + sig2_col_id_plus + ' }\' > ' + sig2_output_name + '.bed', shell=True)
+	call('tail -n+2 ' + peak_bed + ' | awk -F \'\t\' -v OFS=\'\t\' \'{' + 'if (' + sig2_col_id_plus + ' > 0)' + 'print $1, $2, $3, $4, ' + sig2_col_id_plus + ' }\' > ' + sig2_output_name + '.pk.bed', shell=True)
 	### intersect with wg bed
-	call('bedtools map' + ' -a ' + sig2_output_name + '.bed' + ' -b ' + wg_bed + ' -c 5 -o sum' + ' > ' + sig2_output_name + '.pk.bed', shell=True)
+	call('bedtools map' + ' -a ' + sig2_output_name + '.pk.bed' + ' -b ' + wg_bed + ' -c 5 -o sum -null 0' + ' > ' + sig2_output_name + '.pk.sig.bed', shell=True)
 
 	### read table
 	wg_table = read2d_array(wg_bed, str)
 	wg_sig = wg_table[:,4].astype(float)
 
-	pk_table = read2d_array(sig2_output_name + '.pk.bed', str)
-	pk_sig = pk_table[:,4].astype(float)
+	pk_table = read2d_array(sig2_output_name + '.pk.sig.bed', str)
+	pk_sig = pk_table[:,5].astype(float)
 
 	pk_region_len = np.sum(pk_table[:,2].astype(float) - pk_table[:,1].astype(float))
 	pk_num = pk_sig.shape[0]
