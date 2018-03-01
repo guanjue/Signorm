@@ -67,7 +67,7 @@ def FSiP(wg_bed, peak_bed, sig2_col_list, sig2_wg_raw):
 	print('wg signal: ' + str(wg_sig_sum))
 	print('FSiP: ' + str(FSiP))
 
-	write2d_array([FSiP, pk_sig_sum, wg_sig_sum, pk_region_len, pk_num], sig2_output_name+'.info.txt')
+	write2d_array(np.array([[FSiP, pk_sig_sum, wg_sig_sum, pk_region_len, pk_num]]), sig2_output_name+'.info.txt')
 
 	#call('rm ' + sig2_output_name + '.bed', shell=True)
 	#call('rm ' + sig2_output_name + '.pk.bed', shell=True)
