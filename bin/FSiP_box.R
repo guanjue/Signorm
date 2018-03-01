@@ -3,7 +3,8 @@ args = commandArgs(trailingOnly=TRUE)
 info_list1 = args[1]
 info_list2 = args[2]
 info_list3 = args[3]
-outputname = args[4]
+info_list3 = args[4]
+outputname = args[5]
 
 info_list_files1 = read.table(info_list1, header = F)
 info_list_files2 = read.table(info_list2, header = F)
