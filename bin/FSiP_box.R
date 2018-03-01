@@ -53,7 +53,7 @@ axis(2)
 axis(1, at=c(1: length(cell_type)),labels=cell_type, las=2)
 points(sig2_fsip, pch=20, col='blue')
 points(sig3_fsip, pch=20, col='orange')
-for (i in c(1:length(sig2_norm_fsip))){
+for (i in c(1:length(sig1_fsip))){
 	x_tmp = i
 	ymin = min(c(sig1_fsip[i], sig2_fsip[i], sig3_fsip[i]))
 	ymax = max(c(sig1_fsip[i], sig2_fsip[i], sig3_fsip[i]))
