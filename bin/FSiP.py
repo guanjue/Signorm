@@ -58,7 +58,8 @@ def FSiP(wg_bed, peak_bed, sig2_col_list, sig2_wg_raw):
 	print(np.sum(wg_sig))
 	print(np.sum(pk_sig))
 
-
+	call('rm ' + sig2_output_name + '.bed', shell=True)
+	call('rm ' + sig2_output_name + '.pk.bed', shell=True)
 ############################################################################
 #time python /Volumes/MAC_Data/data/labs/zhang_lab/01projects/signorm/bin/peaknorm_order.py -w 200_noblack.11_22_2017.bed -p atacTable180124peaksFiltered.txt -n 100000 -a $sig1_col -b $sig1'.upperlim.txt' -c $sig2_col -d $sig2'.upperlim.txt' -u 32
 
