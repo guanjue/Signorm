@@ -5,6 +5,7 @@ info_list2 = args[2]
 info_list3 = args[3]
 info_list4 = args[4]
 outputname = args[5]
+ref_ct = args[6]
 
 info_list_files1 = read.table(info_list1, header = F)
 info_list_files2 = read.table(info_list2, header = F)
@@ -29,6 +30,9 @@ for (i in c(1:dim(info_list_files1)[1])){
 	### cell type
 	filename[i] = unlist(strsplit(toString(info_list_files1[i,1]), "[/]"))[2]
 	cell_type[i] = unlist(strsplit(toString(filename[i]), "[.]"))[1]
+	if (cell_type[i] == ref_ct){
+		ref_fsip = sig1_fsip[i]
+	}
 }
 
 for (i in c(1:dim(info_list_files2)[1])){
@@ -64,6 +68,7 @@ axis(1, at=c(1: length(cell_type)),labels=cell_type, las=2)
 points(sig2_fsip, pch=20, col='blue')
 points(sig3_fsip, pch=20, col='green')
 points(sig4_fsip, pch=20, col='orange')
+abline(h=ref_fsip, col='blue', lwd=1.5)
 
 for (i in c(1:length(sig1_fsip))){
 	x_tmp = i
@@ -78,6 +83,7 @@ dev.off()
 FSiP = cbind(sig1_fsip, sig2_fsip, sig3_fsip, sig4_fsip)
 pdf(paste(outputname, '.FSiP.box.pdf', sep=''))
 boxplot(FSiP, ylim=c(0,1), range = 1.5)
+abline(h=ref_fsip, col='blue', lwd=1.5)
 dev.off()
 
 
