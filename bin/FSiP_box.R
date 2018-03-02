@@ -44,7 +44,7 @@ for (i in c(1:dim(info_list_files2)[1])){
 	filename[i] = unlist(strsplit(toString(info_list_files1[i,1]), "[/]"))[2]
 	cell_type[i] = unlist(strsplit(toString(filename[i]), "[.]"))[1]
 	if (cell_type[i] == ref_ct){
-		ref_fsip = sig1_fsip[i]
+		ref_fsip = sig2_fsip[i]
 	}
 }
 
