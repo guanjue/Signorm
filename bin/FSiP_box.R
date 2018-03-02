@@ -21,12 +21,6 @@ for (i in c(1:dim(info_list_files1)[1])){
 	info = read.table(toString(info_list_files1[i,1]), header = F)
 	### FSiP vector
 	sig1_fsip[i] = info[1,1]
-	### cell type
-	filename[i] = unlist(strsplit(toString(info_list_files1[i,1]), "[/]"))[2]
-	cell_type[i] = unlist(strsplit(toString(filename[i]), "[.]"))[1]
-	if (cell_type[i] == ref_ct){
-		ref_fsip = sig1_fsip[i]
-	}
 }
 
 for (i in c(1:dim(info_list_files2)[1])){
@@ -34,6 +28,12 @@ for (i in c(1:dim(info_list_files2)[1])){
 	info = read.table(toString(info_list_files2[i,1]), header = F)
 	### FSiP vector
 	sig2_fsip[i] = info[1,1]
+	### cell type
+	filename[i] = unlist(strsplit(toString(info_list_files1[i,1]), "[/]"))[2]
+	cell_type[i] = unlist(strsplit(toString(filename[i]), "[.]"))[1]
+	if (cell_type[i] == ref_ct){
+		ref_fsip = sig1_fsip[i]
+	}
 }
 
 
