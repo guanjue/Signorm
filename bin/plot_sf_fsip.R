@@ -74,7 +74,7 @@ dev.off()
 FSiP = cbind(sig2_fsip, sig2_norm_fsip)
 pdf(paste(outputname, '.FSiP.box.pdf', sep=''))
 boxplot(FSiP, ylim=c(ymin_FSiP, ymax_FSiP))
-lines(sig1_fsip, pch=20, col='blue', lwd=1.5, lty=2)
+abline(h=sig1_fsip, pch=20, col='blue', lwd=1.5, lty=2)
 dev.off()
 
 
