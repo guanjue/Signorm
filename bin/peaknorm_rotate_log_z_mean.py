@@ -165,6 +165,10 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	### convert to float np.array
 	sig2_norm = np.array(sig2_norm, float)
 	sig2_norm_totalmean = np.mean(sig2_norm[(sig1[:,0] != sig1[0,0]) & (sig2[:,0] != sig2[0,0])])
+	print('total means: ')
+	print(sig1_totalmean)
+	print(sig2_totalmean)
+	print(sig2_norm_totalmean)
 	### reshape for writing oputput
 	sig2_norm = np.reshape(sig2_norm, (sig2_norm.shape[0],1))
 
