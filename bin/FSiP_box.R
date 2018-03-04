@@ -38,8 +38,8 @@ for (i in c(1:dim(info_list_files2)[1])){
 
 
 ######### plot boxplot for FSiP
-ymin_FSiP = min(c(sig1_fsip, sig2_fsip))-0.1
-ymax_FSiP = max(c(sig1_fsip, sig2_fsip))+0.1
+ymin_FSiP = min(c(sig1_fsip, sig2_fsip))-0.3
+ymax_FSiP = max(c(sig1_fsip, sig2_fsip))+0.3
 
 pdf(paste(outputname, '.FSiP.pdf', sep=''))
 plot(sig1_fsip, pch=20, col='black', ylim=c(ymin_FSiP, ymax_FSiP), axes=FALSE, xlab='')
@@ -60,7 +60,7 @@ dev.off()
 ######### plot FSiP factor plot
 FSiP = cbind(sig1_fsip, sig2_fsip)
 pdf(paste(outputname, '.FSiP.box.pdf', sep=''))
-boxplot(FSiP, ylim=c(0,1), range = 1.5)
+boxplot(FSiP, ylim=c(ymin_FSiP, ymax_FSiP), range = 1.5)
 abline(h=ref_fsip, col='blue', lwd=1.5, lty=2)
 dev.off()
 
