@@ -52,8 +52,8 @@ for (i in c(1:length(totalreads_sf))){
 }
 dev.off()
 
-ymin_FSiP = min(c(sig2_fsip, sig2_norm_fsip, sig1_fsip))-0.1
-ymax_FSiP = max(c(sig2_fsip, sig2_norm_fsip, sig1_fsip))+0.1
+ymin_FSiP = min(c(sig2_fsip, sig2_norm_fsip, sig1_fsip))-0.2
+ymax_FSiP = max(c(sig2_fsip, sig2_norm_fsip, sig1_fsip))+0.2
 
 pdf(paste(outputname, '.FSiP.pdf', sep=''))
 plot(sig2_fsip, pch=20, col='black', ylim=c(ymin_FSiP, ymax_FSiP), axes=FALSE, xlab='')
@@ -73,7 +73,8 @@ dev.off()
 ######### plot FSiP factor plot
 FSiP = cbind(sig2_fsip, sig2_norm_fsip)
 pdf(paste(outputname, '.FSiP.box.pdf', sep=''))
-boxplot(FSiP, ylim=c(0,1))
+boxplot(FSiP, ylim=c(ymin_FSiP, ymax_FSiP))
+lines(sig1_fsip, pch=20, col='blue')
 dev.off()
 
 
