@@ -158,13 +158,13 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 		sig2_norm.append(s_norm)
 
 	### total reads sf (for compare)
-	sig1_totalmean = np.mean(sig1)
-	sig2_totalmean = np.mean(sig2)
+	sig1_totalmean = np.mean(sig1[(sig1[:,0] != sig1[0,0]) & (sig2[:,0] != sig2[0,0]),0])
+	sig2_totalmean = np.mean(sig2[(sig1[:,0] != sig1[0,0]) & (sig2[:,0] != sig2[0,0]),0])
 	total_mean_sf = sig1_totalmean / sig2_totalmean
 
 	### convert to float np.array
 	sig2_norm = np.array(sig2_norm, float)
-	sig2_norm_totalmean = np.mean(sig2_norm)
+	sig2_norm_totalmean = np.mean(sig2_norm[(sig1[:,0] != sig1[0,0]) & (sig2[:,0] != sig2[0,0]),0])
 	### reshape for writing oputput
 	sig2_norm = np.reshape(sig2_norm, (sig2_norm.shape[0],1))
 
