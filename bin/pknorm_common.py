@@ -84,7 +84,7 @@ def NewtonRaphsonMethod(sig1_pk,sig1_bg, sig2_pk,sig2_bg, A,B, moment, converge_
 
 ################################################################################################
 ### PKnorm
-def pknorm(sig1_wg_raw, sig2_wg_raw, moment, B_init, sample_num, small_num, rank_lim):
+def pknorm(sig1_wg_raw, sig2_wg_raw, moment, B_init, sample_num, small_num, rank_lim, upperlim, lowerlim):
 	sig1_output_name = sig1_wg_raw.split('.')[0]
 	sig2_output_name = sig2_wg_raw.split('.')[0]
 
@@ -139,6 +139,10 @@ def pknorm(sig1_wg_raw, sig2_wg_raw, moment, B_init, sample_num, small_num, rank
 	sig2_norm = []
 	for s in sig2[:,0]:
 		s_norm = (A* (s+small_num)**B) - small_num
+		if s_norm > upperlim:
+			s_norm = upperlim
+		elif s_norm < lowerlim:
+			s_norm = lowerlim
 		sig2_norm.append(s_norm)
 
 	### total reads sf (for compare)
@@ -232,14 +236,14 @@ import getopt
 import sys
 def main(argv):
 	try:
-		opts, args = getopt.getopt(argv,"hr:t:m:i:s:n:l:")
+		opts, args = getopt.getopt(argv,"hr:t:m:i:s:n:l:a:b:")
 	except getopt.GetoptError:
-		print 'time python pknorm_common.py -r ref.txt -t target.txt -m moment -i initial_B -s plotpoints_num -n add_small_num -l rank_lim'
+		print 'time python pknorm_common.py -r ref.txt -t target.txt -m moment -i initial_B -s plotpoints_num -n add_small_num -l rank_lim -a upperlimit -b lowerlimit'
 		sys.exit(2)
 
 	for opt,arg in opts:
 		if opt=="-h":
-			print 'time python pknorm_common.py -r ref.txt -t target.txt -m moment -i initial_B -s plotpoints_num -n add_small_num -l rank_lim'		
+			print 'time python pknorm_common.py -r ref.txt -t target.txt -m moment -i initial_B -s plotpoints_num -n add_small_num -l rank_lim -a upperlimit -b lowerlimit'		
 		elif opt=="-r":
 			sig1_wg_raw=str(arg.strip())				
 		elif opt=="-t":
@@ -254,8 +258,13 @@ def main(argv):
 			small_num=float(arg.strip())
 		elif opt=="-l":
 			rank_lim=int(arg.strip())
+		elif opt=="-a":
+			upperlim=float(arg.strip())
+		elif opt=="-b":
+			lowerlim=float(arg.strip())
 
-	pknorm(sig1_wg_raw, sig2_wg_raw, moment, B_init, sample_num, small_num, rank_lim)
+
+	pknorm(sig1_wg_raw, sig2_wg_raw, moment, B_init, sample_num, small_num, rank_lim, upperlim, lowerlim)
 
 if __name__=="__main__":
 	main(sys.argv[1:])
