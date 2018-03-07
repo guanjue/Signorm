@@ -76,9 +76,9 @@ state_transition_matrix = np.array(state_transition_matrix, dtype=float)
 
 write2d_array(state_transition_matrix, 'state_transition_matrix.txt')
 
-svm = seaborn.clustermap(state_transition_matrix)
-figure = svm.get_figure() 
-figure.savefig('state_transition_matrix.png')
+fig, ax = plt.subplots(figsize=(10,10))  
+seaborn.clustermap(state_transition_matrix, annot=True, linewidths=.5, ax=ax)
+fig.savefig('state_transition_matrix.png')
 
 
 
