@@ -65,7 +65,10 @@ for i in range(0,state_freq[0].shape[0]):
 		exp_i = state_freq[1][i]
 		exp_j = state_freq[1][j]
 		exp = exp_i * exp_j / allnum
-		fc = (counts+100) / (exp+100)
+		if i != j:
+			fc = (counts+100) / (exp+100)
+		else:
+			fc = 1
 		state_transition_i.append(fc)
 	state_transition_matrix.append(state_transition_i) 
 
