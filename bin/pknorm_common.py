@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-from scipy.stats import norm
+from scipy.stats import norm, nbinom
 
 ################################################################################################
 ### read 2d array
@@ -83,6 +83,20 @@ def NewtonRaphsonMethod(sig1_pk,sig1_bg, sig2_pk,sig2_bg, A,B, moment, converge_
 	return np.array(used_AB)
 
 ################################################################################################
+### Negative binomial p-value
+def nb_cpf(signal_vec):
+	sig_mean = np.mean(signal_vec)
+	sig_var = np.var(signal_vec)
+	sig_prob = sig_mean / sig_var
+	if sig_prob < 0.1:
+		sig_prob = 0.1
+	elif sig_prob > 0.9:
+		sig_prob = 0.9
+	sig_size = sig_mean * sig_prob / (1-sig_prob)
+	nbp = 1-nbinom.cdf(signal_vec, sig_size, sig_prob)
+	return nbp
+
+################################################################################################
 ### PKnorm
 def pknorm(sig1_wg_raw, sig2_wg_raw, moment, B_init, fdr_thresh, sample_num, small_num, rank_lim, upperlim, lowerlim):
 	sig1_output_name = sig1_wg_raw.split('.')[0]
@@ -92,8 +106,13 @@ def pknorm(sig1_wg_raw, sig2_wg_raw, moment, B_init, fdr_thresh, sample_num, sma
 	sig1 = read2d_array(sig1_wg_raw, float)
 	sig2 = read2d_array(sig2_wg_raw, float)
 	
+	p_method = 'nb'
 	### read whole genome binary label
-	sig1_z_p_fdr = p_adjust(1 - norm.cdf((sig1 - np.mean(sig1))/ np.std(sig1)), 'fdr')
+	if p_method == 'nb':
+		sig1_z_p_fdr = p_adjust(nb_cpf(sig1), 'fdr')
+	elif p_method == 'z':
+		sig1_z_p_fdr = p_adjust(1 - norm.cdf((sig1 - np.mean(sig1))/ np.std(sig1)), 'fdr')
+
 	sig1_binary = sig1_z_p_fdr < fdr_thresh
 	sig1_pk_num = np.sum(sig1_binary)
 
@@ -105,7 +124,11 @@ def pknorm(sig1_wg_raw, sig2_wg_raw, moment, B_init, fdr_thresh, sample_num, sma
 
 	print(sig1_pk_num)
 
-	sig2_z_p_fdr = p_adjust(1 - norm.cdf((sig2 - np.mean(sig2))/ np.std(sig2)), 'fdr')
+	if p_method == 'nb':
+		sig2_z_p_fdr = p_adjust(nb_cpf(sig2), 'fdr')
+	elif p_method == 'z':
+		sig2_z_p_fdr = p_adjust(1 - norm.cdf((sig2 - np.mean(sig2))/ np.std(sig2)), 'fdr')
+
 	sig2_binary = sig2_z_p_fdr < fdr_thresh
 	sig2_pk_num = np.sum(sig2_binary)
 
