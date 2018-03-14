@@ -91,10 +91,6 @@ def pknorm(sig1_wg_raw, sig2_wg_raw, moment, B_init, sample_num, small_num, rank
 	### read whole genome signals
 	sig1 = read2d_array(sig1_wg_raw, float)
 	sig2 = read2d_array(sig2_wg_raw, float)
-
-	### total reads norm
-	if sig1_output_name == sig2_output_name:
-		sig2 = sig1
 	
 	### read whole genome binary label
 	sig1_z_p_fdr = p_adjust(1 - norm.cdf((sig1 - np.mean(sig1))/ np.std(sig1)), 'fdr')
