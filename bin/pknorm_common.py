@@ -252,9 +252,9 @@ def main(argv):
 			moment=int(arg.strip())
 		elif opt=="-i":
 			B_init=float(arg.strip())
-		elif opt=="-s":
-			sample_num=int(arg.strip())		
 		elif opt=="-n":
+			sample_num=int(arg.strip())		
+		elif opt=="-s":
 			small_num=float(arg.strip())
 		elif opt=="-l":
 			rank_lim=int(arg.strip())
