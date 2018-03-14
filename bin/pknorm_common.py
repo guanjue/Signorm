@@ -84,7 +84,7 @@ def NewtonRaphsonMethod(sig1_pk,sig1_bg, sig2_pk,sig2_bg, A,B, moment, converge_
 
 ################################################################################################
 ### PKnorm
-def pknorm(sig1_wg_raw, sig2_wg_raw, moment, B_init, sample_num, small_num, rank_lim, upperlim, lowerlim):
+def pknorm(sig1_wg_raw, sig2_wg_raw, moment, B_init, fdr_thresh, sample_num, small_num, rank_lim, upperlim, lowerlim):
 	sig1_output_name = sig1_wg_raw.split('.')[0]
 	sig2_output_name = sig2_wg_raw.split('.')[0]
 
@@ -94,7 +94,7 @@ def pknorm(sig1_wg_raw, sig2_wg_raw, moment, B_init, sample_num, small_num, rank
 	
 	### read whole genome binary label
 	sig1_z_p_fdr = p_adjust(1 - norm.cdf((sig1 - np.mean(sig1))/ np.std(sig1)), 'fdr')
-	sig1_binary = sig1_z_p_fdr < 0.05
+	sig1_binary = sig1_z_p_fdr < fdr_thresh
 	sig1_pk_num = np.sum(sig1_binary)
 
 	### if pk number < 10000 then use rank for sig2
@@ -106,7 +106,7 @@ def pknorm(sig1_wg_raw, sig2_wg_raw, moment, B_init, sample_num, small_num, rank
 	print(sig1_pk_num)
 
 	sig2_z_p_fdr = p_adjust(1 - norm.cdf((sig2 - np.mean(sig2))/ np.std(sig2)), 'fdr')
-	sig2_binary = sig2_z_p_fdr < 0.05
+	sig2_binary = sig2_z_p_fdr < fdr_thresh
 	sig2_pk_num = np.sum(sig2_binary)
 
 	### if pk number < 10000 then use rank for sig2
@@ -232,14 +232,14 @@ import getopt
 import sys
 def main(argv):
 	try:
-		opts, args = getopt.getopt(argv,"hr:t:m:i:s:n:l:a:b:")
+		opts, args = getopt.getopt(argv,"hr:t:m:i:f:s:n:l:a:b:")
 	except getopt.GetoptError:
-		print 'time python pknorm_common.py -r ref.txt -t target.txt -m moment -i initial_B -s plotpoints_num -n add_small_num -l rank_lim -a upperlimit -b lowerlimit'
+		print 'time python pknorm_common.py -r ref.txt -t target.txt -m moment -i initial_B -f fdrthresh -n plotpoints_num -s add_small_num -l rank_lim -a upperlimit -b lowerlimit'
 		sys.exit(2)
 
 	for opt,arg in opts:
 		if opt=="-h":
-			print 'time python pknorm_common.py -r ref.txt -t target.txt -m moment -i initial_B -s plotpoints_num -n add_small_num -l rank_lim -a upperlimit -b lowerlimit'		
+			print 'time python pknorm_common.py -r ref.txt -t target.txt -m moment -i initial_B -f fdrthresh -n plotpoints_num -s add_small_num -l rank_lim -a upperlimit -b lowerlimit'		
 		elif opt=="-r":
 			sig1_wg_raw=str(arg.strip())				
 		elif opt=="-t":
@@ -248,6 +248,8 @@ def main(argv):
 			moment=int(arg.strip())
 		elif opt=="-i":
 			B_init=float(arg.strip())
+		elif opt=="-f":
+			fdr_thresh=float(arg.strip())
 		elif opt=="-n":
 			sample_num=int(arg.strip())		
 		elif opt=="-s":
@@ -260,7 +262,7 @@ def main(argv):
 			lowerlim=float(arg.strip())
 
 
-	pknorm(sig1_wg_raw, sig2_wg_raw, moment, B_init, sample_num, small_num, rank_lim, upperlim, lowerlim)
+	pknorm(sig1_wg_raw, sig2_wg_raw, moment, B_init, fdr_thresh, sample_num, small_num, rank_lim, upperlim, lowerlim)
 
 if __name__=="__main__":
 	main(sys.argv[1:])
