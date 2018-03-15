@@ -111,6 +111,8 @@ def pknorm(sig1_wg_raw, sig2_wg_raw, moment, B_init, fdr_thresh, sample_num, sma
 	if p_method == 'nb':
 		sig1_p = read2d_array(sig1_wg_raw + '.nbp.txt', float)
 		sig1_z_p_fdr = p_adjust(sig1_p, 'fdr')
+	elif p_method == 'nb_in':
+		sig1_z_p_fdr = p_adjust(nb_cpf(sig1), 'fdr')
 	elif p_method == 'z':
 		sig1_z_p_fdr = p_adjust(1 - norm.cdf((sig1 - np.mean(sig1))/ np.std(sig1)), 'fdr')
 
@@ -129,6 +131,8 @@ def pknorm(sig1_wg_raw, sig2_wg_raw, moment, B_init, fdr_thresh, sample_num, sma
 	if p_method == 'nb':
 		sig2_p = read2d_array(sig2_wg_raw + '.nbp.txt', float)
 		sig2_z_p_fdr = p_adjust(sig2_p, 'fdr')
+	elif p_method == 'nb_in':
+		sig2_z_p_fdr = p_adjust(nb_cpf(sig2), 'fdr')
 	elif p_method == 'z':
 		sig2_z_p_fdr = p_adjust(1 - norm.cdf((sig2 - np.mean(sig2))/ np.std(sig2)), 'fdr')
 
