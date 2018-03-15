@@ -106,7 +106,7 @@ def pknorm(sig1_wg_raw, sig2_wg_raw, moment, B_init, fdr_thresh, sample_num, sma
 	sig1 = read2d_array(sig1_wg_raw, float)
 	sig2 = read2d_array(sig2_wg_raw, float)
 	
-	p_method = 'z'
+	p_method = 'nb'
 	### read whole genome binary label
 	if p_method == 'nb':
 		sig1_p = read2d_array(sig1_wg_raw + '.nbp.txt', float)
