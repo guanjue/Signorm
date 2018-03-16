@@ -128,7 +128,7 @@ def pknorm(sig1_wg_raw, sig2_wg_raw, moment, B_init, fdr_thresh, sample_num, sma
 
 	print(sig1_pk_num)
 
-	if p_method == 'z':
+	if p_method == 'nb':
 		sig2_p = read2d_array(sig2_wg_raw + '.nbp.txt', float)
 		sig2_z_p_fdr = p_adjust(sig2_p, 'fdr')
 	elif p_method == 'nb_in':
