@@ -119,7 +119,7 @@ def pknorm(sig1_wg_raw, sig2_wg_raw, moment, B_init, fdr_thresh, sample_num, sma
 		sig1_z_p_fdr = p_adjust(1 - norm.cdf((sig1 - np.mean(sig1))/ np.std(sig1)), 'fdr')
 		sig1_binary = sig1_z_p_fdr < fdr_thresh
 	elif p_method == 'ncis':
-		sig1_binary = (sig1 < fdr_thresh) & (sig2 < fdr_thresh)
+		sig1_binary = (sig1[:,0] < fdr_thresh) & (sig2[:,0] < fdr_thresh)
 
 
 	sig1_pk_num = np.sum(sig1_binary)
@@ -144,7 +144,7 @@ def pknorm(sig1_wg_raw, sig2_wg_raw, moment, B_init, fdr_thresh, sample_num, sma
 		sig2_z_p_fdr = p_adjust(1 - norm.cdf((sig2 - np.mean(sig2))/ np.std(sig2)), 'fdr')
 		sig2_binary = sig2_z_p_fdr < fdr_thresh
 	elif p_method == 'ncis':
-		sig2_binary = (sig1 < fdr_thresh) & (sig2 < fdr_thresh)
+		sig2_binary = (sig1[:,0] < fdr_thresh) & (sig2[:,0] < fdr_thresh)
 
 	
 	sig2_pk_num = np.sum(sig2_binary)
