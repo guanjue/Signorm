@@ -18,11 +18,11 @@ sig2 = read.table(input_sig2,header=FALSE)
 sig1_binary = 10**(-sig1) <= 0.01
 sig2_binary = 10**(-sig2) <= 0.01
 
-peak_binary_pk = as.logical(sig1_binary[:,0] * sig2_binary[:,0]) 
-peak_binary = peak_binary_pk & (sig1[:,0] != sig1[0,0]) & (sig2[:,0] != sig2[0,0]) 
+peak_binary_pk = as.logical(sig1_binary * sig2_binary) 
+peak_binary = peak_binary_pk & (sig1 != sig1[0]) & (sig2 != sig2[0]) 
 
-bg_binary_bg = as.logical((sig1_binary[:,0] + sig2_binary[:,0])==0)
-bg_binary = bg_binary_bg & (sig1[:,0] != sig1[0,0]) & (sig2[:,0] != sig2[0,0]) 
+bg_binary_bg = as.logical((sig1_binary + sig2_binary)==0)
+bg_binary = bg_binary_bg & (sig1 != sig1[0]) & (sig2 != sig2[0]) 
 
 common_peak_count_read1 = sig1[peak_binary,0]+small_num
 common_peak_count_read2 = sig2[peak_binary,0]+small_num
