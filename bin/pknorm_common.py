@@ -171,6 +171,8 @@ def pknorm(sig1_wg_raw, sig2_wg_raw, moment, B_init, fdr_thresh, sample_num, sma
 			s_norm = lowerlim
 		sig2_norm.append(s_norm)
 
+	sig1[sig1>upperlim] = upperlim
+	sig1[sig1<lowerlim] = lowerlim
 	### total reads sf (for compare)
 	sig1_totalmean = np.mean(sig1)
 	sig2_totalmean = np.mean(sig2)
