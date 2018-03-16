@@ -33,7 +33,7 @@ common_peak_count_read2 = sig2[peak_binary]+small_num
 
 
 M<-log2((common_peak_count_read2+small_num)/(common_peak_count_read1+small_num))
-A<-0.5*log2((common_peak_count_read1+small_num)*(common_peak_count_read2+small_num))
+A<-0.5*log2((common_peak_count_read2+small_num)*(common_peak_count_read1+small_num))
 M <- as.matrix(M)
 A <- as.matrix(A)
 
@@ -52,7 +52,7 @@ log2_peak_count_read1 <- log2(common_peak_count_read1 + small_num)
 log2_peak_count_read2 <- log2(common_peak_count_read2 + small_num)
 log2_peak_count_read2_rescaled <- (2-b[2])*log2_peak_count_read2/(2+b[2]) - 2*b[1]/(2+b[2]);
 M_rescaled <- (log2_peak_count_read2_rescaled - log2_peak_count_read1);
-A_rescaled <- (log2_peak_count_read1_rescaled + log2_peak_count_read2)/2;
+A_rescaled <- (log2_peak_count_read2_rescaled + log2_peak_count_read1)/2;
 
 png(paste(output,".MAplot_after_rescaling.png", sep=''))
 #ma.plot(A_rescaled,M_rescaled,cex=1,main=paste(dataname," MA plot after rescaling (all peaks)",sep=""))
