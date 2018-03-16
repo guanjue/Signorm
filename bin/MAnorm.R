@@ -6,6 +6,11 @@ library(affy)
 cat('test\n')
 #common_peak_count_read1<-read.table(input_sig1,header=FALSE)
 #common_peak_count_read2<-read.table(input_sig2,header=FALSE)
+### get parameters
+args = commandArgs(trailingOnly=TRUE)
+input_sig1 = args[1]
+input_sig2 = args[2]
+output = args[3]
 
 sig1 = read.table(input_sig1,header=FALSE)
 sig2 = read.table(input_sig2,header=FALSE)
