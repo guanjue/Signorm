@@ -67,7 +67,7 @@ log2_allregion_count_read2_rescaled <- (2-b[2])*log2_allregion_count_read2/(2+b[
 sig2_rescale = 2^log2_allregion_count_read2_rescaled - small_num
 
 set.seed(2018)
-sample_id = sample(nrow(sig2_rescale), random_sample_num)
+sample_id = sample(length(sig2_rescale), random_sample_num)
 png(paste(output,".scatterplot_before_rescaling.png", sep=''))
 plot(log2_allregion_count_read1[sample_id], log2_allregion_count_read2[sample_id], col = 'blue')
 points(log2_allregion_count_read1[sample_id][peak_binary[sample_id]], log2_allregion_count_read2[sample_id][peak_binary[sample_id]], col='orange')
