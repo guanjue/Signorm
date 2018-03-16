@@ -126,6 +126,7 @@ def pknorm(sig1_wg_raw, sig2_wg_raw, moment, B_init, fdr_thresh, sample_num, sma
 		print('rank sig1')
 		sig1_binary = sig1 > sig1_thresh
 
+	print(sum(sig1_binary))
 	print(sig1_pk_num)
 
 	if p_method == 'nb':
@@ -145,6 +146,7 @@ def pknorm(sig1_wg_raw, sig2_wg_raw, moment, B_init, fdr_thresh, sample_num, sma
 		print('rank sig2')
 		sig2_binary = sig2 > sig2_thresh
 
+	print(sum(sig2_binary))
 	print(sig2_pk_num)
 
 	### peak region (both != 0 in sig1 & sig2)
