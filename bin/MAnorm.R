@@ -88,5 +88,5 @@ sig2_FRiP = sum(sig2[peak_binary]) / sum(sig2)
 info = rbind(c(sum(sig2)/sum(sig1), b[1], b[2]), c(sig1_FRiP, sig2_rescale_FRiP, sig2_FRiP))
 
 write.table(info, paste(output, '.MA.norm.info.txt', sep=''))
-write.table(sig1_rescale, paste(output,".MAnorm.txt", sep=''),sep="\t",quote=FALSE,row.names=FALSE,col.names=FALSE)
+write.table(sig2_rescale, paste(output,".MAnorm.txt", sep=''),sep="\t",quote=FALSE,row.names=FALSE,col.names=FALSE)
 
