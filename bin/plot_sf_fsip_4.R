@@ -20,7 +20,7 @@ sig2_totalsignorm_fsip = c()
 ### cell type
 cell_type = c()
 
-for ( in c(1:dim(info_list_files)[1])){
+for ( i in c(1:dim(info_list_files)[1])){
 	print(info_list_files[i,1])
 	info = read.table(toString(info_list_files[i,1]), header = F)
 	### sf vector
