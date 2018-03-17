@@ -14,6 +14,8 @@ output = args[3]
 
 small_num = 0.01
 random_sample_num = 50000
+upperlim = 100
+lowerlim = 0
 
 sig1 = scan(input_sig1)
 sig2 = scan(input_sig2)
@@ -52,7 +54,7 @@ A_rescaled <- (log2_peak_count_read2_rescaled + log2_peak_count_read1)/2;
 
 ylim = max(c(abs(min(M)), abs(max(M)), abs(min(M_rescaled)), abs(max(M_rescaled))))
 
-png(paste(output,".MAplot_before_rescaling.png", sep=''))
+png(paste(output,".MAplot_before_rescaling.png", sep=''), width = 4, height = 4, units = 'in', res = 300)
 #ma.plot(A,M,cex=1,main=paste(dataname," MA plot before rescaling (common peaks)",sep=""))
 plot(A,M,main="MA plot before rescaling (common peaks)", ylim=c(-ylim, ylim), pch=16, cex=1)
 abline(h=0,col="red",lwd=3)
@@ -60,7 +62,7 @@ abline(b,col="dodgerblue",lwd=3, lty=2)
 dev.off()
 
 
-png(paste(output,".MAplot_after_rescaling.png", sep=''))
+png(paste(output,".MAplot_after_rescaling.png", sep=''), width = 4, height = 4, units = 'in', res = 300)
 #ma.plot(A_rescaled,M_rescaled,cex=1,main=paste(dataname," MA plot after rescaling (all peaks)",sep=""))
 plot(as.matrix(A_rescaled),as.matrix(M_rescaled),main=" MA plot after rescaling (all peaks)", ylim=c(-ylim, ylim), pch=16, cex=1)
 abline(h=0,col="red",lwd=3)
@@ -71,6 +73,8 @@ dev.off()
 log2_allregion_count_read1 <- log2(sig1 + small_num)
 log2_allregion_count_read2 <- log2(sig2 + small_num)
 log2_allregion_count_read2_rescaled <- (2-b[2])*log2_allregion_count_read2/(2+b[2]) - 2*b[1]/(2+b[2]);
+log2_allregion_count_read2_rescaled[log2_allregion_count_read2_rescaled>upperlim] = upperlim
+log2_allregion_count_read2_rescaled[log2_allregion_count_read2_rescaled<lowerlim] = lowerlim
 
 sig2_rescale = 2^log2_allregion_count_read2_rescaled - small_num
 
@@ -79,7 +83,7 @@ lims_min =max(c(min(log2_allregion_count_read1), min(log2_allregion_count_read2)
 
 set.seed(2018)
 sample_id = sample(length(sig2_rescale[plot_binary]), random_sample_num)
-png(paste(output,".scatterplot_before_rescaling.png", sep=''))
+png(paste(output,".scatterplot_before_rescaling.png", sep=''), width = 4, height = 4, units = 'in', res = 300)
 pk_points_read1 = log2_allregion_count_read1[plot_binary][sample_id][peak_binary[plot_binary][sample_id]]
 pk_points_read2 = log2_allregion_count_read2[plot_binary][sample_id][peak_binary[plot_binary][sample_id]]
 bg_points_read1 = log2_allregion_count_read1[plot_binary][sample_id][bg_binary[plot_binary][sample_id]]
@@ -93,7 +97,7 @@ lines(c(mean(bg_points_read1), mean(pk_points_read1)), c(mean(bg_points_read2), 
 abline(0,1,lwd=3,col='black')
 dev.off()
 
-png(paste(output,".scatterplot_after_rescaling.png", sep=''))
+png(paste(output,".scatterplot_after_rescaling.png", sep=''), width = 4, height = 4, units = 'in', res = 300)
 pk_points_read1 = log2_allregion_count_read1[plot_binary][sample_id][peak_binary[plot_binary][sample_id]]
 pk_points_read2 = log2_allregion_count_read2_rescaled[plot_binary][sample_id][peak_binary[plot_binary][sample_id]]
 bg_points_read1 = log2_allregion_count_read1[plot_binary][sample_id][bg_binary[plot_binary][sample_id]]
