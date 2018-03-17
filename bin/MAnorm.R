@@ -76,48 +76,66 @@ log2_allregion_count_read2_rescaled <- (2-b[2])*log2_allregion_count_read2/(2+b[
 log2_allregion_count_read2_rescaled[log2_allregion_count_read2_rescaled>log2(upperlim)] = log2(upperlim)
 log2_allregion_count_read2_rescaled[log2_allregion_count_read2_rescaled<log2(lowerlim)] = log2(lowerlim)
 
-sig2_rescale = 2^log2_allregion_count_read2_rescaled - small_num
+sig2_rescaled = 2^log2_allregion_count_read2_rescaled - small_num
 
 lims_max = max(c(max(log2_allregion_count_read1), max(log2_allregion_count_read2), max(log2_allregion_count_read2_rescaled)))
 lims_min =max(c(min(log2_allregion_count_read1), min(log2_allregion_count_read2), min(log2_allregion_count_read2_rescaled)))
 
 set.seed(2018)
-sample_id = sample(length(sig2_rescale[plot_binary]), random_sample_num)
+sample_id = sample(length(sig2_rescaled[plot_binary]), random_sample_num)
 png(paste(output,".scatterplot_before_rescaling.png", sep=''), width = 8, height = 8, units = 'in', res = 300)
 pk_points_read1 = log2_allregion_count_read1[plot_binary][sample_id][peak_binary[plot_binary][sample_id]]
 pk_points_read2 = log2_allregion_count_read2[plot_binary][sample_id][peak_binary[plot_binary][sample_id]]
 bg_points_read1 = log2_allregion_count_read1[plot_binary][sample_id][bg_binary[plot_binary][sample_id]]
 bg_points_read2 = log2_allregion_count_read2[plot_binary][sample_id][bg_binary[plot_binary][sample_id]]
+
+pk_mean_read1 = log2(mean(sig1[plot_binary][peak_binary]))
+pk_mean_read2 = log2(mean(sig2[plot_binary][peak_binary]))
+bg_mean_read1 = log2(mean(sig1[plot_binary][bg_binary]))
+bg_mean_read2 = log2(mean(sig2[plot_binary][bg_binary]))
+total_mean_read1 = log2(mean(sig1[plot_binary]))
+total_mean_read2 = log2(mean(sig2[plot_binary]))
+
 plot(log2_allregion_count_read1[plot_binary][sample_id], log2_allregion_count_read2[plot_binary][sample_id], col = 'dodgerblue', pch=16, xlim=c(lims_min, lims_max), ylim=c(lims_min, lims_max), cex=1)
 points(pk_points_read1, pk_points_read2, col='darkorange1', pch=16, cex=1)
 points(bg_points_read1, bg_points_read2, col='gray28', pch=16, cex=1)
-points(mean(pk_points_read1), mean(pk_points_read2), col='black', pch=16, cex=2)
-points(mean(bg_points_read1), mean(bg_points_read2), col='black', pch=16, cex=2)
-lines(c(mean(bg_points_read1), mean(pk_points_read1)), c(mean(bg_points_read2), mean(pk_points_read2)), col='black', lty=2, lwd=3)
+points(pk_mean_read1, pk_mean_read2, col='black', pch=16, cex=2)
+points(bg_mean_read1, bg_mean_read2, col='black', pch=16, cex=2)
+points(total_mean_read1, total_mean_read2, col='red', pch=16, cex=2)
+lines(c(bg_mean_read1, pk_mean_read1), c(bg_mean_read2, pk_mean_read2), col='black', lty=2, lwd=3)
 abline(0,1,lwd=3,col='black')
 dev.off()
 
 png(paste(output,".scatterplot_after_rescaling.png", sep=''), width = 8, height = 8, units = 'in', res = 300)
 pk_points_read1 = log2_allregion_count_read1[plot_binary][sample_id][peak_binary[plot_binary][sample_id]]
-pk_points_read2 = log2_allregion_count_read2_rescaled[plot_binary][sample_id][peak_binary[plot_binary][sample_id]]
+pk_points_read2_rescaled = log2_allregion_count_read2_rescaled[plot_binary][sample_id][peak_binary[plot_binary][sample_id]]
 bg_points_read1 = log2_allregion_count_read1[plot_binary][sample_id][bg_binary[plot_binary][sample_id]]
-bg_points_read2 = log2_allregion_count_read2_rescaled[plot_binary][sample_id][bg_binary[plot_binary][sample_id]]
+bg_points_read2_rescaled = log2_allregion_count_read2_rescaled[plot_binary][sample_id][bg_binary[plot_binary][sample_id]]
+
+pk_mean_read1 = log2(mean(sig1[plot_binary][peak_binary]))
+pk_mean_read2_rescaled = log2(mean(sig2_rescaled[plot_binary][peak_binary]))
+bg_mean_read1 = log2(mean(sig1[plot_binary][bg_binary]))
+bg_mean_read2_rescaled = log2(mean(sig2_rescaled[plot_binary][bg_binary]))
+total_mean_read1 = log2(mean(sig1[plot_binary]))
+total_mean_read2_rescaled = log2(mean(sig2_rescaled[plot_binary]))
+
 plot(log2_allregion_count_read1[plot_binary][sample_id], log2_allregion_count_read2_rescaled[plot_binary][sample_id], col = 'dodgerblue', pch=16, xlim=c(lims_min, lims_max), ylim=c(lims_min, lims_max), cex=1)
-points(pk_points_read1, pk_points_read2, col='darkorange1', pch=16, cex=1)
-points(bg_points_read1, bg_points_read2, col='gray28', pch=16, cex=1)
-points(mean(pk_points_read1), mean(pk_points_read2), col='black', pch=16, cex=2)
-points(mean(bg_points_read1), mean(bg_points_read2), col='black', pch=16, cex=2)
-lines(c(mean(bg_points_read1), mean(pk_points_read1)), c(mean(bg_points_read2), mean(pk_points_read2)), col='black', lty=2, lwd=3)
+points(pk_points_read1, pk_points_read2_rescaled, col='darkorange1', pch=16, cex=1)
+points(bg_points_read1, bg_points_read2_rescaled, col='gray28', pch=16, cex=1)
+points(pk_mean_read1, pk_mean_read2_rescaled, col='black', pch=16, cex=2)
+points(bg_mean_read1, bg_mean_read2_rescaled, col='black', pch=16, cex=2)
+points(total_mean_read1, total_mean_read2_rescaled, col='red', pch=16, cex=2)
+lines(c(bg_mean_read1, pk_mean_read1), c(bg_mean_read2_rescaled, pk_mean_read2_rescaled), col='black', lty=2, lwd=3)
 abline(0,1,lwd=3,col='black')
 dev.off()
 
 
-sig2_rescale_FRiP = sum(sig2_rescale[peak_binary]) / sum(sig2_rescale)
+sig2_rescaled_FRiP = sum(sig2_rescaled[peak_binary]) / sum(sig2_rescaled)
 sig1_FRiP = sum(sig1[peak_binary]) / sum(sig1)
 sig2_FRiP = sum(sig2[peak_binary]) / sum(sig2)
 
-info = rbind(c(sum(sig2)/sum(sig1), b[1], b[2]), c(sig1_FRiP, sig2_rescale_FRiP, sig2_FRiP))
+info = rbind(c(sum(sig2)/sum(sig1), b[1], b[2]), c(sig1_FRiP, sig2_rescaled_FRiP, sig2_FRiP))
 
 write.table(info, paste(output, '.MA.norm.info.txt', sep=''))
-write.table(sig2_rescale, paste(output,".MAnorm.txt", sep=''),sep="\t",quote=FALSE,row.names=FALSE,col.names=FALSE)
+write.table(sig2_rescaled, paste(output,".MAnorm.txt", sep=''),sep="\t",quote=FALSE,row.names=FALSE,col.names=FALSE)
 
