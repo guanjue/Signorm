@@ -54,7 +54,7 @@ ylim = max(c(abs(min(M)), abs(max(M)), abs(min(M_rescaled)), abs(max(M_rescaled)
 
 png(paste(output,".MAplot_before_rescaling.png", sep=''))
 #ma.plot(A,M,cex=1,main=paste(dataname," MA plot before rescaling (common peaks)",sep=""))
-plot(A,M,cex=1,main="MA plot before rescaling (common peaks)", ylim=c(-ylim, ylim), pch='.', cex=10)
+plot(A,M,main="MA plot before rescaling (common peaks)", ylim=c(-ylim, ylim), pch='.', cex=10)
 abline(h=0,col="red",lwd=3)
 abline(b,col="dodgerblue",lwd=3, lty=2)
 dev.off()
