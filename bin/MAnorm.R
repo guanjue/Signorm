@@ -23,6 +23,9 @@ sig2 = scan(input_sig2)
 sig3 = scan(input_sig3)
 totalmean_sf = sum(sig1+small_num) / sum(sig2+small_num)
 sig4 = (sig2+small_num) * totalmean_sf - small_num
+sig4[sig4>upperlim] = upperlim
+sig4[sig4<lowerlim] = lowerlim
+
 
 sig1_binary = 10^(-sig1) <= 0.01
 sig2_binary = 10^(-sig2) <= 0.01
@@ -199,4 +202,5 @@ info = rbind(c(sum(sig2), sum(sig1), b[1], b[2], totalmean_sf), c(sig1_FRiP, sig
 
 write.table(info, paste(output, '.MA.norm.info.txt', sep=''))
 write.table(sig2_rescaled, paste(output,".MAnorm.txt", sep=''),sep="\t",quote=FALSE,row.names=FALSE,col.names=FALSE)
+write.table(sig4, paste(output,".totalsig_norm.txt", sep=''),sep="\t",quote=FALSE,row.names=FALSE,col.names=FALSE)
 
