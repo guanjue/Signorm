@@ -20,7 +20,7 @@ sig2_totalsignorm_fsip = c()
 ### cell type
 cell_type = c()
 
-for (i in c(1:dim(info_list_files)[1])){
+for ( in c(1:dim(info_list_files)[1])){
 	print(info_list_files[i,1])
 	info = read.table(toString(info_list_files[i,1]), header = F)
 	### sf vector
@@ -49,7 +49,7 @@ points(sig2_manorm_fsip, pch=20, col='orange')
 points(sig2_pknorm_fsip, pch=20, col='green')
 points(sig2_totalsignorm_fsip, pch=20, col='red')
 lines(sig1_ref_fsip, pch=20, col='black')
-for (i in c(1:length(sig2_norm_fsip))){
+for (i in c(1:length(sig2_raw_fsip))){
 	x_tmp = i
 	ymin = min(c(sig2_raw_fsip[i], sig2_manorm_fsip[i], sig2_pknorm_fsip[i], sig2_totalsignorm_fsip[i]))
 	ymax = max(c(sig2_raw_fsip[i], sig2_manorm_fsip[i], sig2_pknorm_fsip[i], sig2_totalsignorm_fsip[i]))
