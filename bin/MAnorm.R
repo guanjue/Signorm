@@ -14,7 +14,7 @@ input_sig3 = args[3]
 output = args[4]
 
 small_num = 0.01
-random_sample_num = 50000
+random_sample_num = 100000
 upperlim = 100
 lowerlim = 0
 
