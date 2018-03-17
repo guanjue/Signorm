@@ -73,8 +73,8 @@ dev.off()
 log2_allregion_count_read1 <- log2(sig1 + small_num)
 log2_allregion_count_read2 <- log2(sig2 + small_num)
 log2_allregion_count_read2_rescaled <- (2-b[2])*log2_allregion_count_read2/(2+b[2]) - 2*b[1]/(2+b[2]);
-log2_allregion_count_read2_rescaled[log2_allregion_count_read2_rescaled>upperlim] = upperlim
-log2_allregion_count_read2_rescaled[log2_allregion_count_read2_rescaled<lowerlim] = lowerlim
+log2_allregion_count_read2_rescaled[log2_allregion_count_read2_rescaled>log2(upperlim)] = log2(upperlim)
+log2_allregion_count_read2_rescaled[log2_allregion_count_read2_rescaled<log2(lowerlim)] = log2(lowerlim)
 
 sig2_rescale = 2^log2_allregion_count_read2_rescaled - small_num
 
