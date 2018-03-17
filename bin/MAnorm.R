@@ -10,7 +10,8 @@ cat('test\n')
 args = commandArgs(trailingOnly=TRUE)
 input_sig1 = args[1]
 input_sig2 = args[2]
-output = args[3]
+input_sig3 = args[3]
+output = args[4]
 
 small_num = 0.01
 random_sample_num = 50000
@@ -19,6 +20,8 @@ lowerlim = 0
 
 sig1 = scan(input_sig1)
 sig2 = scan(input_sig2)
+sig3 = scan(input_sig3)
+sig4 = (sig2+small_num) * sum(sig1+small_num) / sum(sig2+small_num) - small_num
 
 sig1_binary = 10^(-sig1) <= 0.01
 sig2_binary = 10^(-sig2) <= 0.01
@@ -129,12 +132,68 @@ lines(c(bg_mean_read1, pk_mean_read1), c(bg_mean_read2_rescaled, pk_mean_read2_r
 abline(0,1,lwd=3,col='black')
 dev.off()
 
+png(paste(output,".scatterplot_after_PKnorm.png", sep=''), width = 8, height = 8, units = 'in', res = 300)
+
+log2_allregion_count_read1 <- log2(sig1 + small_num)
+log2_allregion_count_read3 <- log2(sig3 + small_num)
+
+pk_points_read1 = log2_allregion_count_read1[plot_binary][sample_id][peak_binary[plot_binary][sample_id]]
+pk_points_read3 = log2_allregion_count_read3[plot_binary][sample_id][peak_binary[plot_binary][sample_id]]
+bg_points_read1 = log2_allregion_count_read1[plot_binary][sample_id][bg_binary[plot_binary][sample_id]]
+bg_points_read3 = log2_allregion_count_read3[plot_binary][sample_id][bg_binary[plot_binary][sample_id]]
+
+pk_mean_read1 = log2(mean(sig1[plot_binary][peak_binary[plot_binary]]))
+pk_mean_read3 = log2(mean(sig3[plot_binary][peak_binary[plot_binary]]))
+bg_mean_read1 = log2(mean(sig1[plot_binary][bg_binary[plot_binary]]))
+bg_mean_read3 = log2(mean(sig3[plot_binary][bg_binary[plot_binary]]))
+total_mean_read1 = log2(mean(sig1[plot_binary]))
+total_mean_read3 = log2(mean(sig3[plot_binary]))
+
+plot(log2_allregion_count_read1[plot_binary][sample_id], pk_points_read3[plot_binary][sample_id], col = 'dodgerblue', pch=16, xlim=c(lims_min, lims_max), ylim=c(lims_min, lims_max), cex=1)
+points(pk_points_read1, pk_points_read3, col='darkorange1', pch=16, cex=1)
+points(bg_points_read1, bg_points_read3, col='gray28', pch=16, cex=1)
+points(pk_mean_read1, pk_mean_read3, col='black', pch=16, cex=2)
+points(bg_mean_read1, bg_mean_read3, col='black', pch=16, cex=2)
+points(total_mean_read1, total_mean_read3, col='red', pch=16, cex=2)
+lines(c(bg_mean_read1, pk_mean_read1), c(bg_mean_read3, pk_mean_read3), col='black', lty=2, lwd=3)
+abline(0,1,lwd=3,col='black')
+dev.off()
+
+png(paste(output,".scatterplot_after_totalmeannorm.png", sep=''), width = 8, height = 8, units = 'in', res = 300)
+
+log2_allregion_count_read1 <- log2(sig1 + small_num)
+log2_allregion_count_read4 <- log2(sig4 + small_num)
+
+pk_points_read1 = log2_allregion_count_read1[plot_binary][sample_id][peak_binary[plot_binary][sample_id]]
+pk_points_read4 = log2_allregion_count_read4[plot_binary][sample_id][peak_binary[plot_binary][sample_id]]
+bg_points_read1 = log2_allregion_count_read1[plot_binary][sample_id][bg_binary[plot_binary][sample_id]]
+bg_points_read4 = log2_allregion_count_read4[plot_binary][sample_id][bg_binary[plot_binary][sample_id]]
+
+pk_mean_read1 = log2(mean(sig1[plot_binary][peak_binary[plot_binary]]))
+pk_mean_read4 = log2(mean(sig4[plot_binary][peak_binary[plot_binary]]))
+bg_mean_read1 = log2(mean(sig1[plot_binary][bg_binary[plot_binary]]))
+bg_mean_read4 = log2(mean(sig4[plot_binary][bg_binary[plot_binary]]))
+total_mean_read1 = log2(mean(sig1[plot_binary]))
+total_mean_read4 = log2(mean(sig4[plot_binary]))
+
+plot(log2_allregion_count_read1[plot_binary][sample_id], pk_points_read4[plot_binary][sample_id], col = 'dodgerblue', pch=16, xlim=c(lims_min, lims_max), ylim=c(lims_min, lims_max), cex=1)
+points(pk_points_read1, pk_points_read4, col='darkorange1', pch=16, cex=1)
+points(bg_points_read1, bg_points_read4, col='gray28', pch=16, cex=1)
+points(pk_mean_read1, pk_mean_read4, col='black', pch=16, cex=2)
+points(bg_mean_read1, bg_mean_read4, col='black', pch=16, cex=2)
+points(total_mean_read1, total_mean_read4, col='red', pch=16, cex=2)
+lines(c(bg_mean_read1, pk_mean_read1), c(bg_mean_read4, pk_mean_read4), col='black', lty=2, lwd=3)
+abline(0,1,lwd=3,col='black')
+dev.off()
+
+
 
 sig2_rescaled_FRiP = sum(sig2_rescaled[peak_binary]) / sum(sig2_rescaled)
 sig1_FRiP = sum(sig1[peak_binary]) / sum(sig1)
 sig2_FRiP = sum(sig2[peak_binary]) / sum(sig2)
+sig3_FRiP = sum(sig3[peak_binary]) / sum(sig3)
 
-info = rbind(c(sum(sig2)/sum(sig1), b[1], b[2]), c(sig1_FRiP, sig2_rescaled_FRiP, sig2_FRiP))
+info = rbind(c(sum(sig2)/sum(sig1), b[1], b[2]), c(sig1_FRiP, sig2_rescaled_FRiP, sig2_FRiP, sig3_FRiP))
 
 write.table(info, paste(output, '.MA.norm.info.txt', sep=''))
 write.table(sig2_rescaled, paste(output,".MAnorm.txt", sep=''),sep="\t",quote=FALSE,row.names=FALSE,col.names=FALSE)
