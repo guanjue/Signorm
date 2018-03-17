@@ -86,10 +86,10 @@ bg_points_read1 = log2_allregion_count_read1[plot_binary][sample_id][bg_binary[p
 bg_points_read2 = log2_allregion_count_read2[plot_binary][sample_id][bg_binary[plot_binary][sample_id]]
 plot(log2_allregion_count_read1[plot_binary][sample_id], log2_allregion_count_read2[plot_binary][sample_id], col = 'dodgerblue', pch='.', xlim=c(lims_min, lims_max), ylim=c(lims_min, lims_max), cex=10)
 points(pk_points_read1, pk_points_read2, col='darkorange1', pch='.', cex=10)
-points(bg_points_read1, bg_points_read2, col='gray', pch='.', cex=10)
+points(bg_points_read1, bg_points_read2, col='gray28', pch='.', cex=10)
 points(mean(pk_points_read1), mean(pk_points_read2), col='black', pch='.', cex=15)
 points(mean(bg_points_read1), mean(bg_points_read2), col='black', pch='.', cex=15)
-lines(c(mean(bg_points_read1), mean(pk_points_read1)), c(mean(bg_points_read2), mean(pk_points_read2)), col='gray', lty=2, lwd=3)
+lines(c(mean(bg_points_read1), mean(pk_points_read1)), c(mean(bg_points_read2), mean(pk_points_read2)), col='gray28', lty=2, lwd=3)
 abline(0,1,lwd=3,col='black')
 dev.off()
 
@@ -100,10 +100,10 @@ bg_points_read1 = log2_allregion_count_read2_rescaled[plot_binary][sample_id][bg
 bg_points_read2 = log2_allregion_count_read2_rescaled[plot_binary][sample_id][bg_binary[plot_binary][sample_id]]
 plot(log2_allregion_count_read1[plot_binary][sample_id], log2_allregion_count_read2_rescaled[plot_binary][sample_id], col = 'dodgerblue', pch='.', xlim=c(lims_min, lims_max), ylim=c(lims_min, lims_max), cex=10)
 points(pk_points_read1, pk_points_read2, col='darkorange1', pch='.', cex=10)
-points(bg_points_read1, bg_points_read2, col='gray', pch='.', cex=10)
+points(bg_points_read1, bg_points_read2, col='gray28', pch='.', cex=10)
 points(mean(pk_points_read1), mean(pk_points_read2), col='black', pch='.', cex=15)
 points(mean(bg_points_read1), mean(bg_points_read2), col='black', pch='.', cex=15)
-lines(c(mean(bg_points_read1), mean(pk_points_read1)), c(mean(bg_points_read2), mean(pk_points_read2)), col='gray', lty=2, lwd=3)
+lines(c(mean(bg_points_read1), mean(pk_points_read1)), c(mean(bg_points_read2), mean(pk_points_read2)), col='gray28', lty=2, lwd=3)
 abline(0,1,lwd=3,col='black')
 dev.off()
 
