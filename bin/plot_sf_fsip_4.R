@@ -63,7 +63,7 @@ FSiP = cbind(sig2_raw_fsip, sig2_totalsignorm_fsip, sig2_manorm_fsip, sig2_pknor
 colnames(FSiP) = c('raw_signal', 'totalsignorm', 'MAnorm', 'PKnorm')
 pdf(paste(outputname, '.FSiP.box.pdf', sep=''))
 boxplot(FSiP, ylim=c(ymin_FSiP, ymax_FSiP))
-abline(h=sig1_fsip, pch=20, col='blue', lwd=1.5, lty=2)
+abline(h=sig1_ref_fsip, pch=20, col='blue', lwd=1.5, lty=2)
 dev.off()
 
 
