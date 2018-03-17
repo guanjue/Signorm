@@ -34,7 +34,7 @@ for ( i in c(1:dim(info_list_files)[1])){
 	sig2_pknorm_fsip[i] = info[2,4]
 	sig2_totalsignorm_fsip[i] = info[2,5]
 	### cell type
-	cell_type[i] = unlist(strsplit(toString(info_list_files[i,1]), "[rep]"))[1]
+	cell_type[i] = unlist(strsplit(toString(info_list_files[i,1]), "[h3k4me3]"))[1]
 }
 
 
