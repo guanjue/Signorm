@@ -208,6 +208,9 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	plot_y = np.log2(sig1[idx,0]+small_num)
 	plot_xn = np.log2(sig2[idx,0]+small_num)
 	plot_yn = np.log2(sig1[idx,0]+small_num)
+	plot_totalmean_xn = np.log2(sig2_norm_totalmean+small_num)
+	plot_totalmean_yn = np.log2(sig1_totalmean+small_num)
+
 	lims_max = np.max(np.concatenate((plot_x, plot_y, plot_xn, plot_yn)))
 	lims_min = np.min(np.concatenate((plot_x, plot_y, plot_xn, plot_yn)))
 
@@ -217,7 +220,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	plt.scatter(plot_x[peak_binary_sample], plot_y[peak_binary_sample], marker='.', color='coral')
 	plt.scatter(sig2_1log_pk_m_pkn, sig1_1log_pk_m_od, marker='.', color='k')
 	plt.scatter(sig2_1log_bg_m_pkn, sig1_1log_bg_m_od, marker='.', color='k')
-	plt.scatter(sig2_norm_totalmean+small_num, sig1_totalmean+small_num, marker='.', color='red')
+	plt.scatter(plot_totalmean_xn, plot_totalmean_yn, marker='.', color='red')
 	plt.plot([lims_min, lims_max], [lims_min, lims_max], 'k', color = 'k')
 	plt.plot([sig2_1log_bg_m_pkn, sig2_1log_pk_m_pkn], [sig1_1log_bg_m_od, sig1_1log_pk_m_od])
 	#plt.scatter(np.mean(plot_x[peak_binary_sample]), np.mean(plot_y[peak_binary_sample]), marker='.', color='k')
@@ -233,6 +236,9 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 
 	plot_xn = np.log2(sig2[idx,0]+small_num)
 	plot_yn = np.log2(sig1[idx,0]+small_num)
+	plot_totalmean_xn = np.log2(sig2_totalmean+small_num)
+	plot_totalmean_yn = np.log2(sig1_totalmean+small_num)
+
 	lims_max = np.max(np.concatenate((plot_x, plot_y, plot_xn, plot_yn)))
 	lims_min = np.min(np.concatenate((plot_x, plot_y, plot_xn, plot_yn)))
 
@@ -242,7 +248,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	plt.scatter(plot_xn[peak_binary_sample], plot_yn[peak_binary_sample], marker='.', color='coral')
 	plt.scatter(sig2_1log_pk_m_od, sig1_1log_pk_m_od, marker='.', color='k')
 	plt.scatter(sig2_1log_bg_m_od, sig1_1log_bg_m_od, marker='.', color='k')
-	plt.scatter(sig2_totalmean+small_num, sig1_totalmean+small_num, marker='.', color='red')
+	plt.scatter(plot_totalmean_xn, plot_totalmean_yn, marker='.', color='red')
 	plt.plot([lims_min, lims_max], [lims_min, lims_max], 'k', color = 'k')
 	plt.plot([sig2_1log_bg_m_od, sig2_1log_pk_m_od], [sig1_1log_bg_m_od, sig1_1log_pk_m_od])
 	#plt.scatter(np.mean(plot_xn[peak_binary_sample]), np.mean(plot_yn[peak_binary_sample]), marker='.', color='k')
