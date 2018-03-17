@@ -27,6 +27,7 @@ peak_binary = peak_binary_pk & (sig1 != sig1[1]) & (sig2 != sig2[1])
 bg_binary_bg = as.logical((sig1_binary + sig2_binary)==0)
 bg_binary = bg_binary_bg & (sig1 != sig1[1]) & (sig2 != sig2[1]) 
 
+plot_binary = (sig1 != sig1[1]) & (sig2 != sig2[1]) 
 
 common_peak_count_read1 = sig1[peak_binary]+small_num
 common_peak_count_read2 = sig2[peak_binary]+small_num
@@ -70,20 +71,33 @@ lims_max = max(c(max(log2_allregion_count_read1), max(log2_allregion_count_read2
 lims_min =max(c(min(log2_allregion_count_read1), min(log2_allregion_count_read2), min(log2_allregion_count_read2_rescaled)))
 
 set.seed(2018)
-sample_id = sample(length(sig2_rescale), random_sample_num)
+sample_id = sample(length(sig2_rescale[plot_binary]), random_sample_num)
 png(paste(output,".scatterplot_before_rescaling.png", sep=''))
-plot(log2_allregion_count_read1[sample_id], log2_allregion_count_read2[sample_id], col = 'dodgerblue', pch='.', xlim=c(lims_min, lims_max), ylim=c(lims_min, lims_max))
-points(log2_allregion_count_read1[sample_id][peak_binary[sample_id]], log2_allregion_count_read2[sample_id][peak_binary[sample_id]], col='darkorange1', pch='.')
-points(log2_allregion_count_read1[sample_id][bg_binary[sample_id]], log2_allregion_count_read2[sample_id][bg_binary[sample_id]], col='gray', pch='.')
-abline(0,1,lwd=2,col='black')
+pk_points_read1 = log2_allregion_count_read1[plot_binary][sample_id][peak_binary[sample_id]]
+pk_points_read2 = log2_allregion_count_read2[plot_binary][sample_id][peak_binary[sample_id]]
+bg_points_read1 = log2_allregion_count_read1[plot_binary][sample_id][bg_binary[sample_id]]
+bg_points_read2 = log2_allregion_count_read2[plot_binary][sample_id][bg_binary[sample_id]]
+plot(log2_allregion_count_read1[plot_binary][sample_id], log2_allregion_count_read2[plot_binary][sample_id], col = 'dodgerblue', pch='.', xlim=c(lims_min, lims_max), ylim=c(lims_min, lims_max), cex=3)
+points(pk_points_read1, pk_points_read2, col='darkorange1', pch='.', cex=3)
+points(bg_points_read1, bg_points_read2, col='gray', pch='.', cex=3)
+points(mean(pk_points_read1), mean(pk_points_read2), col='black', pch='.', cex=5)
+points(mean(bg_points_read1), mean(bg_points_read2), col='black', pch='.', cex=5)
+line(c(mean(bg_points_read1), mean(pk_points_read1)), c(mean(bg_points_read2), mean(pk_points_read2)), col='gray', lty=2, lwd=3)
+abline(0,1,lwd=3,col='black')
 dev.off()
 
 png(paste(output,".scatterplot_after_rescaling.png", sep=''))
-plot(log2_allregion_count_read1[sample_id], log2_allregion_count_read2_rescaled[sample_id], col = 'dodgerblue', pch='.', xlim=c(lims_min, lims_max), ylim=c(lims_min, lims_max))
-points(log2_allregion_count_read1[sample_id][peak_binary[sample_id]], log2_allregion_count_read2_rescaled[sample_id][peak_binary[sample_id]], col='darkorange1', pch='.')
-points(log2_allregion_count_read1[sample_id][bg_binary[sample_id]], log2_allregion_count_read2_rescaled[sample_id][bg_binary[sample_id]], col='gray', pch='.')
-abline(0,1,lwd=2,col='black')
-dev.off()
+pk_points_read1 = log2_allregion_count_read1[plot_binary][sample_id][peak_binary[sample_id]]
+pk_points_read2 = log2_allregion_count_read2_rescaled[plot_binary][sample_id][peak_binary[sample_id]]
+bg_points_read1 = log2_allregion_count_read2_rescaled[plot_binary][sample_id][bg_binary[sample_id]]
+bg_points_read2 = log2_allregion_count_read2_rescaled[plot_binary][sample_id][bg_binary[sample_id]]
+plot(log2_allregion_count_read1[plot_binary][sample_id], log2_allregion_count_read2_rescaled[plot_binary][sample_id], col = 'dodgerblue', pch='.', xlim=c(lims_min, lims_max), ylim=c(lims_min, lims_max), cex=3)
+points(pk_points_read1, pk_points_read2, col='darkorange1', pch='.', cex=3)
+points(bg_points_read1, bg_points_read2, col='gray', pch='.', cex=3)
+points(mean(pk_points_read1), mean(pk_points_read2), col='black', pch='.', cex=5)
+points(mean(bg_points_read1), mean(bg_points_read2), col='black', pch='.', cex=5)
+line(c(mean(bg_points_read1), mean(pk_points_read1)), c(mean(bg_points_read2), mean(pk_points_read2)), col='gray', lty=2, lwd=3)
+abline(0,1,lwd=3,col='black')dev.off()
 
 
 sig2_rescale_FRiP = sum(sig2_rescale[peak_binary]) / sum(sig2_rescale)
