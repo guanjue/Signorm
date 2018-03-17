@@ -42,11 +42,6 @@ linear<-lm(M~A)$coefficients
 #b<-lm(M~A)$coefficients
 #b<-robustRegBS(M,A,beta=linear)
 b<-rlm(M~A)$coefficients
-png(paste(output,".MAplot_before_rescaling.png", sep=''))
-#ma.plot(A,M,cex=1,main=paste(dataname," MA plot before rescaling (common peaks)",sep=""))
-ma.plot(A,M,cex=1,main="MA plot before rescaling (common peaks)")
-abline(b,col="green")
-dev.off()
 
 cat("M = b[1] + b[2] * A\n")
 log2_peak_count_read1 <- log2(common_peak_count_read1 + small_num)
@@ -55,9 +50,21 @@ log2_peak_count_read2_rescaled <- (2-b[2])*log2_peak_count_read2/(2+b[2]) - 2*b[
 M_rescaled <- (log2_peak_count_read2_rescaled - log2_peak_count_read1);
 A_rescaled <- (log2_peak_count_read2_rescaled + log2_peak_count_read1)/2;
 
+ylim = max(c(abs(min(M)), abs(max(M)), abs(min(M_rescaled)), abs(max(M_rescaled))))
+
+png(paste(output,".MAplot_before_rescaling.png", sep=''))
+#ma.plot(A,M,cex=1,main=paste(dataname," MA plot before rescaling (common peaks)",sep=""))
+plot(A,M,cex=1,main="MA plot before rescaling (common peaks)", ylim=c(-ylim, ylim))
+abline(b,col="dodgerblue",lwd=3, lty=2)
+abline(h=0,col="red",lwd=3)
+dev.off()
+
+
 png(paste(output,".MAplot_after_rescaling.png", sep=''))
 #ma.plot(A_rescaled,M_rescaled,cex=1,main=paste(dataname," MA plot after rescaling (all peaks)",sep=""))
-ma.plot(as.matrix(A_rescaled),as.matrix(M_rescaled),cex=1,main=" MA plot after rescaling (all peaks)")
+plot(as.matrix(A_rescaled),as.matrix(M_rescaled),cex=1,main=" MA plot after rescaling (all peaks)", ylim=c(-ylim, ylim))
+abline(h=0,col="dodgerblue",lwd=3, lty=2)
+abline(h=0,col="red",lwd=3)
 dev.off()
 
 
@@ -97,7 +104,8 @@ points(bg_points_read1, bg_points_read2, col='gray', pch='.', cex=3)
 points(mean(pk_points_read1), mean(pk_points_read2), col='black', pch='.', cex=5)
 points(mean(bg_points_read1), mean(bg_points_read2), col='black', pch='.', cex=5)
 lines(c(mean(bg_points_read1), mean(pk_points_read1)), c(mean(bg_points_read2), mean(pk_points_read2)), col='gray', lty=2, lwd=3)
-abline(0,1,lwd=3,col='black')dev.off()
+abline(0,1,lwd=3,col='black')
+dev.off()
 
 
 sig2_rescale_FRiP = sum(sig2_rescale[peak_binary]) / sum(sig2_rescale)
