@@ -62,7 +62,7 @@ dev.off()
 
 png(paste(output,".MAplot_after_rescaling.png", sep=''))
 #ma.plot(A_rescaled,M_rescaled,cex=1,main=paste(dataname," MA plot after rescaling (all peaks)",sep=""))
-plot(as.matrix(A_rescaled),as.matrix(M_rescaled),cex=1,main=" MA plot after rescaling (all peaks)", ylim=c(-ylim, ylim), pch='.', cex=10)
+plot(as.matrix(A_rescaled),as.matrix(M_rescaled),main=" MA plot after rescaling (all peaks)", ylim=c(-ylim, ylim), pch='.', cex=10)
 abline(h=0,col="red",lwd=3)
 abline(h=0,col="dodgerblue",lwd=3, lty=2)
 dev.off()
