@@ -54,7 +54,7 @@ ylim = max(c(abs(min(M)), abs(max(M)), abs(min(M_rescaled)), abs(max(M_rescaled)
 
 png(paste(output,".MAplot_before_rescaling.png", sep=''))
 #ma.plot(A,M,cex=1,main=paste(dataname," MA plot before rescaling (common peaks)",sep=""))
-plot(A,M,main="MA plot before rescaling (common peaks)", ylim=c(-ylim, ylim), pch='.', cex=5)
+plot(A,M,main="MA plot before rescaling (common peaks)", ylim=c(-ylim, ylim), pch=16, cex=5)
 abline(h=0,col="red",lwd=3)
 abline(b,col="dodgerblue",lwd=3, lty=2)
 dev.off()
@@ -62,7 +62,7 @@ dev.off()
 
 png(paste(output,".MAplot_after_rescaling.png", sep=''))
 #ma.plot(A_rescaled,M_rescaled,cex=1,main=paste(dataname," MA plot after rescaling (all peaks)",sep=""))
-plot(as.matrix(A_rescaled),as.matrix(M_rescaled),main=" MA plot after rescaling (all peaks)", ylim=c(-ylim, ylim), pch='.', cex=5)
+plot(as.matrix(A_rescaled),as.matrix(M_rescaled),main=" MA plot after rescaling (all peaks)", ylim=c(-ylim, ylim), pch=16, cex=5)
 abline(h=0,col="red",lwd=3)
 abline(h=0,col="dodgerblue",lwd=3, lty=2)
 dev.off()
@@ -84,11 +84,11 @@ pk_points_read1 = log2_allregion_count_read1[plot_binary][sample_id][peak_binary
 pk_points_read2 = log2_allregion_count_read2[plot_binary][sample_id][peak_binary[plot_binary][sample_id]]
 bg_points_read1 = log2_allregion_count_read1[plot_binary][sample_id][bg_binary[plot_binary][sample_id]]
 bg_points_read2 = log2_allregion_count_read2[plot_binary][sample_id][bg_binary[plot_binary][sample_id]]
-plot(log2_allregion_count_read1[plot_binary][sample_id], log2_allregion_count_read2[plot_binary][sample_id], col = 'dodgerblue', pch='.', xlim=c(lims_min, lims_max), ylim=c(lims_min, lims_max), cex=5)
-points(pk_points_read1, pk_points_read2, col='darkorange1', pch='.', cex=5)
-points(bg_points_read1, bg_points_read2, col='gray28', pch='.', cex=5)
-points(mean(pk_points_read1), mean(pk_points_read2), col='black', pch='.', cex=8)
-points(mean(bg_points_read1), mean(bg_points_read2), col='black', pch='.', cex=8)
+plot(log2_allregion_count_read1[plot_binary][sample_id], log2_allregion_count_read2[plot_binary][sample_id], col = 'dodgerblue', pch=16, xlim=c(lims_min, lims_max), ylim=c(lims_min, lims_max), cex=5)
+points(pk_points_read1, pk_points_read2, col='darkorange1', pch=16, cex=5)
+points(bg_points_read1, bg_points_read2, col='gray28', pch=16, cex=5)
+points(mean(pk_points_read1), mean(pk_points_read2), col='black', pch=16, cex=8)
+points(mean(bg_points_read1), mean(bg_points_read2), col='black', pch=16, cex=8)
 lines(c(mean(bg_points_read1), mean(pk_points_read1)), c(mean(bg_points_read2), mean(pk_points_read2)), col='black', lty=2, lwd=3)
 abline(0,1,lwd=3,col='black')
 dev.off()
@@ -98,11 +98,11 @@ pk_points_read1 = log2_allregion_count_read1[plot_binary][sample_id][peak_binary
 pk_points_read2 = log2_allregion_count_read2_rescaled[plot_binary][sample_id][peak_binary[plot_binary][sample_id]]
 bg_points_read1 = log2_allregion_count_read1[plot_binary][sample_id][bg_binary[plot_binary][sample_id]]
 bg_points_read2 = log2_allregion_count_read2_rescaled[plot_binary][sample_id][bg_binary[plot_binary][sample_id]]
-plot(log2_allregion_count_read1[plot_binary][sample_id], log2_allregion_count_read2_rescaled[plot_binary][sample_id], col = 'dodgerblue', pch='.', xlim=c(lims_min, lims_max), ylim=c(lims_min, lims_max), cex=5)
-points(pk_points_read1, pk_points_read2, col='darkorange1', pch='.', cex=5)
-points(bg_points_read1, bg_points_read2, col='gray28', pch='.', cex=5)
-points(mean(pk_points_read1), mean(pk_points_read2), col='black', pch='.', cex=8)
-points(mean(bg_points_read1), mean(bg_points_read2), col='black', pch='.', cex=8)
+plot(log2_allregion_count_read1[plot_binary][sample_id], log2_allregion_count_read2_rescaled[plot_binary][sample_id], col = 'dodgerblue', pch=16, xlim=c(lims_min, lims_max), ylim=c(lims_min, lims_max), cex=5)
+points(pk_points_read1, pk_points_read2, col='darkorange1', pch=16, cex=5)
+points(bg_points_read1, bg_points_read2, col='gray28', pch=16, cex=5)
+points(mean(pk_points_read1), mean(pk_points_read2), col='black', pch=16, cex=8)
+points(mean(bg_points_read1), mean(bg_points_read2), col='black', pch=16, cex=8)
 lines(c(mean(bg_points_read1), mean(pk_points_read1)), c(mean(bg_points_read2), mean(pk_points_read2)), col='black', lty=2, lwd=3)
 abline(0,1,lwd=3,col='black')
 dev.off()
