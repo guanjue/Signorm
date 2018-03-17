@@ -104,7 +104,7 @@ bg_mean_read2 = log2(mean(sig2[plot_binary][bg_binary[plot_binary]]))
 total_mean_read1 = log2(mean(sig1[plot_binary]))
 total_mean_read2 = log2(mean(sig2[plot_binary]))
 
-plot(log2_allregion_count_read1[plot_binary][sample_id], log2_allregion_count_read2[plot_binary][sample_id], col = 'dodgerblue', pch=16, xlim=c(lims_min, lims_max), ylim=c(lims_min, lims_max), cex=1, main='raw signal', xlab='reference', ylab=ct)
+plot(log2_allregion_count_read1[plot_binary][sample_id], log2_allregion_count_read2[plot_binary][sample_id], col = 'dodgerblue', pch=16, xlim=c(lims_min, lims_max), ylim=c(lims_min, lims_max), cex=1, main='Raw_Signal', xlab='reference', ylab=ct)
 points(pk_points_read1, pk_points_read2, col='darkorange1', pch=16, cex=1)
 points(bg_points_read1, bg_points_read2, col='gray28', pch=16, cex=1)
 points(pk_mean_read1, pk_mean_read2, col='black', pch=16, cex=2)
