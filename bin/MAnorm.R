@@ -82,7 +82,7 @@ points(pk_points_read1, pk_points_read2, col='darkorange1', pch='.', cex=3)
 points(bg_points_read1, bg_points_read2, col='gray', pch='.', cex=3)
 points(mean(pk_points_read1), mean(pk_points_read2), col='black', pch='.', cex=5)
 points(mean(bg_points_read1), mean(bg_points_read2), col='black', pch='.', cex=5)
-line(c(mean(bg_points_read1), mean(pk_points_read1)), c(mean(bg_points_read2), mean(pk_points_read2)), col='gray', lty=2, lwd=3)
+lines(c(mean(bg_points_read1), mean(pk_points_read1)), c(mean(bg_points_read2), mean(pk_points_read2)), col='gray', lty=2, lwd=3)
 abline(0,1,lwd=3,col='black')
 dev.off()
 
@@ -96,7 +96,7 @@ points(pk_points_read1, pk_points_read2, col='darkorange1', pch='.', cex=3)
 points(bg_points_read1, bg_points_read2, col='gray', pch='.', cex=3)
 points(mean(pk_points_read1), mean(pk_points_read2), col='black', pch='.', cex=5)
 points(mean(bg_points_read1), mean(bg_points_read2), col='black', pch='.', cex=5)
-line(c(mean(bg_points_read1), mean(pk_points_read1)), c(mean(bg_points_read2), mean(pk_points_read2)), col='gray', lty=2, lwd=3)
+lines(c(mean(bg_points_read1), mean(pk_points_read1)), c(mean(bg_points_read2), mean(pk_points_read2)), col='gray', lty=2, lwd=3)
 abline(0,1,lwd=3,col='black')dev.off()
 
 
