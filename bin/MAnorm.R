@@ -89,10 +89,10 @@ pk_points_read2 = log2_allregion_count_read2[plot_binary][sample_id][peak_binary
 bg_points_read1 = log2_allregion_count_read1[plot_binary][sample_id][bg_binary[plot_binary][sample_id]]
 bg_points_read2 = log2_allregion_count_read2[plot_binary][sample_id][bg_binary[plot_binary][sample_id]]
 
-pk_mean_read1 = log2(mean(sig1[plot_binary][peak_binary]))
-pk_mean_read2 = log2(mean(sig2[plot_binary][peak_binary]))
-bg_mean_read1 = log2(mean(sig1[plot_binary][bg_binary]))
-bg_mean_read2 = log2(mean(sig2[plot_binary][bg_binary]))
+pk_mean_read1 = log2(mean(sig1[plot_binary][peak_binary[plot_binary]]))
+pk_mean_read2 = log2(mean(sig2[plot_binary][peak_binary[plot_binary]]))
+bg_mean_read1 = log2(mean(sig1[plot_binary][bg_binary[plot_binary]]))
+bg_mean_read2 = log2(mean(sig2[plot_binary][bg_binary[plot_binary]]))
 total_mean_read1 = log2(mean(sig1[plot_binary]))
 total_mean_read2 = log2(mean(sig2[plot_binary]))
 
@@ -112,10 +112,10 @@ pk_points_read2_rescaled = log2_allregion_count_read2_rescaled[plot_binary][samp
 bg_points_read1 = log2_allregion_count_read1[plot_binary][sample_id][bg_binary[plot_binary][sample_id]]
 bg_points_read2_rescaled = log2_allregion_count_read2_rescaled[plot_binary][sample_id][bg_binary[plot_binary][sample_id]]
 
-pk_mean_read1 = log2(mean(sig1[plot_binary][peak_binary]))
-pk_mean_read2_rescaled = log2(mean(sig2_rescaled[plot_binary][peak_binary]))
-bg_mean_read1 = log2(mean(sig1[plot_binary][bg_binary]))
-bg_mean_read2_rescaled = log2(mean(sig2_rescaled[plot_binary][bg_binary]))
+pk_mean_read1 = log2(mean(sig1[plot_binary][peak_binary[plot_binary]]))
+pk_mean_read2_rescaled = log2(mean(sig2_rescaled[plot_binary][peak_binary[plot_binary]]))
+bg_mean_read1 = log2(mean(sig1[plot_binary][bg_binary[plot_binary]]))
+bg_mean_read2_rescaled = log2(mean(sig2_rescaled[plot_binary][bg_binary[plot_binary]]))
 total_mean_read1 = log2(mean(sig1[plot_binary]))
 total_mean_read2_rescaled = log2(mean(sig2_rescaled[plot_binary]))
 
