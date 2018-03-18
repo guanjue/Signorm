@@ -14,7 +14,7 @@ input_sig3 = args[3]
 output = args[4]
 
 small_num = 0.01
-random_sample_num = 100000
+random_sample_num = 1000000
 upperlim = 100
 lowerlim = 0
 ct = unlist(strsplit(input_sig3, "[.]"))[1]
