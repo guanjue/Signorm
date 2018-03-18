@@ -49,7 +49,7 @@ import getopt
 import sys
 def main(argv):
 	try:
-		opts, args = getopt.getopt(argv,"hw:p:n:a:b:c:d:u:l:")
+		opts, args = getopt.getopt(argv,"hi:o:")
 	except getopt.GetoptError:
 		print 'time python readscount2readsbed.py -i input_reads_count_file -o output_reads_file'
 		sys.exit(2)
