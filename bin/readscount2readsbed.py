@@ -35,7 +35,7 @@ def readscount2readsbed(input_reads_count_file, output_reads_file):
 			print(i)
 		i = i+1
 		num = int(rc_i[3])
-		for j in range(0, j):
+		for j in range(0, num):
 			reads.append(rc_i[0:3])
 
 	reads = np.array(reads)
