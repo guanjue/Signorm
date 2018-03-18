@@ -269,7 +269,7 @@ import getopt
 import sys
 def main(argv):
 	try:
-		opts, args = getopt.getopt(argv,"hw:p:n:a:b:c:d:u:l:")
+		opts, args = getopt.getopt(argv,"hi:o:")
 	except getopt.GetoptError:
 		print 'time python index_label2meansig.py -i input_file_list -o outputname -l log2 -s small_num -d lowerlim -u upperlim'
 		sys.exit(2)
