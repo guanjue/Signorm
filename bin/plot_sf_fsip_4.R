@@ -38,8 +38,8 @@ for ( i in c(1:dim(info_list_files)[1])){
 }
 
 
-ymin_FSiP = min(c(sig1_ref_fsip, sig2_raw_fsip, sig2_manorm_fsip, sig2_pknorm_fsip, sig2_totalsignorm_fsip))-0.2
-ymax_FSiP = max(c(sig1_ref_fsip, sig2_raw_fsip, sig2_manorm_fsip, sig2_pknorm_fsip, sig2_totalsignorm_fsip))+0.2
+ymin_FSiP = min(c(sig1_ref_fsip, sig2_raw_fsip, sig2_manorm_fsip, sig2_pknorm_fsip, sig2_totalsignorm_fsip))-0.1
+ymax_FSiP = max(c(sig1_ref_fsip, sig2_raw_fsip, sig2_manorm_fsip, sig2_pknorm_fsip, sig2_totalsignorm_fsip))+0.1
 
 pdf(paste(outputname, '.FSiP.pdf', sep=''))
 plot(sig2_raw_fsip, pch=20, col='black', ylim=c(ymin_FSiP, ymax_FSiP), axes=FALSE, xlab='')
