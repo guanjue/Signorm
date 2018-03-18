@@ -96,7 +96,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	sig2_output_name = sig2_wg_raw.split('.')[0]
 
 	### add small_number
-	small_num = 1e-2
+	small_num = 1e-1
 
 	### read whole genome signals
 	sig1 = read2d_array(sig1_wg_raw, float)
@@ -114,7 +114,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	#	sig1_thresh = np.sort(sig1, axis=None)[-10000]
 	#	print('rank sig1')
 	#	sig1_binary = sig1 > sig1_thresh
-	sig1_binary = 10**(-sig1) <= 0.01
+	sig1_binary = 10**(-sig1) <= 0.001
 	#print(sig1_pk_num)
 
 	#sig2_z_p_fdr = p_adjust(1 - norm.cdf((sig2 - np.mean(sig2))/ np.std(sig2)), 'fdr')
@@ -124,7 +124,7 @@ def pknorm(wg_bed, peak_bed, sample_num, sig1_col_list, sig1_wg_raw, sig2_col_li
 	#	sig2_thresh = np.sort(sig2, axis=None)[-10000]
 	#	print('rank sig2')
 	#	sig2_binary = sig2 > sig2_thresh
-	sig2_binary = 10**(-sig2) <= 0.01
+	sig2_binary = 10**(-sig2) <= 0.001
 	#print(sig2_pk_num)
 
 	### peak region (both != 0 in sig1 & sig2)
