@@ -10,7 +10,7 @@ def read2d_array(filename,dtype_used, split='\t'):
 	data=open(filename,'r')
 	data0=[]
 	for records in data:
-		tmp = [x.strip() for x in records.split(' ')]
+		tmp = [x.strip() for x in records.split(split)]
 		data0.append(tmp)
 	data0 = np.array(data0,dtype=dtype_used)
 	data.close()
