@@ -84,7 +84,7 @@ import sys
 
 def main(argv):
 	try:
-		opts, args = getopt.getopt(argv,"ha:b:c:d:e:u:l:o:")
+		opts, args = getopt.getopt(argv,"ha:b:c:d:e:u:l:s:o:")
 	except getopt.GetoptError:
 		print 'python ideas_state_color_by_atac_sig.py -a ideas_state_bed -b ideas_state_col -c atac_sig_bed -d atac_sig_col -e ideas_state_id_color_name_list -u signal_upperlim -l signal_lowerlim o outputname'
 		sys.exit(2)
@@ -107,12 +107,14 @@ def main(argv):
 			signal_upperlim=float(arg.strip())
 		elif opt=="-l":
 			signal_lowerlim=float(arg.strip())
+		elif opt=="-s":
+			chromsize_file=str(arg.strip())
 
 		elif opt=="-o":
 			outputname=str(arg.strip())
 
 
-	ideas_state_color_by_atac_sig(ideas_state_bed, ideas_state_col, atac_sig_bed, atac_sig_col, ideas_state_id_color_name_list, signal_upperlim, signal_lowerlim, outputname)
+	ideas_state_color_by_atac_sig(ideas_state_bed, ideas_state_col, atac_sig_bed, atac_sig_col, ideas_state_id_color_name_list, signal_upperlim, signal_lowerlim, outputname, chromsize_file)
 
 if __name__=="__main__":
 	main(sys.argv[1:])
