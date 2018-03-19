@@ -62,18 +62,19 @@ def atac_pk_ideas_color(atac_binary_matrix_file, atac_start_col, atac_pk_list, i
 
 	### binary pk colored by ideas state
 	for ct in atac_pk_dict:
+		print(ct)
 		if ct in ideas_state_dict:
 			ct_atac_pk_ideas_color_bed = []
-			atac_pk_vec = atac_pk_dict[ct]
-			ideas_state_vec = ideas_state_dict[ct]
+			atac_pk_vec = atac_pk_dict[ct].reshape(atac_pk_dict[ct].shape[0],1)
+			ideas_state_vec = ideas_state_dict[ct].reshape(ideas_state_dict[ct].shape[0],1)
 			### concatenate bed, atac_pk, ideas_state
 			bed_atac_pk_ideas_state = np.concatenate((atac_pk_bed, atac_pk_vec, ideas_state_vec), axis = 1)
 
 			for info in bed_atac_pk_ideas_state:
 				### check if atac_pk != 0
 				if info[3] != '0':
-					name = ideas_state_info_dict[info[4]][2] + ';' + info[4]
-					color = ideas_state_info_dict[info[4]][1]
+					name = ideas_state_info_dict[info[4]][1] + ';' + info[4]
+					color = ideas_state_info_dict[info[4]][0]
 					ct_atac_pk_ideas_color_bed.append([ info[0],info[1],info[2], name, '1000', '.', info[1],info[2], color ])
 
 			ct_atac_pk_ideas_color_bed = np.array(ct_atac_pk_ideas_color_bed)
