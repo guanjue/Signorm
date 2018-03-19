@@ -87,12 +87,12 @@ def main(argv):
 	try:
 		opts, args = getopt.getopt(argv,"ha:b:c:d:e:u:l:s:o:")
 	except getopt.GetoptError:
-		print 'python ideas_state_color_by_atac_sig.py -a ideas_state_bed -b ideas_state_col -c atac_sig_bed -d atac_sig_col -e ideas_state_id_color_name_list -u signal_upperlim -l signal_lowerlim o outputname'
+		print 'python ideas_state_color_by_atac_sig.py -a ideas_state_bed -b ideas_state_col -c atac_sig_bed -d atac_sig_col -e ideas_state_id_color_name_list -u signal_upperlim -l signal_lowerlim -o outputname'
 		sys.exit(2)
 
 	for opt,arg in opts:
 		if opt=="-h":
-			print 'python ideas_state_color_by_atac_sig.py -a ideas_state_bed -b ideas_state_col -c atac_sig_bed -d atac_sig_col -e ideas_state_id_color_name_list -u signal_upperlim -l signal_lowerlim o outputname'
+			print 'python ideas_state_color_by_atac_sig.py -a ideas_state_bed -b ideas_state_col -c atac_sig_bed -d atac_sig_col -e ideas_state_id_color_name_list -u signal_upperlim -l signal_lowerlim -o outputname'
 			sys.exit()
 		elif opt=="-a":
 			ideas_state_bed=str(arg.strip())

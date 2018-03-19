@@ -27,7 +27,7 @@ def write2d_array(array,output):
 	r1.close()
 
 
-def atac_pk_ideas_color(atac_binary_matrix_file, atac_start_col, atac_pk_list, ideas_state_matrix_file, ideas_start_col, ideas_state_list, outputname):
+def atac_pk_ideas_color(atac_binary_matrix_file, atac_start_col, atac_pk_list, ideas_state_matrix_file, ideas_start_col, ideas_state_list, ideas_state_id_color_name_list, outputname):
 	### read atac pk
 	atac_binary_matrix = read2d_array(atac_binary_matrix_file, str)
 	atac_pk_bed = atac_binary_matrix[:, 0:3]
@@ -36,7 +36,7 @@ def atac_pk_ideas_color(atac_binary_matrix_file, atac_start_col, atac_pk_list, i
 	atac_pk_list = read2d_array(atac_pk_list, str)
 	### matrix to dict
 	atac_pk_dict = {}
-	for i in range(0, atac_pk_binary.shape()[1]):
+	for i in range(0, atac_pk_binary.shape[1]):
 		ct = atac_pk_list[i][1]
 		atac_pk_dict[ct] = atac_pk_binary[:,i]
 
@@ -48,7 +48,7 @@ def atac_pk_ideas_color(atac_binary_matrix_file, atac_start_col, atac_pk_list, i
 	ideas_state_list = read2d_array(ideas_state_list, str)
 	### matrix to dict
 	ideas_state_dict = {}
-	for i in range(0, ideas_state_matrix_id.shape()[1]):
+	for i in range(0, ideas_state_matrix_id.shape[1]):
 		ct = ideas_state_list[i][1]
 		ideas_state_dict[ct] = ideas_state_matrix_id[:,i]
 
@@ -86,14 +86,14 @@ import sys
 
 def main(argv):
 	try:
-		opts, args = getopt.getopt(argv,"ha:b:c:d:e:f:o:")
+		opts, args = getopt.getopt(argv,"ha:b:c:d:e:f:g:o:")
 	except getopt.GetoptError:
-		print 'python ideas_state_color_by_atac_sig.py -a ideas_state_bed -b ideas_state_col -c atac_sig_bed -d atac_sig_col -e ideas_state_id_color_name_list -u signal_upperlim -l signal_lowerlim o outputname'
+		print 'python atac_pk_ideas_color.py -a atac_binary_matrix_file -b atac_start_col -c atac_pk_list -d ideas_state_matrix_file -e ideas_start_col -f ideas_state_list -g ideas_state_id_color_name_list -o outputname'
 		sys.exit(2)
 
 	for opt,arg in opts:
 		if opt=="-h":
-			print 'python ideas_state_color_by_atac_sig.py -a ideas_state_bed -b ideas_state_col -c atac_sig_bed -d atac_sig_col -e ideas_state_id_color_name_list -u signal_upperlim -l signal_lowerlim o outputname'
+			print 'python atac_pk_ideas_color.py -a atac_binary_matrix_file -b atac_start_col -c atac_pk_list -d ideas_state_matrix_file -e ideas_start_col -f ideas_state_list -g ideas_state_id_color_name_list -o outputname'
 			sys.exit()
 		elif opt=="-a":
 			atac_binary_matrix_file=str(arg.strip())
@@ -107,12 +107,14 @@ def main(argv):
 			ideas_start_col=int(arg.strip())
 		elif opt=="-f":
 			ideas_state_list=str(arg.strip())
+		elif opt=="-g":
+			ideas_state_id_color_name_list=str(arg.strip())
 
 		elif opt=="-o":
 			outputname=str(arg.strip())
 
 
-	atac_pk_ideas_color(atac_binary_matrix_file, atac_start_col, atac_pk_list, ideas_state_matrix_file, ideas_start_col, ideas_state_list, outputname)
+	atac_pk_ideas_color(atac_binary_matrix_file, atac_start_col, atac_pk_list, ideas_state_matrix_file, ideas_start_col, ideas_state_list, ideas_state_id_color_name_list, outputname)
 
 if __name__=="__main__":
 	main(sys.argv[1:])

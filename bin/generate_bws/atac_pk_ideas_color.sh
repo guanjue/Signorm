@@ -27,3 +27,10 @@ chmod 777 bedToBigBed
 
 
 
+time python ~/group/software/signorm/bin/generate_bws/atac_pk_ideas_color.py -a /storage/home/gzx103/scratch/vision/5end/index_set_20cell_pknorm/atac_20cell.bed.index.matrix.txt -b 5 -c /storage/home/gzx103/scratch/vision/5end/index_set_20cell_pknorm/peak_list.txt -d /storage/home/gzx103/scratch/vision/5end/index_set_20cell_pknorm/atac_20cell.bed.ideas.matrix.txt -e 5 -f /storage/home/gzx103/scratch/vision/5end/index_set_20cell_pknorm/ideas_list.txt -g /storage/home/gzx103/scratch/vision/5end/index_set_20cell_pknorm/ideas_atac_sig_color/ideas_state_id_color_name_list.txt -o atac_pk
+
+
+atac_20cell.bed.index.matrix.txt
+
+atac_20cell.bed.ideas.matrix.txt
+
