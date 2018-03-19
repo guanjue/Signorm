@@ -63,10 +63,11 @@ def ideas_state_color_by_atac_sig(ideas_state_bed, ideas_state_col, atac_sig_bed
 			### change rgb color based on atac-seq signal
 			signal_range = signal_upperlim - signal_lowerlim
 			sigdif = (signal_upperlim - float(atac_pk_sig)) / signal_range
-			ideas_pk_state_atac_sig_color_r = int(float(ideas_pk_state_color.split(',')[0]) * (1-sigdif) + 255.0 * sigdif)
-			ideas_pk_state_atac_sig_color_g = int(float(ideas_pk_state_color.split(',')[1]) * (1-sigdif) + 255.0 * sigdif)
-			ideas_pk_state_atac_sig_color_b = int(float(ideas_pk_state_color.split(',')[2]) * (1-sigdif) + 255.0 * sigdif)
-			ideas_pk_state_atac_sig_color = str(ideas_pk_state_atac_sig_color_r)+','+str(ideas_pk_state_atac_sig_color_g)+','+str(ideas_pk_state_atac_sig_color_b)
+			if (sigdif > 0.01) and (ideas_pk_state_color != '255,255,255'):
+				ideas_pk_state_atac_sig_color_r = int(float(ideas_pk_state_color.split(',')[0]) * (1-sigdif) + 255.0 * sigdif)
+				ideas_pk_state_atac_sig_color_g = int(float(ideas_pk_state_color.split(',')[1]) * (1-sigdif) + 255.0 * sigdif)
+				ideas_pk_state_atac_sig_color_b = int(float(ideas_pk_state_color.split(',')[2]) * (1-sigdif) + 255.0 * sigdif)
+				ideas_pk_state_atac_sig_color = str(ideas_pk_state_atac_sig_color_r)+','+str(ideas_pk_state_atac_sig_color_g)+','+str(ideas_pk_state_atac_sig_color_b)
 
 			### merge all information
 			ideas_state_bigbed.append([ ideas_pk_state_chr, ideas_pk_state_start, ideas_pk_state_end, ideas_pk_state_name+';'+ideas_pk_state_id, '1000', '.', ideas_pk_state_start, ideas_pk_state_end, ideas_pk_state_atac_sig_color ])
