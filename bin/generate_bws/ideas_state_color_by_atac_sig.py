@@ -28,12 +28,18 @@ def write2d_array(array,output):
 
 
 
-def ideas_state_color_by_atac_sig(ideas_state_bed, ideas_state_col, atac_sig_bed, atac_sig_col, ideas_state_id_color_name_list, signal_upperlim, signal_lowerlim, outputname):
+def ideas_state_color_by_atac_sig(ideas_state_bed, ideas_state_col, atac_sig_bed, atac_sig_col, ideas_state_id_color_name_list, signal_upperlim, signal_lowerlim, outputname, chromsize_file):
 	### read ideas state
 	ideas_state_all = read2d_array(ideas_state_bed, str)
 
 	### read atac signal
 	atac_sig_all = read2d_array(atac_sig_bed, str)
+
+	### read chromsize
+	chromsize = read2d_array(chromsize_file, str)
+	chromsize_dict = {}
+	for infos in chromsize:
+		chromsize_dict[infos[0]] = int(infos[1])
 
 	### read ideas_state_id_color_name_list
 	ideas_state_info = read2d_array(ideas_state_id_color_name_list, str)
@@ -46,21 +52,24 @@ def ideas_state_color_by_atac_sig(ideas_state_bed, ideas_state_col, atac_sig_bed
 		ideas_pk_state_chr = ideas_peak[0]
 		ideas_pk_state_start = ideas_peak[1]
 		ideas_pk_state_end = ideas_peak[2]
-		ideas_pk_state_id = ideas_peak[ideas_state_col-1]
-		ideas_pk_state_color = ideas_state_info_dict[ideas_pk_state_id][0]
-		ideas_pk_state_name = ideas_state_info_dict[ideas_pk_state_id][1]
-		atac_pk_sig = atac_peak[atac_sig_col-1]
 
-		### change rgb color based on atac-seq signal
-		signal_range = signal_upperlim - signal_lowerlim
-		sigdif = (signal_upperlim - float(atac_pk_sig)) / signal_range
-		ideas_pk_state_atac_sig_color_r = int(float(ideas_pk_state_color.split(',')[0]) * (1-sigdif) + 255.0 * sigdif)
-		ideas_pk_state_atac_sig_color_g = int(float(ideas_pk_state_color.split(',')[1]) * (1-sigdif) + 255.0 * sigdif)
-		ideas_pk_state_atac_sig_color_b = int(float(ideas_pk_state_color.split(',')[2]) * (1-sigdif) + 255.0 * sigdif)
-		ideas_pk_state_atac_sig_color = str(ideas_pk_state_atac_sig_color_r)+','+str(ideas_pk_state_atac_sig_color_g)+','+str(ideas_pk_state_atac_sig_color_b)
+		### only write bed within chromsize
+		if chromsize_dict[ideas_pk_state_chr] >= int(ideas_pk_state_end):
+			ideas_pk_state_id = ideas_peak[ideas_state_col-1]
+			ideas_pk_state_color = ideas_state_info_dict[ideas_pk_state_id][0]
+			ideas_pk_state_name = ideas_state_info_dict[ideas_pk_state_id][1]
+			atac_pk_sig = atac_peak[atac_sig_col-1]
 
-		### merge all information
-		ideas_state_bigbed.append([ ideas_pk_state_chr, ideas_pk_state_start, ideas_pk_state_end, ideas_pk_state_name+';'+ideas_pk_state_id, '1000', '.', ideas_pk_state_start, ideas_pk_state_end, ideas_pk_state_atac_sig_color ])
+			### change rgb color based on atac-seq signal
+			signal_range = signal_upperlim - signal_lowerlim
+			sigdif = (signal_upperlim - float(atac_pk_sig)) / signal_range
+			ideas_pk_state_atac_sig_color_r = int(float(ideas_pk_state_color.split(',')[0]) * (1-sigdif) + 255.0 * sigdif)
+			ideas_pk_state_atac_sig_color_g = int(float(ideas_pk_state_color.split(',')[1]) * (1-sigdif) + 255.0 * sigdif)
+			ideas_pk_state_atac_sig_color_b = int(float(ideas_pk_state_color.split(',')[2]) * (1-sigdif) + 255.0 * sigdif)
+			ideas_pk_state_atac_sig_color = str(ideas_pk_state_atac_sig_color_r)+','+str(ideas_pk_state_atac_sig_color_g)+','+str(ideas_pk_state_atac_sig_color_b)
+
+			### merge all information
+			ideas_state_bigbed.append([ ideas_pk_state_chr, ideas_pk_state_start, ideas_pk_state_end, ideas_pk_state_name+';'+ideas_pk_state_id, '1000', '.', ideas_pk_state_start, ideas_pk_state_end, ideas_pk_state_atac_sig_color ])
 
 
 	ideas_state_bigbed = np.array(ideas_state_bigbed)
