@@ -35,10 +35,7 @@ def write2d_array(array,output):
 cd_tree_file = 'cd_tree.txt'
 cd_tree = read2d_array(cd_tree_file, str, ',') 
 
-
-state_input = 'test_20cell.location_pknorm_16lim_refmean_samplemean_nosub.state'
-
-state_input = 'test.state'
+state_input = '/storage/home/gzx103/scratch/vision/5end/index_set_20cell_pknorm/ideas_label/used.state'
 
 state_all = read2d_array(state_input, str, ' ')
 state_all_ct = state_all[0]
