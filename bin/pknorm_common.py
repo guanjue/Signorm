@@ -105,11 +105,6 @@ def pknorm(sig1_wg_raw, sig2_wg_raw, moment, B_init, fdr_thresh, sample_num, sma
 	### read whole genome signals
 	sig1 = read2d_array(sig1_wg_raw, float)
 	sig2 = read2d_array(sig2_wg_raw, float)
-
-	### get small number
-	small_num = (m1*n0-m0*n1) / (m0 - m1 - n0 + n1)
-	#c = (m1*n0-m0*n1) / (m0 - m1 - n0 + n1)
-	#where m0=mean(x_bg), m1=mean(x_pk), n0=mean(y_bg), n1=mean(y_pk).
 	
 	p_method = 'nb'
 	### read whole genome binary label
