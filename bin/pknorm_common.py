@@ -105,8 +105,13 @@ def pknorm(sig1_wg_raw, sig2_wg_raw, moment, B_init, fdr_thresh, sample_num, sma
 	### read whole genome signals
 	sig1 = read2d_array(sig1_wg_raw, float)
 	sig2 = read2d_array(sig2_wg_raw, float)
+
+	### get small number
+	small_num = (m1*n0-m0*n1) / (m0 - m1 - n0 + n1)
+	#c = (m1*n0-m0*n1) / (m0 - m1 - n0 + n1)
+	#where m0=mean(x_bg), m1=mean(x_pk), n0=mean(y_bg), n1=mean(y_pk).
 	
-	p_method = 'ncis'
+	p_method = 'nb'
 	### read whole genome binary label
 	if p_method == 'nb':
 		sig1_p = read2d_array(sig1_wg_raw + '.nbp.txt', float)
@@ -166,9 +171,27 @@ def pknorm(sig1_wg_raw, sig2_wg_raw, moment, B_init, fdr_thresh, sample_num, sma
 	bg_binary = ~(sig1_binary[:,0] | sig2_binary[:,0])
 	print(np.sum(bg_binary))
 
+	### get common bg pk
+	sig1_cbg = sig1[bg_binary,0]
+	sig2_cbg = sig2[bg_binary,0]
+	sig1_cpk = sig1[peak_binary,0]
+	sig2_cpk = sig2[peak_binary,0]
 
+	### get data driven added small number
+	sig1_cbg_mean = np.mean(sig1_cbg)
+	sig2_cbg_mean = np.mean(sig2_cbg)
+	sig1_cpk_mean = np.mean(sig1_cpk)
+	sig2_cpk_mean = np.mean(sig2_cpk)
+
+	small_num = (sig1_cpk_mean*sig2_cbg_mean - sig1_cbg_mean*sig2_cpk_mean) / ((sig1_cbg_mean-sig1_cpk_mean)-(sig2_cbg_mean-sig2_cpk_mean))
+	if small_num >1:
+		small_num = 1.0
+	elif small_num <0.001:
+		small_num = 0.001
+	print('added small number: '+str(small_num))
 	### get transformation factor
-	AB = NewtonRaphsonMethod(sig1[peak_binary,0]+small_num,sig1[bg_binary,0]+small_num, sig2[peak_binary,0]+small_num,sig2[bg_binary,0]+small_num, 1.0, 2.0, moment, 1e-5, 500)
+
+	AB = NewtonRaphsonMethod(sig1_cpk+small_num,sig1_cbg+small_num, sig2_cpk+small_num,sig2_cbg+small_num, 1.0, 2.0, moment, 1e-5, 500)
 	A=AB[0]
 	B=AB[1]
 	print('transformation: '+'B: '+str(B)+'; A: '+str(A))
