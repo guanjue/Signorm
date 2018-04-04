@@ -17,3 +17,5 @@ do
 	rm 'atac_pk.'$ct'.sort.bed'
 done
 
+time python ~/group/software/signorm/bin/generate_bws/check_ccRE_types.py
+
