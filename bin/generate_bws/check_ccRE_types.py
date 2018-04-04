@@ -51,6 +51,9 @@ ccRE_type_matrix = np.array(ccRE_type_matrix)
 
 output = open('count_table.txt', 'w')
 output.write('celltyp'+'\t')
+for records in ccRE_type:
+	output.write(records+'\t')
+output.write('\n')
 i = 0
 for records in ccRE_type_matrix:
 	output.write(list1[i]+'\t')
