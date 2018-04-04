@@ -23,7 +23,7 @@ sig1 = scan(input_sig1)
 sig2 = scan(input_sig2)
 sig3 = scan(input_sig3)
 totalmean_sf = sum(sig1) / sum(sig2)
-sig4 = (sig2+small_num) * totalmean_sf - small_num
+sig4 = (sig2+small_num) * totalmean_sf #- small_num
 sig4[sig4>upperlim] = upperlim
 sig4[sig4<lowerlim] = lowerlim
 
