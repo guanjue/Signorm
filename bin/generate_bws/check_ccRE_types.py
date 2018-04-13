@@ -23,14 +23,15 @@ def write2d_array(array,output):
 	r1.close()
 
 
-list1 = read2d_array('/storage/home/gzx103/scratch/vision/5end/index_set_20cell_pknorm/peak_list.txt', str)
+list1 = read2d_array('/storage/home/gzx103/scratch/vision/5end/index_set_20cell_pknorm/peak_list.txt', str)[:,1]
 
-ccRE_type = read2d_array('/storage/home/gzx103/scratch/vision/5end/index_set_20cell_pknorm/ideas_atac_sig_color/ideas_state_id_color_name_list.txt', str)[:,2]
+ccRE_type = read2d_array('/storage/home/gzx103/scratch/vision/5end/index_set_20cell_pknorm/ideas_atac_sig_color/ideas_state_id_color_name_list.txt', str)[:,:]
 
+print(ccRE_type_matrix.shape)
 ccRE_type_matrix = []
 
 for name in list1:
-	filename = 'atac_pk.' + name + '.bed'
+	filename = 'atac_pk.' + str(name) + '.bed'
 	d_dict = {}
 	d = read2d_array(filename, str)
 	for info in d:
@@ -41,19 +42,23 @@ for name in list1:
 	### get to 1d dict
 	count_array = []
 	for ccRE in ccRE_type:
+		ccRE = ccRE[2]+';'+ccRE[0]
 		if ccRE in d_dict:
 			count_array.append(d_dict[ccRE])
 		else:
 			count_array.append(0)
-		ccRE_type_matrix.append(count_array)
+	ccRE_type_matrix.append(count_array)
 
 ccRE_type_matrix = np.array(ccRE_type_matrix)
 
 output = open('count_table.txt', 'w')
 output.write('celltyp'+'\t')
 for records in ccRE_type:
+	records = records[2]+';'+records[0]
 	output.write(records+'\t')
 output.write('\n')
+
+print(ccRE_type_matrix)
 i = 0
 for records in ccRE_type_matrix:
 	output.write(list1[i]+'\t')
