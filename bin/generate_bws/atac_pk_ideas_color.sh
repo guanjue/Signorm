@@ -12,7 +12,8 @@ for filename in $(cat atac_pk_ideas_state_color_file_list.txt)
 do
 	ct=$(echo "$filename" | awk -F '.' '{print $2}')
 	echo $ct
-	sort -k1,1 -k2,2n 'atac_pk.'$ct'.bed' > 'atac_pk.'$ct'.sort.bed'
+	#sort -k1,1 -k2,2n 'atac_pk.'$ct'.bed' > 'atac_pk.'$ct'.sort.bed'
+	sort -k1,1 -k2,2n 'atac_pk.'$ct'.bed' | awk -F '\t' -v OFS='\t' '{if ($4!="Q_____;0") print $0 }' > 'atac_pk.'$ct'.sort.bed'
 	./bedToBigBed 'atac_pk.'$ct'.sort.bed' /storage/home/gzx103/group/projects/vision/input_norm/mm10.chrom.sizes 'atac_pk.'$ct'.bb'
 	rm 'atac_pk.'$ct'.sort.bed'
 done
