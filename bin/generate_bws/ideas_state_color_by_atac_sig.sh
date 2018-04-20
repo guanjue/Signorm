@@ -16,7 +16,7 @@ do
 	filename=$(echo "$file" | awk -F '/' '{print $10}')
 	ct=$(echo "$filename" | awk -F '.' '{print $2}')
 	echo $ct
-	time python ~/group/software/signorm/bin/generate_bws/ideas_state_color_by_atac_sig.py -a '/storage/home/gzx103/scratch/vision/5end/index_set_20cell_pknorm/ideas_label/20ct.'$ct'.bed' -b 5 -c '/storage/home/gzx103/scratch/vision/5end/index_set_20cell_pknorm/atac_sig/'$ct'.atac.pkn16.txt' -d 1 -e ideas_state_id_color_name_list.txt -u 16.0 -l 0.0 -s /storage/home/gzx103/group/projects/vision/input_norm/mm10.chrom.sizes -o 'ideas.v15.8.'$ct'.bed'
-	sort -k1,1 -k2,2n 'ideas.v15.8.'$ct'.bed' > 'ideas.v15.8.'$ct'.sort.bed'
-	./bedToBigBed 'ideas.v15.8.'$ct'.sort.bed' /storage/home/gzx103/group/projects/vision/input_norm/mm10.chrom.sizes 'ideas.v15.8.'$ct'.bb'
+	time python ~/group/software/signorm/bin/generate_bws/ideas_state_color_by_atac_sig.py -a '/storage/home/gzx103/scratch/vision/5end/index_set_20cell_pknorm/ideas_label/20ct.'$ct'.bed' -b 5 -c '/storage/home/gzx103/scratch/vision/5end/index_set_20cell_pknorm/atac_sig/'$ct'.atac.pkn16.txt' -d 1 -e ideas_state_id_color_name_list.txt -u 16.0 -l 0.0 -s /storage/home/gzx103/group/projects/vision/input_norm/mm10.chrom.sizes -o 'ideas.'$ct'.bed'
+	sort -k1,1 -k2,2n 'ideas.'$ct'.bed' > 'ideas.'$ct'.sort.bed'
+	./bedToBigBed 'ideas.'$ct'.sort.bed' /storage/home/gzx103/group/projects/vision/input_norm/mm10.chrom.sizes 'ideas.'$ct'.bb'
 done
