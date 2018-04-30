@@ -71,7 +71,7 @@ def get_state_number_onect(ideas_state_matrix_file, target_state_label, bedfile,
 				ideas_state_wig.append([ideas_pk_state_chr,ideas_pk_state_start,ideas_pk_state_end,'0'])
 
 	ideas_state_wig = np.array(ideas_state_wig)
-	write2d_array(ideas_state_wig, target_state+'.state_num.bedgraph')
+	write2d_array(ideas_state_wig, ideas_state_matrix_colnames[cell_type_col-1]+'.'+target_state+'.state_num.bedgraph')
 
 
 
@@ -81,7 +81,7 @@ import getopt
 import sys
 def main(argv):
 	try:
-		opts, args = getopt.getopt(argv,"hi:s:b:c:")
+		opts, args = getopt.getopt(argv,"hi:s:b:c:t:")
 	except getopt.GetoptError:
 		print 'time python get_state_number_onect.py -i ideas_state_matrix -s target_state_label -c chromsize_file -t cell_type_col'
 		sys.exit(2)
