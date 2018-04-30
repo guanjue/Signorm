@@ -4,13 +4,13 @@ import numpy as np
 
 ################################################################################################
 ### read 2d array
-def read2d_array(filename,dtype_used):
+def read2d_array(filename,dtype_used, sep):
 	import numpy as np
 	data=open(filename,'r')
 	data.readline()
 	data0=[]
 	for records in data:
-		tmp = [x.strip() for x in records.split(' ')]
+		tmp = [x.strip() for x in records.split(sep)]
 		data0.append(tmp)
 	data0 = np.array(data0,dtype=dtype_used)
 	data.close()
@@ -30,10 +30,10 @@ def write2d_array(array,output):
 ### get state number
 def get_state_number_across_allct(ideas_state_matrix_file, target_state_label, chromsize_file):
 	target_state = target_state_label
-	ideas_state_matrix = read2d_array(ideas_state_matrix_file, str)
+	ideas_state_matrix = read2d_array(ideas_state_matrix_file, str, ' ')
 
 	### read chromsize
-	chromsize = read2d_array(chromsize_file, str)
+	chromsize = read2d_array(chromsize_file, str, '\t')
 	chromsize_dict = {}
 	for infos in chromsize:
 		chromsize_dict[infos[0]] = int(infos[1])
