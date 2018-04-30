@@ -1,0 +1,107 @@
+#module load python/2.7
+import os
+import numpy as np
+
+################################################################################################
+### read 2d array
+def read2d_array(filename,dtype_used, sep):
+	import numpy as np
+	data=open(filename,'r')
+	data0=[]
+	for records in data:
+		tmp = [x.strip() for x in records.split(sep)]
+		data0.append(tmp)
+	data0 = np.array(data0,dtype=dtype_used)
+	data.close()
+	return data0
+
+### read 2d array
+def read2d_array_chrom(filename,dtype_used, sep):
+	import numpy as np
+	data=open(filename,'r')
+	data0=[]
+	for records in data:
+		tmp = [x.strip() for x in records.split(sep)]
+		data0.append(tmp)
+	data0 = np.array(data0,dtype=dtype_used)
+	data.close()
+	return data0
+
+################################################################################################
+### write 2d matrix
+def write2d_array(array,output):
+	r1=open(output,'w')
+	for records in array:
+		for i in range(0,len(records)-1):
+			r1.write(str(records[i])+'\t')
+		r1.write(str(records[len(records)-1])+'\n')
+	r1.close()
+
+################################################################################################
+### get state number
+def get_state_number_onect(ideas_state_matrix_file, target_state_label, bedfile, chromsize_file, cell_type_col):
+	target_state = target_state_label
+	ideas_state_matrix = read2d_array(ideas_state_matrix_file, str, ' ')
+	ideas_state_matrix_colnames = ideas_state_matrix[0,:]
+	ideas_state_matrix = ideas_state_matrix[1:,:]
+	### read chromsize
+	chromsize = read2d_array_chrom(chromsize_file, str, '\t')
+	chromsize_dict = {}
+	for infos in chromsize:
+		chromsize_dict[infos[0]] = int(infos[1])
+	### read bed
+	bed_info = read2d_array_chrom(bedfile, str, '\t')
+
+	ideas_state_wig = []
+	i=0
+	for bed, records in zip(bed_info, ideas_state_matrix):
+		if i%100000==0:
+			print(i)
+		i = i+1
+		ideas_pk_state_chr = bed[0]
+		ideas_pk_state_start = bed[1]
+		ideas_pk_state_end = bed[2]
+
+		### only write bed within chromsize
+		if chromsize_dict[ideas_pk_state_chr] >= int(ideas_pk_state_end):
+			state = records[cell_type_col-1]
+			if state==target_state:
+				ideas_state_wig.append([ideas_pk_state_chr,ideas_pk_state_start,ideas_pk_state_end,'1'])
+			else:
+				ideas_state_wig.append([ideas_pk_state_chr,ideas_pk_state_start,ideas_pk_state_end,'0'])
+
+	ideas_state_wig = np.array(ideas_state_wig)
+	write2d_array(ideas_state_wig, target_state+'.state_num.bedgraph')
+
+
+
+############################################################################
+
+import getopt
+import sys
+def main(argv):
+	try:
+		opts, args = getopt.getopt(argv,"hi:s:b:c:")
+	except getopt.GetoptError:
+		print 'time python get_state_number_onect.py -i ideas_state_matrix -s target_state_label -c chromsize_file -t cell_type_col'
+		sys.exit(2)
+
+	for opt,arg in opts:
+		if opt=="-h":
+			print 'time python get_state_number_onect.py -i ideas_state_matrix -s target_state_label -c chromsize_file -t cell_type_col'
+			sys.exit()
+		elif opt=="-i":
+			ideas_state_matrix_file=str(arg.strip())
+		elif opt=="-s":
+			target_state_label=str(arg.strip())
+		elif opt=="-b":
+			bedfile=str(arg.strip())
+		elif opt=="-c":
+			chromsize_file=str(arg.strip())	
+		elif opt=="-t":
+			cell_type_col=int(arg.strip())
+	get_state_number_onect(ideas_state_matrix_file, target_state_label, bedfile, chromsize_file, cell_type_col)
+
+if __name__=="__main__":
+	main(sys.argv[1:])
+
