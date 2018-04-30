@@ -5,7 +5,7 @@ tail -n+2 rnaHtseqCountsall.txt | awk -F '\t' -v OFS='\t' '{print $1, ($6+$7)/2,
 cat gencode.vM4.annotation.bed | awk -F '\t' -v OFS='\t' '{if ($5=="protein_coding") print $0}' > gencode.vM4.annotation.pc.bed
 
 ### sort cmp_ery reads count table by matched bed id
-time python ~/group/software/signorm/bin/vlookup.py -t rnaHtseqCountsall.cmp_ery.txt -m 1 -s gencode.vM4.annotation.bed -n 4 -o rnaHtseqCountsall.cmp_ery.bedmatched.tmp1.txt
+time python ~/group/software/signorm/bin/vlookup.py -t rnaHtseqCountsall.cmp_ery.txt -m 1 -s gencode.vM4.annotation.pc.bed -n 4 -o rnaHtseqCountsall.cmp_ery.bedmatched.tmp1.txt
 
 ### get expression signal only
 cut -f2,3 rnaHtseqCountsall.cmp_ery.bedmatched.tmp1.txt > rnaHtseqCountsall.cmp_ery.bedmatched.tmp2.txt
