@@ -33,7 +33,11 @@ def get_state_number_across_allct(ideas_state_matrix_file, target_state_label):
 	ideas_state_matrix = read2d_array(ideas_state_matrix_file, str)
 
 	ideas_state_wig = []
+	i=0
 	for records in ideas_state_matrix:
+		if i%100000==0:
+			print(i)
+		i = i+1
 		state = records[4:len(records)-1]
 		state_num = np.sum(state==target_state)
 		ideas_state_wig.append([records[1],records[2],records[3],str(state_num)])
