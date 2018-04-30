@@ -44,9 +44,9 @@ def get_state_number_across_allct(ideas_state_matrix_file, target_state_label, c
 		if i%100000==0:
 			print(i)
 		i = i+1
-		ideas_pk_state_chr = ideas_peak[0]
-		ideas_pk_state_start = ideas_peak[1]
-		ideas_pk_state_end = ideas_peak[2]
+		ideas_pk_state_chr = records[0]
+		ideas_pk_state_start = records[1]
+		ideas_pk_state_end = records[2]
 
 		### only write bed within chromsize
 		if chromsize_dict[ideas_pk_state_chr] >= int(ideas_pk_state_end):
