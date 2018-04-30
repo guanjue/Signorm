@@ -28,9 +28,15 @@ def write2d_array(array,output):
 
 ################################################################################################
 ### get state number
-def get_state_number_across_allct(ideas_state_matrix_file, target_state_label):
+def get_state_number_across_allct(ideas_state_matrix_file, target_state_label, chromsize_file):
 	target_state = target_state_label
 	ideas_state_matrix = read2d_array(ideas_state_matrix_file, str)
+
+	### read chromsize
+	chromsize = read2d_array(chromsize_file, str)
+	chromsize_dict = {}
+	for infos in chromsize:
+		chromsize_dict[infos[0]] = int(infos[1])
 
 	ideas_state_wig = []
 	i=0
@@ -38,9 +44,15 @@ def get_state_number_across_allct(ideas_state_matrix_file, target_state_label):
 		if i%100000==0:
 			print(i)
 		i = i+1
-		state = records[4:len(records)-1]
-		state_num = np.sum(state==target_state)
-		ideas_state_wig.append([records[1],records[2],records[3],str(state_num)])
+		ideas_pk_state_chr = ideas_peak[0]
+		ideas_pk_state_start = ideas_peak[1]
+		ideas_pk_state_end = ideas_peak[2]
+
+		### only write bed within chromsize
+		if chromsize_dict[ideas_pk_state_chr] >= int(ideas_pk_state_end):
+			state = records[4:len(records)-1]
+			state_num = np.sum(state==target_state)
+			ideas_state_wig.append([ideas_pk_state_chr,ideas_pk_state_start,ideas_pk_state_end,str(state_num)])
 
 	ideas_state_wig = np.array(ideas_state_wig)
 	write2d_array(ideas_state_wig, target_state+'.state_num.bedgraph')
@@ -53,21 +65,23 @@ import getopt
 import sys
 def main(argv):
 	try:
-		opts, args = getopt.getopt(argv,"hi:s:")
+		opts, args = getopt.getopt(argv,"hi:s:c:")
 	except getopt.GetoptError:
-		print 'time python get_state_number_across_allct.py -i ideas_state_matrix -s target_state_label'
+		print 'time python get_state_number_across_allct.py -i ideas_state_matrix -s target_state_label -c chromsize_file'
 		sys.exit(2)
 
 	for opt,arg in opts:
 		if opt=="-h":
-			print 'time python get_state_number_across_allct.py -i ideas_state_matrix -s target_state_label'
+			print 'time python get_state_number_across_allct.py -i ideas_state_matrix -s target_state_label -c chromsize_file'
 			sys.exit()
 		elif opt=="-i":
 			ideas_state_matrix_file=str(arg.strip())
 		elif opt=="-s":
 			target_state_label=str(arg.strip())
+		elif opt=="-c":
+			chromsize_file=str(arg.strip())		
 
-	get_state_number_across_allct(ideas_state_matrix_file, target_state_label)
+	get_state_number_across_allct(ideas_state_matrix_file, target_state_label, chromsize_file)
 
 if __name__=="__main__":
 	main(sys.argv[1:])
