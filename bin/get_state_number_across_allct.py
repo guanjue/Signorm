@@ -40,7 +40,7 @@ def write2d_array(array,output):
 
 ################################################################################################
 ### get state number
-def get_state_number_across_allct(ideas_state_matrix_file, target_state_label, chromsize_file):
+def get_state_number_across_allct(ideas_state_matrix_file, target_state_label, bedfile, chromsize_file):
 	target_state = target_state_label
 	ideas_state_matrix = read2d_array(ideas_state_matrix_file, str, ' ')
 
@@ -49,16 +49,18 @@ def get_state_number_across_allct(ideas_state_matrix_file, target_state_label, c
 	chromsize_dict = {}
 	for infos in chromsize:
 		chromsize_dict[infos[0]] = int(infos[1])
+	### read bed
+	bed_info = read2d_array_chrom(bedfile, str, '\t')
 
 	ideas_state_wig = []
 	i=0
-	for records in ideas_state_matrix:
+	for bed, records in zip(bed_info, ideas_state_matrix):
 		if i%100000==0:
 			print(i)
 		i = i+1
-		ideas_pk_state_chr = records[1]
-		ideas_pk_state_start = records[2]
-		ideas_pk_state_end = records[3]
+		ideas_pk_state_chr = bed[0]
+		ideas_pk_state_start = bed[1]
+		ideas_pk_state_end = bed[2]
 
 		### only write bed within chromsize
 		if chromsize_dict[ideas_pk_state_chr] >= int(ideas_pk_state_end):
@@ -77,7 +79,7 @@ import getopt
 import sys
 def main(argv):
 	try:
-		opts, args = getopt.getopt(argv,"hi:s:c:")
+		opts, args = getopt.getopt(argv,"hi:s:b:c:")
 	except getopt.GetoptError:
 		print 'time python get_state_number_across_allct.py -i ideas_state_matrix -s target_state_label -c chromsize_file'
 		sys.exit(2)
@@ -90,10 +92,12 @@ def main(argv):
 			ideas_state_matrix_file=str(arg.strip())
 		elif opt=="-s":
 			target_state_label=str(arg.strip())
+		elif opt=="-b":
+			bedfile=str(arg.strip())
 		elif opt=="-c":
 			chromsize_file=str(arg.strip())		
 
-	get_state_number_across_allct(ideas_state_matrix_file, target_state_label, chromsize_file)
+	get_state_number_across_allct(ideas_state_matrix_file, target_state_label, bedfile, chromsize_file)
 
 if __name__=="__main__":
 	main(sys.argv[1:])
