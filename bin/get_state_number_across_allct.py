@@ -19,7 +19,7 @@ def read2d_array(filename,dtype_used, sep):
 ### read 2d array
 def read2d_array_chrom(filename,dtype_used, sep):
 	import numpy as np
-	data.readline()
+	data=open(filename,'r')
 	data0=[]
 	for records in data:
 		tmp = [x.strip() for x in records.split(sep)]
