@@ -11,7 +11,7 @@ time python ~/group/software/signorm/bin/vlookup.py -t rnaHtseqCountsall.cmp_ery
 cut -f2,3 rnaHtseqCountsall.cmp_ery.bedmatched.tmp1.txt > rnaHtseqCountsall.cmp_ery.bedmatched.tmp2.txt
 
 ### paste bed info & sort by fold-change between cmp & ery_fl
-paste gencode.vM4.annotation.pc.bed rnaHtseqCountsall.cmp_ery.bedmatched.tmp2.txt | awk -F '\t' -v OFS='\t' '{print $1,$2,$3,$4,$5,$6, ($7)/($3-$2)}' | sort -k7,7n > rnaHtseqCountsall.cmp_ery.bedmatched.txt
+paste gencode.vM4.annotation.pc.bed rnaHtseqCountsall.cmp_ery.bedmatched.tmp2.txt | awk -F '\t' -v OFS='\t' '{print $1,$2,$3,$4,$5,$6, -($7)/($3-$2)}' | sort -k7,7n > rnaHtseqCountsall.cmp_ery.bedmatched.txt
 
 ### get sorted bed file
 cut -f1,2,3,4,5,6 rnaHtseqCountsall.cmp_ery.bedmatched.txt > gencode.vM4.annotation.pc.cmp_ery_fc.bed
