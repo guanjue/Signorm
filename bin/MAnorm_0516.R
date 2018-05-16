@@ -18,7 +18,7 @@ input_sig2_p = args[5]
 output = args[6]
 
 small_num = as.numeric(args[7])
-random_sample_num = args[8]
+random_sample_num = as.numeric(args[8])
 
 
 ct = unlist(strsplit(input_sig3, "[.]"))[1]
