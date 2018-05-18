@@ -46,18 +46,19 @@ def quantile_normalization_keepref(data_matrix, signal_col, reference_col, outpu
 	### put all sig with the same rank into one vector in a dict
 	rank_sig_dict = {}
 	data_rank_matrix = []
-	#for i in range(0, data_matrix_sig.shape[1]):
-	### get sample data
-	sample_data = data_matrix_sig[:,(reference_col-1)]
-	### get sample data rank
-	sample_data_rank=stats.rankdata(sample_data, method='ordinal')
-	### generate data rank matrix
-	data_rank_matrix.append(sample_data_rank)
+	for i in range(0, data_matrix_sig.shape[1]):
+		### get sample data
+		sample_data = data_matrix_sig[:,i]
+		### get sample data rank
+		sample_data_rank=stats.rankdata(sample_data, method='ordinal')
+		### generate data rank matrix
+		data_rank_matrix.append(sample_data_rank)
 
-	### put sig into rank_sig_dict
-	for sig, rank in zip(sample_data, sample_data_rank):
-		if not (rank in rank_sig_dict):
-			rank_sig_dict[rank] = sig
+		### if i is the reference sample
+		if i == (reference_col-1):
+			### put sig into rank_sig_dict
+			for sig, rank in zip(sample_data, sample_data_rank):
+				rank_sig_dict[rank] = sig
 
 	### transpose data_rank_matrix to original shape
 	data_rank_matrix = np.transpose( np.array(data_rank_matrix) )
