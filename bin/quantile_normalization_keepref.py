@@ -51,8 +51,9 @@ def quantile_normalization_keepref(data_matrix, signal_col, reference_col, outpu
 		sample_data = data_matrix_sig[:,i]
 		### get sample data rank
 		sample_data_rank=stats.rankdata(sample_data, method='ordinal')
+		sample_data_rank_od=stats.rankdata(sample_data, method='max')
 		### generate data rank matrix
-		data_rank_matrix.append(sample_data_rank)
+		data_rank_matrix.append(sample_data_rank_od)
 
 		### if i is the reference sample
 		if i == (reference_col-1):
