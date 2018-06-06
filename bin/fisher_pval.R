@@ -13,7 +13,7 @@ print(file_list)
 ### read files of the cell marker
 data_matrix = NULL
 for (file in file_list){
-	d = read.table(file, header = F)
+	d = read.table(paste(input_folder, file, sep=''), header = F)
 	data_matrix = cbind(data_matrix, d[,])
 }
 ### get fisher method combined p-value
